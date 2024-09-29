@@ -4,9 +4,10 @@
 module.exports = grammar({
     name: 'cangjie',
     extras: $ => [
-        /\s/,
+        /[\s\uFEFF\u2028\u2029\u2060\u200B]/,
         $.comment,
     ],
+    word: $ => $.identifier,
     rules: {
         source_file: ($) =>
             seq(
@@ -16,7 +17,7 @@ module.exports = grammar({
                 optional($.NL),
             ),
 
-        end: ($) => choice($.NL, ';'),
+        end: ($) => token(choice($.NL, ';')),
 
         // Preamble, package, and import definitions
         preamble: ($) => seq(optional($.package_header), repeat($.import_list)),
@@ -1858,9 +1859,9 @@ module.exports = grammar({
         NL: ($) => choice('\n', '\r\n'),
 
         // Identifiers and literals
-        ident: ($) => /[_\p{XID_Start}][_\p{XID_Continue}]*/gu,
-        raw_ident: ($) => /`[_\p{XID_Start}][_\p{XID_Continue}]*`/gu,
-        identifier: ($) => choice($.ident, $.raw_ident),
+        ident: ($) => /[_\p{XID_Start}][_\p{XID_Continue}]*/u,
+        raw_ident: ($) => /`[_\p{XID_Start}][_\p{XID_Continue}]*`/u,
+        identifier: ($) => token(choice($.ident, $.raw_ident)),
         dollar_identifier: ($) => seq('$', choice($.ident, $.raw_ident)),
 
         // Comments

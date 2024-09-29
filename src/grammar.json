@@ -1,5 +1,6 @@
 {
   "name": "cangjie",
+  "word": "identifier",
   "rules": {
     "source_file": {
       "type": "SEQ",
@@ -50,17 +51,20 @@
       ]
     },
     "end": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "NL"
-        },
-        {
-          "type": "STRING",
-          "value": ";"
-        }
-      ]
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "NL"
+          },
+          {
+            "type": "STRING",
+            "value": ";"
+          }
+        ]
+      }
     },
     "preamble": {
       "type": "SEQ",
@@ -11532,25 +11536,28 @@
     "ident": {
       "type": "PATTERN",
       "value": "[_\\p{XID_Start}][_\\p{XID_Continue}]*",
-      "flags": "gu"
+      "flags": "u"
     },
     "raw_ident": {
       "type": "PATTERN",
       "value": "`[_\\p{XID_Start}][_\\p{XID_Continue}]*`",
-      "flags": "gu"
+      "flags": "u"
     },
     "identifier": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "ident"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "raw_ident"
-        }
-      ]
+      "type": "TOKEN",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "ident"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "raw_ident"
+          }
+        ]
+      }
     },
     "dollar_identifier": {
       "type": "SEQ",
@@ -13043,7 +13050,7 @@
   "extras": [
     {
       "type": "PATTERN",
-      "value": "\\s"
+      "value": "[\\s\\uFEFF\\u2028\\u2029\\u2060\\u200B]"
     },
     {
       "type": "SYMBOL",
