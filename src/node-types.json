@@ -27,10 +27,6 @@
       "required": true,
       "types": [
         {
-          "type": "NL",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         },
@@ -50,10 +46,6 @@
       "required": false,
       "types": [
         {
-          "type": "NL",
-          "named": true
-        },
-        {
           "type": "identifier",
           "named": true
         }
@@ -65,13 +57,9 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
-        {
-          "type": "NL",
-          "named": true
-        },
         {
           "type": "package_name_identifier",
           "named": true
@@ -87,10 +75,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "NL",
-          "named": true
-        },
         {
           "type": "identifier",
           "named": true
@@ -133,6 +117,22 @@
     }
   },
   {
+    "type": "\n",
+    "named": false
+  },
+  {
+    "type": "\r\n",
+    "named": false
+  },
+  {
+    "type": "\"",
+    "named": false
+  },
+  {
+    "type": "\"\"\"",
+    "named": false
+  },
+  {
     "type": "$",
     "named": false
   },
@@ -151,10 +151,6 @@
   {
     "type": ";",
     "named": false
-  },
-  {
-    "type": "NL",
-    "named": true
   },
   {
     "type": "as",
