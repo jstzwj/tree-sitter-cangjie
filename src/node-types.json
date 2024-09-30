@@ -1,11 +1,6 @@
 [
   {
-    "type": "NL",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "source_file",
+    "type": "comment",
     "named": true,
     "fields": {},
     "children": {
@@ -13,22 +8,180 @@
       "required": true,
       "types": [
         {
-          "type": "NL",
+          "type": "delimited_comment",
+          "named": true
+        },
+        {
+          "type": "line_comment",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "\n",
+    "type": "import_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "NL",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "import_part",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "import_part",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "NL",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "package_header",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "NL",
+          "named": true
+        },
+        {
+          "type": "package_name_identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "package_name_identifier",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "NL",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preamble",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "import_list",
+          "named": true
+        },
+        {
+          "type": "package_header",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "preamble",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "$",
     "named": false
   },
   {
-    "type": "\r\n",
+    "type": "*",
     "named": false
   },
   {
-    "type": "hello",
+    "type": ",",
+    "named": false
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": ";",
+    "named": false
+  },
+  {
+    "type": "NL",
+    "named": true
+  },
+  {
+    "type": "as",
+    "named": false
+  },
+  {
+    "type": "delimited_comment",
+    "named": true
+  },
+  {
+    "type": "from",
+    "named": false
+  },
+  {
+    "type": "identifier",
+    "named": true
+  },
+  {
+    "type": "import",
+    "named": false
+  },
+  {
+    "type": "line_comment",
+    "named": true
+  },
+  {
+    "type": "package",
     "named": false
   }
 ]
