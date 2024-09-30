@@ -38,13 +38,18 @@ module.exports = grammar({
   name: 'cangjie',
   extras: ($) => [/[\s\uFEFF\u2028\u2029\u2060\u200B]/, $.comment],
   word: ($) => $.identifier,
-  conflicts: ($) => [],
+  conflicts: ($) => [
+    [$.var_binding_pattern, $.enum_pattern],
+    [$.class_name, $.enum_pattern],
+    [$.class_body],
+    [$.wildcard_pattern, $.type_pattern],
+  ],
   rules: {
     source_file: ($) =>
       seq(
         optional($.preamble),
         // repeat($.top_level_object),
-        // optional($.main_definition),
+        optional($.main_definition),
       ),
 
     _end: ($) => choice('\n', '\r\n', ';'),
@@ -62,6 +67,1693 @@ module.exports = grammar({
       ),
     import_part: ($) => sepBy1('.', choice('*', $.identifier)),
     import_alias: ($) => seq('as', $.identifier),
+
+    // Top-level object definitions
+    top_level_object: ($) =>
+      choice(
+        $.class_definition,
+        // $.interface_definition,
+        // $.function_definition,
+        // $.variable_declaration,
+        // $.enum_definition,
+        // $.struct_definition,
+        // $.type_alias,
+        // $.extend_definition,
+        // $.foreign_declaration,
+        // $.macro_definition,
+        // $.macro_expression,
+      ),
+    // Class definition
+    class_definition: ($) =>
+      seq(
+        optional($.class_modifier_list),
+        'class',
+        $.identifier,
+        optional($.type_parameters),
+        optional(
+          seq(
+            'upperbound',
+            optional($.super_class_or_interfaces),
+          ),
+        ),
+        optional($.generic_constraints),
+        $.class_body,
+      ),
+
+    super_class_or_interfaces: ($) =>sepBy1('&', $.super_interfaces),
+    class_modifier_list: ($) => repeat1($.class_modifier),
+    class_modifier: ($) =>
+      choice('public', 'protected', 'internal', 'private', 'abstract', 'open'),
+    type_parameters: ($) =>
+      seq(
+        '<',
+        sepBy1(',', $.identifier),
+        '>',
+      ),
+    class_type: ($) =>
+      prec.left(
+        seq(
+          sepBy1('.', $.identifier),
+          optional($.type_parameters),
+        ),
+      ),
+    super_interfaces: ($) =>
+      prec.left(sepBy1(',', $.class_type)),
+    generic_constraints: ($) =>
+      prec.left(
+        seq(
+          'where',
+          choice($.identifier, 'thistype'),
+          'upperbound',
+          $.upper_bounds,
+          repeat(
+            seq(
+              ',',
+              choice($.identifier, 'thistype'),
+              'upperbound',
+              $.upper_bounds,
+            ),
+          ),
+        ),
+      ),
+    upper_bounds: ($) =>
+      sepBy1('&', $._type),
+    class_body: ($) =>
+        seq(
+          '{',
+          repeat($._end),
+          repeat($.class_member_declaration),
+          optional($.class_primary_init),
+          repeat($.class_member_declaration),
+          repeat($._end),
+          '}',
+      ),
+
+    class_member_declaration: ($) =>
+      choice(
+        $.class_init,
+        $.static_init,
+        $.variable_declaration,
+        $.function_definition,
+        $.operator_function_definition,
+        $.macro_expression,
+        $.property_definition,
+      ),
+    class_init: ($) =>
+      seq(
+        optional(
+          choice(
+            $.class_non_static_member_modifier,
+            'const',
+          ),
+        ),
+        'init',
+        $.function_parameters,
+        $.block,
+      ),
+    static_init: ($) =>
+      seq(
+        'static',
+        'init',
+        '(',
+        ')',
+        '{',
+        optional($.expression_or_declarations),
+        '}',
+      ),
+    class_primary_init: ($) =>
+      seq(
+        optional(
+          choice(
+            $.class_non_static_member_modifier,
+            'const',
+          ),
+        ),
+        $.class_name,
+        '(',
+        $.class_primary_init_param_lists,
+        ')',
+        '{',
+        optional(seq('super', $.call_suffix)),
+        repeat($._end),
+        optional($.expression_or_declarations),
+        '}',
+      ),
+
+    class_name: ($) => $.identifier,
+    class_primary_init_param_lists: ($) =>
+      prec.left(
+        choice(
+          seq(
+            $.unnamed_parameter_list,
+            optional(
+              seq(',', $.named_parameter_list),
+            ),
+            optional(
+              seq(',',$.class_named_init_param_list,
+              ),
+            ),
+          ),
+          seq(
+            $.unnamed_parameter_list,
+            optional(
+              seq(
+                ',',
+                $.class_unnamed_init_param_list,
+              ),
+            ),
+            optional(
+              seq(
+                ',',
+                $.class_named_init_param_list,
+              ),
+            ),
+          ),
+          seq(
+            $.class_unnamed_init_param_list,
+            optional(
+              seq(
+                ',',
+                $.class_named_init_param_list,
+              ),
+            ),
+          ),
+          seq(
+            $.named_parameter_list,
+            optional(
+              seq(
+                ',',
+                $.class_named_init_param_list,
+              ),
+            ),
+          ),
+          $.class_named_init_param_list,
+        ),
+      ),
+    class_unnamed_init_param_list: ($) =>
+      prec.left(
+        seq(
+          $.class_unnamed_init_param,
+          repeat(
+            seq(
+              ',',
+              $.class_unnamed_init_param,
+            ),
+          ),
+        ),
+      ),
+    class_named_init_param_list: ($) =>
+        sepBy1(',', $.class_named_init_param),
+    class_unnamed_init_param: ($) =>
+      prec.left(
+        seq(
+          optional($.class_non_static_member_modifier),
+          choice('let', 'var'),
+          $.identifier,
+          ':',
+          $._type,
+        ),
+      ),
+    class_named_init_param: ($) =>
+      seq(
+        optional($.class_non_static_member_modifier),
+        choice('let', 'var'),
+        $.identifier,
+        '!',
+        ':',
+        $._type,
+        optional(seq('=', $._expression)),
+      ),
+
+    class_non_static_member_modifier: ($) =>
+      choice('public', 'private', 'protected', 'internal'),
+
+    // Interface definition
+    interface_definition: ($) =>
+      seq(
+        optional($.interface_modifier_list),
+        'interface',
+        $.identifier,
+        optional($.type_parameters),
+        optional(
+          seq('upperbound', $.super_interfaces),
+        ),
+        optional($.generic_constraints),
+        $.interface_body,
+      ),
+    interface_body: ($) =>
+      seq(
+        '{',
+        repeat($._end),
+        repeat($.interface_member_declaration),
+        repeat($._end),
+        '}',
+      ),
+    interface_member_declaration: ($) =>
+      choice(
+        $.function_definition,
+        $.operator_function_definition,
+        $.macro_expression,
+        $.property_definition,
+      ),
+    interface_modifier_list: ($) => repeat1($.interface_modifier),
+    interface_modifier: ($) =>
+      choice('public', 'protected', 'internal', 'private', 'open'),
+
+    // Function definition
+    function_definition: ($) =>
+      prec.left(
+        seq(
+          optional($.function_modifier_list),
+          'func',
+          $.identifier,
+          optional($.type_parameters),
+          $.function_parameters,
+          optional(seq(':', $._type)),
+          optional($.generic_constraints),
+          optional($.block),
+        ),
+      ),
+    function_modifier_list: ($) => prec.left(repeat1($.function_modifier)),
+    function_modifier: ($) =>
+      prec.left(
+        PREC.FUNCTION_MODIFIER,
+        choice(
+          'public',
+          'private',
+          'protected',
+          'internal',
+          'static',
+          'open',
+          'override',
+          'operator',
+          'redef',
+          'mut',
+          'unsafe',
+          'const',
+        ),
+      ),
+
+    operator_function_definition: ($) =>
+      prec.left(
+        seq(
+          optional($.function_modifier_list),
+          'operator',
+          'func',
+          $.overloaded_operators,
+          optional($.type_parameters),
+          $.function_parameters,
+          optional($._type),
+          optional($.generic_constraints),
+          optional($.block),
+        ),
+      ),
+
+    function_parameters: ($) =>
+      choice(
+        seq(
+          '(',
+          optional($.unnamed_parameter_list),
+          optional(seq(',', $.named_parameter_list)),
+          ')',
+        ),
+        seq(
+          '(',
+          optional($.named_parameter_list),
+          ')',
+        ),
+      ),
+
+    nondefault_parameter_list: ($) =>
+      choice(
+        seq(
+          $.unnamed_parameter,
+          optional(seq(',', $.unnamed_parameter)),
+          optional(seq(',', $.named_parameter)),
+        ),
+        seq(
+          $.named_parameter,
+          optional(seq(',', $.named_parameter)),
+        ),
+      ),
+
+    unnamed_parameter_list: ($) =>
+      prec.left(
+        seq(
+          $.unnamed_parameter,
+          optional(seq(',', $.unnamed_parameter)),
+        ),
+      ),
+
+    unnamed_parameter: ($) =>
+      seq(
+        choice($.identifier, '_'),
+        ':',
+        $._type,
+      ),
+
+    named_parameter_list: ($) =>
+      prec.left(
+        seq(
+          choice($.named_parameter, $.default_parameter),
+          optional(
+            seq(
+              ',',
+              choice($.named_parameter, $.default_parameter),
+            ),
+          ),
+        ),
+      ),
+
+    named_parameter: ($) =>
+      seq(
+        $.identifier,
+        '!',
+        ':',
+        $._type,
+      ),
+
+    default_parameter: ($) =>
+      seq(
+        $.identifier,
+        '!',
+        ':',
+        $._type,
+        '=',
+        $._expression,
+      ),
+
+    // Variable Declaration
+    variable_declaration: ($) =>
+      prec.left(
+        seq(
+          repeat($.variable_modifier),
+          choice('let', 'var', 'const'),
+          $.patterns_maybe_irrefutable,
+          choice(
+            seq(
+              optional(seq(':', $._type)),
+              optional(seq('=', $._expression)),
+            ),
+            seq(':', $._type),
+          ),
+        ),
+      ),
+    variable_modifier: ($) =>
+      prec.left(
+        PREC.VARIABLE_MODIFIER,
+        choice('public', 'protected', 'internal', 'private'),
+      ),
+
+    // Enum Definition
+    enum_definition: ($) =>
+      seq(
+        optional($.enum_modifier),
+        'enum',
+        $.identifier,
+        optional(seq($.type_parameters)),
+        optional(
+          seq('upperbound', $.super_interfaces),
+        ),
+        optional($.generic_constraints),
+        '{',
+        optional($.enum_body),
+        '}',
+      ),
+    enum_modifier: ($) => choice('public', 'protected', 'internal', 'private'),
+    enum_body: ($) =>
+      seq(
+        optional('|'),
+        $.case_body,
+        repeat(seq('|', $.case_body)),
+        repeat(
+          choice(
+            $.function_definition,
+            $.operator_function_definition,
+            $.property_definition,
+            $.macro_expression,
+          ),
+        ),
+      ),
+    case_body: ($) =>
+      seq(
+        $.identifier,
+        optional(
+          seq(
+            '(',
+            $._type,
+            repeat(seq(',', $._type)),
+            ')',
+          ),
+        ),
+      ),
+
+    // Struct Definition
+    struct_definition: ($) =>
+      seq(
+        optional($.struct_modifier),
+        'struct',
+        $.identifier,
+        optional(seq($.type_parameters)),
+        optional(
+          seq('upperbound', $.super_interfaces),
+        ),
+        optional($.generic_constraints),
+        $.struct_body,
+      ),
+    struct_body: ($) =>
+      seq(
+        '{',
+        repeat(
+          choice($.struct_member_declaration, $.struct_primary_init, $._end),
+        ),
+        '}',
+      ),
+    struct_member_declaration: ($) =>
+      choice(
+        $.struct_init,
+        $.static_init,
+        $.variable_declaration,
+        $.function_definition,
+        $.operator_function_definition,
+        $.macro_expression,
+        $.property_definition,
+      ),
+    struct_init: ($) =>
+      seq(
+        optional(
+          seq(
+            choice($.struct_non_static_member_modifier, 'const'),
+          ),
+        ),
+        'init',
+        $.function_parameters,
+        $.block,
+      ),
+    struct_primary_init: ($) =>
+      seq(
+        optional(
+          seq(
+            choice($.struct_non_static_member_modifier, 'const'),
+          ),
+        ),
+        $.struct_name,
+        '(',
+        optional($.struct_primary_init_param_lists),
+        ')',
+        '{',
+        optional($.expression_or_declarations),
+        '}',
+      ),
+    struct_name: ($) => $.identifier,
+
+    struct_primary_init_param_lists: ($) =>
+      prec.left(
+        choice(
+          seq(
+            $.unnamed_parameter_list,
+            optional(seq(',', $.named_parameter_list)),
+            optional(seq(',', $.struct_named_init_param_list)),
+          ),
+          seq(
+            $.unnamed_parameter_list,
+            optional(seq(',', $.struct_unnamed_init_param_list)),
+            optional(seq(',', $.struct_named_init_param_list)),
+          ),
+          seq(
+            $.struct_unnamed_init_param_list,
+            optional(seq(',', $.struct_named_init_param_list)),
+          ),
+          seq(
+            $.named_parameter_list,
+            optional(seq(',', $.struct_named_init_param_list)),
+          ),
+          $.struct_named_init_param_list,
+        ),
+      ),
+
+    struct_unnamed_init_param_list: ($) =>
+      prec.left(
+        seq(
+          $.struct_unnamed_init_param,
+          repeat(seq(',', $.struct_unnamed_init_param)),
+        ),
+      ),
+
+    struct_named_init_param_list: ($) =>
+      seq(
+        $.struct_named_init_param,
+        repeat(seq(',', $.struct_named_init_param)),
+      ),
+
+    struct_unnamed_init_param: ($) =>
+      seq(
+        optional($.struct_non_static_member_modifier),
+        choice('let', 'var'),
+        $.identifier,
+        ':',
+        $._type,
+      ),
+
+    struct_named_init_param: ($) =>
+      seq(
+        optional($.struct_non_static_member_modifier),
+        choice('let', 'var'),
+        $.identifier,
+        'not',
+        ':',
+        $._type,
+        optional(seq('=', $._expression)),
+      ),
+
+    struct_modifier: ($) =>
+      choice('public', 'protected', 'internal', 'private'),
+
+    struct_non_static_member_modifier: ($) =>
+      choice('public', 'protected', 'internal', 'private'),
+
+    // Type Alias
+    type_alias: ($) =>
+      seq(
+        optional($.type_modifier),
+        'type',
+        $.identifier,
+        optional($.type_parameters),
+        '=',
+        $._type,
+        optional($._end),
+      ),
+    type_modifier: ($) => choice('public', 'protected', 'internal', 'private'),
+
+    // Extend Definition
+    extend_definition: ($) =>
+      seq(
+        'extend',
+        optional($.extend_type),
+        optional(
+          seq('upperbound', $.super_interfaces),
+        ),
+        optional($.generic_constraints),
+        $.extend_body,
+      ),
+    extend_type: ($) =>
+      prec.left(
+        choice(
+          $.type_parameters,
+          seq(
+            sepBy1(seq('.'), $.identifier),
+            optional(seq($.type_arguments)),
+          ),
+          'Int8',
+          'Int16',
+          'Int32',
+          'Int64',
+          'IntNative',
+          'Uint8',
+          'Uint16',
+          'Uint32',
+          'Uint64',
+          'UintNative',
+          'Float16',
+          'Float32',
+          'Float64',
+          'Rune',
+          'Boolean',
+          'Nothing',
+          'Unit',
+        ),
+      ),
+    extend_body: ($) => seq('{', repeat($.extend_member_declaration), '}'),
+    extend_member_declaration: ($) =>
+      choice(
+        $.function_definition,
+        $.operator_function_definition,
+        $.macro_expression,
+        $.property_definition,
+      ),
+
+    foreign_declaration: ($) =>
+      seq(
+        'foreign',
+        choice($.foreign_body, $.foreign_member_declaration),
+      ),
+
+    foreign_body: ($) =>
+      seq(
+        '{',
+        repeat($._end),
+        repeat($.foreign_member_declaration),
+        repeat($._end),
+        '}',
+      ),
+
+    foreign_member_declaration: ($) =>
+      choice(
+        $.class_definition,
+        $.interface_definition,
+        $.function_definition,
+        $.macro_expression,
+        $.variable_declaration,
+        $._end, // Allowing end after each member declaration
+      ),
+
+    annotation_list: ($) => repeat1($.annotation),
+
+    annotation: ($) =>
+      seq(
+        '@',
+        repeat(seq($.identifier, '.')),
+        $.identifier,
+        optional(seq('[', $.annotation_argument_list, ']')),
+      ),
+
+    annotation_argument_list: ($) =>
+      seq(
+        $.annotation_argument,
+        repeat(seq(',', $.annotation_argument)),
+      ),
+
+    annotation_argument: ($) =>
+      choice(seq($.identifier, ':', $._expression), $._expression),
+
+    macro_definition: ($) =>
+      seq(
+        'public',
+        'macro',
+        $.identifier,
+        choice($.macro_without_attr_param, $.macro_with_attr_param),
+        optional(seq(':', $.identifier)),
+        optional(seq('=', $._expression)),
+      ),
+
+    macro_without_attr_param: ($) =>
+      seq('(', $.macro_input_decl, ')'),
+
+    macro_with_attr_param: ($) =>
+      seq(
+        '(',
+        $.macro_attr_decl,
+        ',',
+        $.macro_input_decl,
+        ')',
+      ),
+
+    macro_input_decl: ($) => seq($.identifier, ':', $.identifier),
+
+    macro_attr_decl: ($) => seq($.identifier, ':', $.identifier),
+
+    property_definition: ($) =>
+      seq(
+        repeat($.property_modifier),
+        'prop',
+        $.identifier,
+        ':',
+        $._type,
+        optional($.property_body),
+      ),
+
+    property_body: ($) =>
+      seq('{', repeat($._end), repeat1($.property_member_declaration), '}'),
+
+    property_member_declaration: ($) =>
+      choice(
+        seq('get', '(', ')', $.block),
+        seq('set', '(', $.identifier, ')', $.block),
+      ),
+
+    property_modifier: ($) =>
+      prec.left(
+        PREC.PROPERTY_MODIFIER,
+        choice(
+          'public',
+          'private',
+          'protected',
+          'internal',
+          'static',
+          'open',
+          'override',
+          'redef',
+          'mut',
+        ),
+      ),
+    // Main Definition
+    main_definition: ($) =>
+      seq(
+        'main', // Matches the keyword 'main' // Matches newlines if present
+        $.function_parameters, // Matches function parameters
+        optional(seq(':', $._type)), // Optionally matches a colon followed by the type // Matches newlines if present
+        $.block, // Matches the block of the function
+      ),
+
+    // Type
+    _type: ($) =>
+      choice($.arrow_type, $.tuple_type, $.prefix_type, $.atomic_type),
+
+    arrow_type: ($) =>
+      seq($.arrow_parameters, '->', $._type),
+
+    arrow_parameters: ($) =>
+      seq(
+        '(',
+        optional(
+          seq(
+            $._type,
+            repeat(seq(',', $._type)),
+          ),
+        ),
+        ')',
+      ),
+
+    tuple_type: ($) =>
+      prec.left(
+        PREC.PARENS,
+        seq(
+          '(',
+          $._type,
+          repeat(seq(',', $._type)),
+          ')',
+        ),
+      ),
+
+    prefix_type: ($) => seq($.prefix_type_operator, $._type),
+
+    prefix_type_operator: ($) => '?',
+
+    atomic_type: ($) =>
+      choice($.char_lang_types, $.user_type, $.parenthesized_type),
+
+    char_lang_types: ($) =>
+      choice(
+        $.numeric_types,
+        'rune',
+        'boolean',
+        'nothing',
+        'unit',
+        'this_type',
+      ),
+
+    numeric_types: ($) =>
+      choice(
+        'int8',
+        'int16',
+        'int32',
+        'int64',
+        'int_native',
+        'uint8',
+        'uint16',
+        'uint32',
+        'uint64',
+        'uint_native',
+        'float16',
+        'float32',
+        'float64',
+      ),
+
+    user_type: ($) =>
+        seq(
+          repeat(seq($.identifier, '.')),
+          $.identifier,
+          optional($.type_arguments),
+        ),
+
+    parenthesized_type: ($) =>
+      seq('(', $._type, ')'),
+
+    type_arguments: ($) =>
+      seq(
+        '<',
+        $._type,
+        repeat(seq(',', $._type)),
+        '>',
+      ),
+
+    // Expression
+    _expression: ($) =>
+      choice(
+        $.assignment_expression,
+        $.flow_expression,
+        $.tuple_literal,
+        $.if_expression,
+        $.match_expression,
+        $.loop_expression,
+        $.try_expression,
+        $.lambda_expression,
+        $.literal_constant,
+        $.parenthesized_expression,
+        $.block,
+      ),
+
+    assignment_expression: ($) =>
+      prec.right(
+        PREC.ASSIGN,
+        choice(
+          seq(
+            $.left_value_expression_without_wildcard,
+            $.assignment_operator,
+            $.flow_expression,
+          ),
+          seq(
+            $.left_value_expression,
+            '=',
+            $.flow_expression,
+          ),
+          seq(
+            $.tuple_left_value_expression,
+            '=',
+            $.flow_expression,
+          ),
+          $.flow_expression,
+        ),
+      ),
+
+    tuple_left_value_expression: ($) =>
+      seq(
+        '(',
+        seq($.left_value_expression, ','),
+        repeat(
+          seq($.left_value_expression, ','),
+        ),
+        optional(','),
+        ')',
+      ),
+
+    left_value_expression: ($) =>
+      choice($.left_value_expression_without_wildcard, '*'),
+
+    left_value_expression_without_wildcard: ($) =>
+      choice(
+        $.identifier,
+        seq(
+          $.left_aux_expression,
+          optional('?'),
+          $.assignable_suffix,
+        ),
+      ),
+
+    left_aux_expression: ($) =>
+      choice(
+        $.identifier,
+        seq($._type, optional($.type_arguments)),
+        $.this_super_expression,
+        seq(
+          $.left_aux_expression,
+          optional('?'),
+          optional('.'),
+          $.identifier,
+          optional($.type_arguments),
+        ),
+        seq($.left_aux_expression, optional('?'), $.call_suffix),
+        seq($.left_aux_expression, optional('?'), $.index_access),
+      ),
+
+    assignable_suffix: ($) => choice($.field_access, $.index_access),
+
+    field_access: ($) =>
+      seq(optional('.'), $.identifier),
+
+    flow_expression: ($) =>
+      prec.left(
+        PREC.FLOW,
+        seq(
+          $.coalescing_expression,
+          repeat(
+            seq(
+              $.flow_operator,
+              $.coalescing_expression,
+            ),
+          ),
+        ),
+      ),
+
+    coalescing_expression: ($) =>
+      prec.left(
+        PREC.COALESCING,
+        seq(
+          $.logic_disjunction_expression,
+          repeat(
+            seq(
+              '??',
+              $.logic_disjunction_expression,
+            ),
+          ),
+        ),
+      ),
+
+    logic_disjunction_expression: ($) =>
+      prec.left(
+        PREC.OR,
+        seq(
+          $.logic_conjunction_expression,
+          repeat(
+            seq(
+              '||',
+              $.logic_conjunction_expression,
+            ),
+          ),
+        ),
+      ),
+
+    logic_conjunction_expression: ($) =>
+      prec.left(
+        PREC.AND,
+        seq(
+          $.range_expression,
+          repeat(seq('&&', $.range_expression)),
+        ),
+      ),
+
+    range_expression: ($) =>
+      prec.left(
+        PREC.RANGE,
+        choice(
+          seq(
+            $.bitwise_disjunction_expression,
+            choice('..', '..='),
+            $.bitwise_disjunction_expression,
+          ),
+          $.bitwise_disjunction_expression,
+        ),
+      ),
+
+    bitwise_disjunction_expression: ($) =>
+      prec.left(
+        PREC.BIT_OR,
+        seq(
+          $.bitwise_xor_expression,
+          repeat(
+            seq('|', $.bitwise_xor_expression),
+          ),
+        ),
+      ),
+
+    bitwise_xor_expression: ($) =>
+      prec.left(
+        PREC.BIT_XOR,
+        seq(
+          $.bitwise_conjunction_expression,
+          repeat(
+            seq(
+              '^',
+              $.bitwise_conjunction_expression,
+            ),
+          ),
+        ),
+      ),
+
+    bitwise_conjunction_expression: ($) =>
+      prec.left(
+        PREC.BIT_AND,
+        seq(
+          $.equality_comparison_expression,
+          repeat(
+            seq(
+              '&',
+              $.equality_comparison_expression,
+            ),
+          ),
+        ),
+      ),
+
+    equality_comparison_expression: ($) =>
+      prec.left(
+        PREC.EQUALITY,
+        choice(
+          seq(
+            $.comparison_or_type_expression,
+            choice('==', '!='),
+            $.comparison_or_type_expression,
+          ),
+          $.comparison_or_type_expression,
+        ),
+      ),
+
+    comparison_or_type_expression: ($) =>
+      prec.left(
+        PREC.REL,
+        choice(
+          seq(
+            $.shifting_expression,
+            choice('<', '>', '<=', '>='),
+            $.shifting_expression,
+          ),
+          seq(
+            $.shifting_expression,
+            'is',
+            $._type,
+          ),
+          seq(
+            $.shifting_expression,
+            'as',
+            $._type,
+          ),
+          $.shifting_expression,
+        ),
+      ),
+
+    shifting_expression: ($) =>
+      prec.left(
+        PREC.SHIFT,
+        seq(
+          $.additive_expression,
+          repeat(
+            seq(
+              choice('<<', '>>'),
+              $.additive_expression,
+            ),
+          ),
+        ),
+      ),
+
+    additive_expression: ($) =>
+      prec.left(
+        PREC.ADD,
+        seq(
+          $.multiplicative_expression,
+          repeat(
+            seq(
+              choice('+', '-'),
+              $.multiplicative_expression,
+            ),
+          ),
+        ),
+      ),
+
+    multiplicative_expression: ($) =>
+      prec.left(
+        PREC.MULT,
+        seq(
+          $.exponent_expression,
+          repeat(
+            seq(
+              choice('*', '/', '%'),
+              $.exponent_expression,
+            ),
+          ),
+        ),
+      ),
+
+    exponent_expression: ($) =>
+      prec.left(
+        PREC.EXP,
+        seq(
+          $.prefix_unary_expression,
+          repeat(
+            seq(
+              '**',
+              $.prefix_unary_expression,
+            ),
+          ),
+        ),
+      ),
+
+    prefix_unary_expression: ($) =>
+      seq(repeat($.prefix_unary_operator), $.inc_and_dec_expression),
+
+    inc_and_dec_expression: ($) =>
+      prec.left(
+        PREC.UNARY,
+        seq($.postfix_expression, optional(choice('++', '--'))),
+      ),
+
+    postfix_expression: ($) =>
+      prec.left(
+        choice(
+          $.atomic_expression,
+          seq($._type, '.', $.identifier),
+          seq(
+            $.postfix_expression,
+            '.',
+            $.identifier,
+            optional($.type_arguments),
+          ),
+          seq($.postfix_expression, $.call_suffix),
+          seq($.postfix_expression, $.index_access),
+          seq(
+            $.postfix_expression,
+            '.',
+            $.identifier,
+            optional($.call_suffix),
+            $.trailing_lambda_expression,
+          ),
+          seq(
+            $.identifier,
+            optional($.call_suffix),
+            $.trailing_lambda_expression,
+          ),
+          seq($.postfix_expression, repeat(seq('?', $.quest_seperated_items))),
+        ),
+      ),
+
+    quest_seperated_items: ($) => prec.left(repeat1($.quest_seperated_item)),
+
+    quest_seperated_item: ($) =>
+      choice(
+        seq('.', $.identifier, optional($.type_arguments)),
+        $.call_suffix,
+        $.index_access,
+        $.trailing_lambda_expression,
+      ),
+
+    call_suffix: ($) =>
+      seq(
+        '(',
+        optional(
+          seq(
+            $.value_argument,
+            repeat(seq(',', $.value_argument)),
+          ),
+        ),
+        ')',
+      ),
+
+    value_argument: ($) =>
+      choice(
+        seq($.identifier, ':', $._expression),
+        $._expression,
+        $.ref_transfer_expression,
+      ),
+
+    ref_transfer_expression: ($) =>
+      seq('inout', optional(seq($._expression, '.', $.identifier))),
+
+    index_access: ($) =>
+      seq(
+        '[',
+        choice($._expression, $.range_element),
+        ']',
+      ),
+
+    range_element: ($) =>
+      prec.left(
+        PREC.RANGE,
+        choice(
+          '..',
+          seq(choice('..', '..='), $._expression),
+          seq($._expression, '..'),
+        ),
+      ),
+
+    atomic_expression: ($) =>
+      choice(
+        $.literal_constant,
+        $.collection_literal,
+        $.tuple_literal,
+        seq($.identifier, optional($.type_arguments)),
+        $.unit_literal,
+        $.if_expression,
+        $.match_expression,
+        $.loop_expression,
+        $.try_expression,
+        $.jump_expression,
+        $.numeric_type_conv_expr,
+        $.this_super_expression,
+        $.spawn_expression,
+        $.synchronized_expression,
+        $.parenthesized_expression,
+        $.lambda_expression,
+        $.quote_expression,
+        $.macro_expression,
+        $.unsafe_expression,
+      ),
+
+    literal_constant: ($) =>
+      choice(
+        $.integer_literal,
+        $.float_literal,
+        $.rune_literal,
+        $.byte_literal,
+        $.boolean_literal,
+        $.string_literal,
+        $.byte_string_array_literal,
+        $.unit_literal,
+      ),
+
+    boolean_literal: ($) => choice('true', 'false'),
+
+    string_literal: ($) =>
+      choice(
+        $.line_string_literal,
+        $.multi_line_string_literal,
+        $.multi_line_raw_string_literal,
+      ),
+
+    line_string_content: ($) => $.line_str_text,
+
+    line_string_literal: ($) =>
+      seq(
+        '"',
+        repeat(choice($.line_string_expression, $.line_string_content)),
+        '"',
+      ),
+
+    line_string_expression: ($) =>
+      prec.left(
+        seq(
+          '${',
+          repeat(';'),
+          repeat($.expression_or_declaration),
+          repeat(';'),
+          '}',
+        ),
+      ),
+
+    multi_line_string_content: ($) => $.multi_line_str_text,
+
+    multi_line_string_literal: ($) =>
+      seq(
+        $.TRIPLE_QUOTE_OPEN,
+        repeat(
+          choice($.multi_line_string_expression, $.multi_line_string_content),
+        ),
+        $.TRIPLE_QUOTE_CLOSE,
+      ),
+
+    multi_line_string_expression: ($) =>
+      seq(
+        '${',
+        repeat($._end),
+        repeat($.expression_or_declaration),
+        repeat($._end),
+        '}',
+      ),
+
+    collection_literal: ($) => $.array_literal,
+
+    array_literal: ($) => seq('[', optional(seq($.elements)), ']'),
+
+    elements: ($) =>
+      repeat1(seq($.element, optional(seq(',', $.element)))),
+
+    element: ($) => choice($.expression_element, $.spread_element),
+
+    expression_element: ($) => $._expression,
+
+    spread_element: ($) => seq('*', $._expression),
+
+    tuple_literal: ($) =>
+      seq('(', repeat($._expression), ')'),
+
+    unit_literal: ($) => seq('(', ')'),
+
+    if_expression: ($) =>
+      prec.left(
+        seq(
+          'if',
+          '(',
+          optional(
+            seq(
+              'let',
+              $.deconstruct_pattern,
+              '=>',
+            ),
+          ),
+          $._expression,
+          ')',
+          $.block,
+          optional(
+            seq(
+              'else',
+              choice($.if_expression, $.block),
+            ),
+          ),
+        ),
+      ),
+
+    deconstruct_pattern: ($) =>
+      choice(
+        $.constant_pattern,
+        $.wildcard_pattern,
+        $.var_binding_pattern,
+        $.tuple_pattern,
+        $.enum_pattern,
+      ),
+
+    match_expression: ($) =>
+      choice(
+        seq(
+          'match',
+          '(',
+          $._expression,
+          ')',
+          '{',
+          repeat($.match_case),
+          '}',
+        ),
+        seq(
+          'match',
+          '{',
+          repeat(
+            seq(
+              'case',
+              choice($._expression, '_'),
+              '=>',
+              $.expression_or_declaration,
+              repeat(seq($._end, $.expression_or_declaration)),
+            ),
+          ),
+          '}',
+        ),
+      ),
+
+    match_case: ($) =>
+      seq(
+        'case',
+        optional(seq($.pattern)),
+        optional($.pattern_guard),
+        '=>',
+        $.expression_or_declaration,
+        repeat(seq($._end, $.expression_or_declaration)),
+      ),
+
+    pattern_guard: ($) => seq('where', $._expression),
+
+    pattern: ($) =>
+      choice(
+        $.constant_pattern,
+        $.wildcard_pattern,
+        $.var_binding_pattern,
+        $.tuple_pattern,
+        $.type_pattern,
+        $.enum_pattern,
+      ),
+
+    constant_pattern: ($) =>
+      prec.left(
+        seq(
+          $.literal_constant,
+          optional(seq('|', optional($.literal_constant))),
+        ),
+      ),
+
+    wildcard_pattern: ($) => '_',
+
+    var_binding_pattern: ($) => $.identifier,
+
+    tuple_pattern: ($) =>
+      seq(
+        '(',
+        repeat(seq($.pattern, optional(seq(',', $.pattern)))),
+        ')',
+      ),
+
+    type_pattern: ($) =>
+      seq(choice('_', $.identifier), optional(seq(':', $._type))),
+
+    enum_pattern: ($) =>
+      prec.left(
+        seq(
+          optional(seq($.user_type, '.')),
+          $.identifier,
+          optional($.enum_pattern_parameters),
+          optional(
+            seq(
+              '|',
+              optional(
+                seq(
+                  optional(seq($.user_type, '.')),
+                  $.identifier,
+                  optional($.enum_pattern_parameters),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+
+    enum_pattern_parameters: ($) =>
+      seq(
+        '(',
+        repeat(seq($.pattern, optional(seq(',', $.pattern)))),
+        ')',
+      ),
+
+    loop_expression: ($) =>
+      choice($.for_in_expression, $.while_expression, $.do_while_expression),
+
+    for_in_expression: ($) =>
+      seq(
+        'for',
+        optional(
+          seq(
+            '(',
+            optional($.patterns_maybe_irrefutable),
+            'in',
+            $._expression,
+            optional($.pattern_guard),
+            ')',
+          ),
+        ),
+        $.block,
+      ),
+
+    patterns_maybe_irrefutable: ($) =>
+      choice(
+        $.wildcard_pattern,
+        $.var_binding_pattern,
+        $.tuple_pattern,
+        $.enum_pattern,
+      ),
+
+    while_expression: ($) =>
+      seq(
+        'while',
+        '(',
+        optional(
+          seq('let', $.deconstruct_pattern, 'backarrow'),
+        ),
+        $._expression,
+        ')',
+        $.block,
+      ),
+
+    do_while_expression: ($) =>
+      prec.left(
+        seq(
+          'do',
+          $.block,
+          'while',
+          optional(seq('(', $._expression, ')')),
+        ),
+      ),
+
+    try_expression: ($) =>
+      choice(
+        seq('try', $.block, 'finally', $.block),
+        seq(
+          'try',
+          $.block,
+          repeat(seq('catch', seq('(', $.catch_pattern, ')', $.block))),
+          optional(seq('finally', $.block)),
+        ),
+        seq(
+          'try',
+          seq('(', optional($.resource_specifications), ')'),
+          $.block,
+          repeat(seq('catch', seq('(', $.catch_pattern, ')', $.block))),
+          optional(seq('finally', $.block)),
+        ),
+      ),
+
+    catch_pattern: ($) => choice($.wildcard_pattern, $.exception_type_pattern),
+
+    exception_type_pattern: ($) =>
+      seq(
+        choice('_', $.identifier),
+        optional(seq(':', $._type)),
+        optional(seq('|', optional($._type))),
+      ),
+
+    resource_specifications: ($) =>
+      repeat1(
+        seq(
+          $.resource_specification,
+          optional(seq(',', $.resource_specification)),
+        ),
+      ),
+
+    resource_specification: ($) =>
+      prec.left(
+        seq(
+          $.identifier,
+          optional(seq(':', optional($.class_type))),
+          optional(seq('=', $._expression)),
+        ),
+      ),
+
+    jump_expression: ($) =>
+      prec.left(
+        choice(
+          seq('throw', $._expression),
+          seq('return', optional($._expression)),
+          'continue',
+          'break',
+        ),
+      ),
+
+    numeric_type_conv_expr: ($) =>
+      seq($.numeric_types, '(', $._expression, ')'),
+
+    this_super_expression: ($) => choice('this', 'super'),
+
+    lambda_expression: ($) =>
+      seq(
+        '{',
+        optional($.lambda_parameters),
+        optional(seq('=>', optional($.expression_or_declarations))),
+        '}',
+      ),
+
+    trailing_lambda_expression: ($) =>
+      seq(
+        '{',
+        optional(seq(optional($.lambda_parameters), '=>')),
+        optional($.expression_or_declarations),
+        '}',
+      ),
+
+    lambda_parameters: ($) =>
+      repeat1(
+        seq($.lambda_parameter, optional(seq(',', $.lambda_parameter))),
+      ),
+
+    lambda_parameter: ($) =>
+      prec.left(
+        seq(choice($.identifier, '_'), optional(seq(':', $._type))),
+      ),
+
+    spawn_expression: ($) =>
+      prec.left(
+        seq(
+          'spawn',
+          optional(seq('(', $._expression, ')')),
+          optional(seq($.trailing_lambda_expression)),
+        ),
+      ),
+
+    synchronized_expression: ($) =>
+      seq('synchronized', '(', $._expression, ')', $.block),
+
+    parenthesized_expression: ($) =>
+      seq('(', $._expression, ')'),
+
+    block: ($) => seq('{', optional($.expression_or_declarations), '}'),
+
+    unsafe_expression: ($) => seq('unsafe', $.block),
+
+    expression_or_declarations: ($) =>
+      seq(
+        repeat($._end),
+        repeat1(
+          seq(
+            $.expression_or_declaration,
+            optional(seq($._end, $.expression_or_declaration)),
+          ),
+        ),
+      ),
+
+    expression_or_declaration: ($) =>
+      choice($._expression, $.var_or_func_declaration),
+
+    var_or_func_declaration: ($) =>
+      choice($.function_definition, $.variable_declaration),
+
+    quote_expression: ($) => seq('quote', $.quote_expr),
+
+    quote_expr: ($) =>
+      seq('(', optional($.quote_parameters), ')'),
+
+    quote_parameters: ($) =>
+      repeat1(choice($.quote_token, $.quote_interpolate, $.macro_expression)),
+
+    // TODO
+    quote_token: ($) => choice('.', ',', $.identifier, $.dollar_identifier),
+
+    quote_interpolate: ($) => seq('$', $.quote_expression),
+
+    macro_expression: ($) =>
+      prec.left(
+        seq(
+          '@',
+          $.identifier,
+          optional($.macro_attr_expr),
+          repeat(
+            choice(
+              $.macro_input_expr_without_parens,
+              $.macro_input_expr_with_parens,
+            ),
+          ),
+        ),
+      ),
+    macro_attr_expr: ($) => seq('[', repeat($.quote_token), ']'),
+    macro_input_expr_without_parens: ($) =>
+      choice(
+        $.function_definition,
+        $.operator_function_definition,
+        $.static_init,
+        $.struct_definition,
+        $.struct_primary_init,
+        $.struct_init,
+        $.enum_definition,
+        $.case_body,
+        $.class_definition,
+        $.class_primary_init,
+        $.class_init,
+        $.interface_definition,
+        $.variable_declaration,
+        $.property_definition,
+        $.extend_definition,
+        $.macro_expression,
+      ),
+    macro_input_expr_with_parens: ($) => seq('(', repeat($.macro_tokens), ')'),
+    macro_tokens: ($) => choice($.quote_token, $.macro_expression),
+
+    assignment_operator: ($) =>
+      choice(
+        '=',
+        '+=',
+        '-=',
+        '**=',
+        '*=',
+        '/=',
+        '%=',
+        '&=',
+        '|=',
+        '&&=',
+        '||=',
+        '<<=',
+        '>>=',
+      ),
+    equality_operator: ($) => choice('!=', '=='),
+    comparison_operator: ($) => choice('<', '>', '<=', '>='),
+    shifting_operator: ($) => choice('<<', '>>'),
+    flow_operator: ($) => choice('|>', '>>='),
+    additive_operator: ($) => choice('+', '-'),
+    exponent_operator: ($) => '**',
+    multiplicative_operator: ($) => choice('*', '/', '%'),
+    prefix_unary_operator: ($) => choice('-', 'not'),
+
+    overloaded_operators: ($) =>
+      choice(
+        '[]',
+        'not',
+        '+',
+        '-',
+        '**',
+        '*',
+        '/',
+        '%',
+        '<<',
+        '>>',
+        '<',
+        '>',
+        '<=',
+        '>=',
+        '==',
+        '!=',
+        '&',
+        '^',
+        '|',
+      ),
 
     // Identifiers and literals
     identifier: ($) =>
@@ -81,6 +1773,228 @@ module.exports = grammar({
     QUOTE_CLOSE: ($) => '"',
     TRIPLE_QUOTE_OPEN: ($) => '"""',
     TRIPLE_QUOTE_CLOSE: ($) => '"""',
+
+    // Literals
+    _integer_literal_suffix: ($) =>
+      choice('i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64'),
+
+    integer_literal: ($) =>
+      choice(
+        seq($._binary_literal, optional($._integer_literal_suffix)),
+        seq($._octal_literal, optional($._integer_literal_suffix)),
+        seq($._decimal_literal, optional($._integer_literal_suffix)),
+        seq($._hexadecimal_literal, optional($._integer_literal_suffix)),
+      ),
+
+    _binary_literal: ($) =>
+      prec.left(
+        seq(
+          '0',
+          choice('b', 'B'),
+          $._bin_digit,
+          repeat(choice($._bin_digit, '_')),
+        ),
+      ),
+    _bin_digit: ($) => /[01]/,
+
+    _octal_literal: ($) =>
+      prec.left(
+        seq(
+          '0',
+          choice('o', 'O'),
+          $._octal_digit,
+          repeat(choice($._octal_digit, '_')),
+        ),
+      ),
+    _octal_digit: ($) => /[0-7]/,
+
+    _decimal_literal: ($) =>
+      prec.left(
+        choice(
+          seq(
+            $._decimal_digit_with_out_zero,
+            repeat(choice($._decimal_digit, '_')),
+          ),
+          $._decimal_digit,
+        ),
+      ),
+
+    _decimal_digit_with_out_zero: ($) => /[1-9]/,
+    _decimal_digit: ($) => /[0-9]/,
+
+    _hexadecimal_literal: ($) =>
+      seq('0', choice('x', 'X'), $._hexadecimal_digits),
+    _hexadecimal_digits: ($) =>
+      prec.left(
+        seq($._hexadecimal_digit, repeat(choice($._hexadecimal_digit, '_'))),
+      ),
+    _hexadecimal_digit: ($) => /[0-9a-fA-F]/,
+
+    _float_literal_suffix: ($) => choice('f16', 'f32', 'f64'),
+
+    float_literal: ($) =>
+      choice(
+        seq($._decimal_literal, optional($._decimal_exponent)),
+        seq($._decimal_fraction, optional($._decimal_exponent)),
+        seq(
+          $._decimal_literal,
+          $._decimal_fraction,
+          optional($._decimal_exponent),
+        ),
+        seq(
+          $._hexadecimalprefix,
+          choice(
+            $._hexadecimal_digits,
+            $._hexadecimal_fraction,
+            seq($._hexadecimal_digits, $._hexadecimal_fraction),
+          ),
+          $._hexadecimal_exponent,
+        ),
+      ),
+
+    _decimal_fraction: ($) => seq('.', $._decimal_fragment),
+    _decimal_fragment: ($) =>
+      prec.left(seq($._decimal_digit, repeat(choice($._decimal_digit, '_')))),
+    _decimal_exponent: ($) =>
+      seq($._float_e, optional($._sign), $._decimal_fragment),
+
+    _hexadecimal_fraction: ($) => seq('.', $._hexadecimal_digits),
+    _hexadecimal_exponent: ($) =>
+      seq($._float_p, optional($._sign), $._decimal_fragment),
+
+    _float_e: ($) => choice('e', 'E'),
+    _float_p: ($) => choice('p', 'P'),
+    _sign: ($) => choice('-', ''),
+
+    _hexadecimalprefix: ($) => seq('0', choice('x', 'X')),
+
+    rune_literal: ($) => seq("'", choice($._single_char, $._escape_seq), "'"),
+    _single_char: ($) => /[^'\\\r\n]/,
+    _escape_seq: ($) => choice($.uni_character_literal, $.escaped_identifier),
+
+    uni_character_literal: ($) =>
+      choice(
+        seq('\\', 'u', '{', $._hexadecimal_digit, '}'),
+        seq(
+          '\\',
+          'u',
+          '{',
+          seq($._hexadecimal_digit, $._hexadecimal_digit),
+          '}',
+        ),
+        seq(
+          '\\',
+          'u',
+          '{',
+          seq($._hexadecimal_digit, $._hexadecimal_digit, $._hexadecimal_digit),
+          '}',
+        ),
+        seq(
+          '\\',
+          'u',
+          '{',
+          seq(
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+          ),
+          '}',
+        ),
+        seq(
+          '\\',
+          'u',
+          '{',
+          seq(
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+          ),
+          '}',
+        ),
+        seq(
+          '\\',
+          'u',
+          '{',
+          seq(
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+          ),
+          '}',
+        ),
+        seq(
+          '\\',
+          'u',
+          '{',
+          seq(
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+          ),
+          '}',
+        ),
+        seq(
+          '\\',
+          'u',
+          '{',
+          seq(
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+            $._hexadecimal_digit,
+          ),
+          '}',
+        ),
+      ),
+
+    escaped_identifier: ($) =>
+      seq('\\', choice('t', 'b', 'r', 'n', "'", '"', '\\', 'f', 'v', '0', '$')),
+
+    byte_literal: ($) =>
+      seq('b', "'", choice($.single_char_byte, $.byte_escape_seq), "'"),
+    byte_escape_seq: ($) => $.hex_char_byte,
+    hex_char_byte: ($) =>
+      choice($.byte_escaped_identifier, $.hex_char_byte_alt),
+    single_char_byte: ($) =>
+      /[\u0000-\u0009\u000B\u000C\u000E-\u0021\u0023-\u0026\u0028-\u005B\u005D-\u007F]/,
+    byte_escaped_identifier: ($) =>
+      seq('\\', choice('t', 'b', 'r', 'n', "'", '"', '\\', 'f', 'v', '0')),
+    hex_char_byte_alt: ($) => seq('\\', 'u', '{', $._hexadecimal_digit, '}'),
+    byte_string_array_literal: ($) =>
+      seq('b', '"', repeat(choice($.single_char_byte, $.byte_escape_seq)), '"'),
+    j_string_literal: ($) =>
+      seq('j', '"', repeat(choice($.single_char_byte, $._escape_seq)), '"'),
+    line_str_text: ($) =>
+      choice(
+        /[^\\\r\n]/, // Match any character except for backslash, carriage return, or newline
+        $._escape_seq,
+      ),
+    triple_quote_close: ($) => seq(optional($.multi_line_string_quote), '"""'),
+
+    multi_line_string_quote: ($) => repeat1('"'),
+    multi_line_str_text: ($) => choice(/[^\\]/, $._escape_seq),
+    multi_line_raw_string_literal: ($) => $.multi_line_raw_string_content,
+    multi_line_raw_string_content: ($) =>
+      prec.left(
+        choice(
+          seq('#', repeat($.multi_line_raw_string_content), '#'),
+          seq('#', '"', /.*/, '"', '#'),
+        ),
+      ),
   },
 });
 
