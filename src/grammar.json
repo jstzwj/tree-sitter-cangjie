@@ -18,6 +18,13 @@
           ]
         },
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "top_level_object"
+          }
+        },
+        {
           "type": "CHOICE",
           "members": [
             {
@@ -4098,39 +4105,67 @@
         },
         {
           "type": "SYMBOL",
-          "name": "tuple_literal"
+          "name": "coalescing_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "if_expression"
+          "name": "logic_disjunction_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "match_expression"
+          "name": "logic_conjunction_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "loop_expression"
+          "name": "range_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "try_expression"
+          "name": "bitwise_disjunction_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "lambda_expression"
+          "name": "bitwise_xor_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "literal_constant"
+          "name": "bitwise_conjunction_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "parenthesized_expression"
+          "name": "equality_comparison_expression"
         },
         {
           "type": "SYMBOL",
-          "name": "block"
+          "name": "comparison_or_type_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "shifting_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "additive_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "multiplicative_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "exponent_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "prefix_unary_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "inc_and_dec_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "postfix_expression"
         }
       ]
     },
@@ -5030,6 +5065,10 @@
         "type": "CHOICE",
         "members": [
           {
+            "type": "SYMBOL",
+            "name": "_atomic_expression"
+          },
+          {
             "type": "SEQ",
             "members": [
               {
@@ -5199,6 +5238,49 @@
       }
     },
     "quest_seperated_item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "item_after_quest"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "call_suffix"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "call_suffix"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "trailing_lambda_expression"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "index_access"
+        }
+      ]
+    },
+    "item_after_quest": {
       "type": "CHOICE",
       "members": [
         {
@@ -5424,7 +5506,7 @@
         ]
       }
     },
-    "atomic_expression": {
+    "_atomic_expression": {
       "type": "CHOICE",
       "members": [
         {
@@ -7402,49 +7484,20 @@
       ]
     },
     "expression_or_declarations": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "REPEAT",
-          "content": {
+      "type": "REPEAT1",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_expression_or_declaration"
+          },
+          {
             "type": "SYMBOL",
             "name": "_end"
           }
-        },
-        {
-          "type": "REPEAT1",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "_expression_or_declaration"
-              },
-              {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SEQ",
-                    "members": [
-                      {
-                        "type": "SYMBOL",
-                        "name": "_end"
-                      },
-                      {
-                        "type": "SYMBOL",
-                        "name": "_expression_or_declaration"
-                      }
-                    ]
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      ]
+        ]
+      }
     },
     "_expression_or_declaration": {
       "type": "CHOICE",
@@ -7455,11 +7508,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "var_or_func_declaration"
+          "name": "_var_or_func_declaration"
         }
       ]
     },
-    "var_or_func_declaration": {
+    "_var_or_func_declaration": {
       "type": "CHOICE",
       "members": [
         {
@@ -9439,27 +9492,67 @@
       "spawn_expression"
     ],
     [
-      "user_type",
-      "left_aux_expression",
-      "atomic_expression"
+      "jump_expression"
+    ],
+    [
+      "class_body"
+    ],
+    [
+      "interface_body"
+    ],
+    [
+      "foreign_body"
+    ],
+    [
+      "expression_or_declarations"
+    ],
+    [
+      "generic_constraints"
+    ],
+    [
+      "foreign_body",
+      "foreign_member_declaration"
+    ],
+    [
+      "_expression",
+      "_atomic_expression"
+    ],
+    [
+      "_expression",
+      "postfix_expression"
+    ],
+    [
+      "class_name",
+      "case_body",
+      "struct_name"
     ],
     [
       "user_type",
-      "atomic_expression"
+      "left_aux_expression",
+      "_atomic_expression"
+    ],
+    [
+      "user_type",
+      "left_aux_expression",
+      "postfix_expression"
+    ],
+    [
+      "user_type",
+      "_atomic_expression"
     ],
     [
       "postfix_expression",
-      "atomic_expression"
+      "_atomic_expression"
     ],
     [
       "user_type",
       "left_aux_expression",
       "postfix_expression",
-      "atomic_expression"
+      "_atomic_expression"
     ],
     [
       "left_value_expression_without_wildcard",
-      "atomic_expression"
+      "_atomic_expression"
     ],
     [
       "_decimal_literal"
@@ -9473,12 +9566,12 @@
       "numeric_type_conv_expr"
     ],
     [
-      "atomic_expression",
+      "_atomic_expression",
       "literal_constant"
     ],
     [
       "left_aux_expression",
-      "atomic_expression"
+      "_atomic_expression"
     ],
     [
       "integer_literal",
@@ -9492,13 +9585,13 @@
       "block"
     ],
     [
-      "atomic_expression",
+      "_atomic_expression",
       "lambda_parameter"
     ],
     [
       "user_type",
       "left_aux_expression",
-      "atomic_expression",
+      "_atomic_expression",
       "lambda_parameter"
     ],
     [
@@ -9647,6 +9740,17 @@
       "user_type",
       "left_aux_expression",
       "lambda_parameter"
+    ],
+    [
+      "user_type",
+      "left_value_expression_without_wildcard",
+      "left_aux_expression",
+      "_atomic_expression"
+    ],
+    [
+      "left_value_expression_without_wildcard",
+      "postfix_expression",
+      "_atomic_expression"
     ]
   ],
   "precedences": [],
