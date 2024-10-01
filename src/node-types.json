@@ -18,7 +18,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -76,6 +224,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -96,7 +248,23 @@
           "named": true
         },
         {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -108,7 +276,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -120,11 +308,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -261,7 +485,67 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
           "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
           "named": true
         },
         {
@@ -273,7 +557,95 @@
           "named": true
         },
         {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
           "type": "tuple_left_value_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -316,7 +688,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
           "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -331,7 +851,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
           "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -346,7 +1014,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
           "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -706,6 +1522,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -726,7 +1546,23 @@
           "named": true
         },
         {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -738,7 +1574,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -754,6 +1610,10 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
@@ -762,7 +1622,39 @@
           "named": true
         },
         {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
           "type": "tuple_type",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -924,7 +1816,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
           "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -1004,7 +2044,15 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
           "type": "arrow_type",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
           "named": true
         },
         {
@@ -1012,7 +2060,115 @@
           "named": true
         },
         {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
           "type": "prefix_type",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
           "named": true
         },
         {
@@ -1020,7 +2176,39 @@
           "named": true
         },
         {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
           "type": "tuple_type",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -1113,6 +2301,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -1133,7 +2325,23 @@
           "named": true
         },
         {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -1145,7 +2353,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -1161,6 +2389,10 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
@@ -1169,7 +2401,39 @@
           "named": true
         },
         {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
           "type": "tuple_type",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -1212,6 +2476,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -1228,7 +2496,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -1240,7 +2528,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -1252,11 +2560,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -1444,7 +2788,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -1495,7 +2987,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
           "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -1506,7 +3146,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -1534,6 +3174,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -1550,7 +3194,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -1562,7 +3226,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -1574,11 +3258,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -1617,6 +3337,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -1637,7 +3361,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -1649,7 +3393,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -1661,11 +3425,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         },
         {
@@ -1796,11 +3596,159 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
           "type": "coalescing_expression",
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
           "type": "flow_operator",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -1848,6 +3796,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -1864,7 +3816,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -1876,7 +3848,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -1896,11 +3888,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -2141,6 +4169,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -2161,11 +4193,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "if_expression",
           "named": true
         },
         {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -2177,7 +4225,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -2189,11 +4257,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -2238,22 +4342,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "postfix_expression",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "index_access",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -2281,6 +4370,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -2297,7 +4390,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -2309,7 +4422,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -2318,6 +4451,173 @@
         },
         {
           "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "index_access",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
           "named": true
         },
         {
@@ -2330,6 +4630,38 @@
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -2473,7 +4805,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
@@ -2501,6 +4833,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -2517,7 +4853,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -2529,7 +4885,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -2541,11 +4917,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -2738,6 +5150,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -2758,7 +5174,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -2770,7 +5206,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -2782,11 +5238,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         },
         {
@@ -2871,7 +5363,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -2886,7 +5526,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
           "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -2978,6 +5766,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -2998,7 +5790,23 @@
           "named": true
         },
         {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -3010,6 +5818,14 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
           "type": "macro_with_attr_param",
           "named": true
         },
@@ -3018,7 +5834,19 @@
           "named": true
         },
         {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -3030,11 +5858,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -3293,6 +6157,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -3313,7 +6181,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -3325,7 +6213,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -3345,11 +6253,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         },
         {
@@ -3392,6 +6336,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -3412,7 +6360,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -3424,11 +6392,31 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
           "type": "match_case",
           "named": true
         },
         {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -3440,11 +6428,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         },
         {
@@ -3551,6 +6575,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -3571,7 +6599,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -3583,7 +6631,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -3595,11 +6663,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         },
         {
@@ -3650,7 +6754,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
           "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -3739,6 +6991,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -3755,7 +7011,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -3767,11 +7043,31 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
           "named": true
         },
         {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
           "type": "numeric_types",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -3783,11 +7079,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -3889,7 +7221,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -3917,6 +7249,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -3933,7 +7269,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -3945,7 +7301,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -3957,11 +7333,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -4034,7 +7446,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -4062,6 +7474,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -4078,7 +7494,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -4090,7 +7526,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -4102,11 +7558,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -4148,7 +7640,15 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
           "type": "arrow_type",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
           "named": true
         },
         {
@@ -4156,11 +7656,43 @@
           "named": true
         },
         {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
           "type": "call_suffix",
           "named": true
         },
         {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
           "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
           "named": true
         },
         {
@@ -4169,6 +7701,10 @@
         },
         {
           "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
           "named": true
         },
         {
@@ -4188,6 +7724,14 @@
           "named": true
         },
         {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
           "type": "loop_expression",
           "named": true
         },
@@ -4197,6 +7741,10 @@
         },
         {
           "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
           "named": true
         },
         {
@@ -4216,11 +7764,23 @@
           "named": true
         },
         {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
           "type": "quest_seperated_items",
           "named": true
         },
         {
           "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
           "named": true
         },
         {
@@ -4330,11 +7890,159 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
           "named": true
         },
         {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
           "type": "prefix_unary_operator",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -4557,7 +8265,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
@@ -4585,6 +8293,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -4601,7 +8313,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -4613,7 +8345,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -4625,11 +8377,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -4659,7 +8447,155 @@
       "required": true,
       "types": [
         {
+          "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
           "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -4698,6 +8634,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -4718,7 +8658,23 @@
           "named": true
         },
         {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -4730,7 +8686,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -4742,11 +8718,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -4789,6 +8801,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -4809,7 +8825,23 @@
           "named": true
         },
         {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -4821,7 +8853,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -4833,11 +8885,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -4887,6 +8975,154 @@
       "types": [
         {
           "type": "additive_expression",
+          "named": true
+        },
+        {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "bitwise_xor_expression",
+          "named": true
+        },
+        {
+          "type": "coalescing_expression",
+          "named": true
+        },
+        {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
+          "type": "comparison_or_type_expression",
+          "named": true
+        },
+        {
+          "type": "equality_comparison_expression",
+          "named": true
+        },
+        {
+          "type": "exponent_expression",
+          "named": true
+        },
+        {
+          "type": "flow_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
+          "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
+          "named": true
+        },
+        {
+          "type": "logic_conjunction_expression",
+          "named": true
+        },
+        {
+          "type": "logic_disjunction_expression",
+          "named": true
+        },
+        {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
+          "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "postfix_expression",
+          "named": true
+        },
+        {
+          "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
+          "type": "range_expression",
+          "named": true
+        },
+        {
+          "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -4948,6 +9184,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -4964,7 +9204,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -4976,7 +9236,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -4988,6 +9268,10 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
@@ -4996,7 +9280,39 @@
           "named": true
         },
         {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
           "type": "trailing_lambda_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -5007,7 +9323,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -5035,6 +9351,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -5051,7 +9371,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -5063,7 +9403,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -5075,11 +9435,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -5300,6 +9696,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -5320,7 +9720,23 @@
           "named": true
         },
         {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -5332,7 +9748,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -5348,6 +9784,10 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
@@ -5356,11 +9796,43 @@
           "named": true
         },
         {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
           "type": "struct_non_static_member_modifier",
           "named": true
         },
         {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
           "type": "tuple_type",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -5557,6 +10029,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -5573,7 +10049,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -5585,7 +10081,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -5597,11 +10113,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -5757,6 +10309,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -5773,7 +10329,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -5785,7 +10361,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -5797,11 +10393,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -6116,6 +10748,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -6136,7 +10772,23 @@
           "named": true
         },
         {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -6148,7 +10800,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -6157,6 +10829,10 @@
         },
         {
           "type": "prefix_unary_expression",
+          "named": true
+        },
+        {
+          "type": "quote_expression",
           "named": true
         },
         {
@@ -6169,6 +10845,38 @@
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]
@@ -6230,6 +10938,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -6246,7 +10958,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -6258,7 +10990,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -6278,6 +11030,10 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
@@ -6286,7 +11042,39 @@
           "named": true
         },
         {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
           "type": "tuple_type",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         },
         {
@@ -6338,6 +11126,10 @@
           "named": true
         },
         {
+          "type": "collection_literal",
+          "named": true
+        },
+        {
           "type": "comparison_or_type_expression",
           "named": true
         },
@@ -6358,7 +11150,27 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_expression",
+          "named": true
+        },
+        {
           "type": "inc_and_dec_expression",
+          "named": true
+        },
+        {
+          "type": "jump_expression",
+          "named": true
+        },
+        {
+          "type": "lambda_expression",
+          "named": true
+        },
+        {
+          "type": "literal_constant",
           "named": true
         },
         {
@@ -6370,7 +11182,27 @@
           "named": true
         },
         {
+          "type": "loop_expression",
+          "named": true
+        },
+        {
+          "type": "macro_expression",
+          "named": true
+        },
+        {
+          "type": "match_expression",
+          "named": true
+        },
+        {
           "type": "multiplicative_expression",
+          "named": true
+        },
+        {
+          "type": "numeric_type_conv_expr",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
           "named": true
         },
         {
@@ -6382,11 +11214,47 @@
           "named": true
         },
         {
+          "type": "quote_expression",
+          "named": true
+        },
+        {
           "type": "range_expression",
           "named": true
         },
         {
           "type": "shifting_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_expression",
+          "named": true
+        },
+        {
+          "type": "synchronized_expression",
+          "named": true
+        },
+        {
+          "type": "this_super_expression",
+          "named": true
+        },
+        {
+          "type": "try_expression",
+          "named": true
+        },
+        {
+          "type": "tuple_literal",
+          "named": true
+        },
+        {
+          "type": "type_arguments",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
+          "named": true
+        },
+        {
+          "type": "unsafe_expression",
           "named": true
         }
       ]

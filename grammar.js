@@ -48,6 +48,7 @@ module.exports = grammar({
     [$.class_body],
     [$.interface_body],
     [$.foreign_body],
+    [$.upper_bounds],
     [$.expression_or_declarations],
     [$.generic_constraints],
     [$.foreign_body, $.foreign_member_declaration],
@@ -803,6 +804,7 @@ module.exports = grammar({
     // Expression
     _expression: ($) =>
       choice(
+        $._atomic_expression,
         $.assignment_expression,
         $.flow_expression,
         $.coalescing_expression,
@@ -821,7 +823,6 @@ module.exports = grammar({
         $.prefix_unary_expression,
         $.inc_and_dec_expression,
         $.postfix_expression,
-        $._atomic_expression,
       ),
 
     assignment_expression: ($) =>
@@ -831,17 +832,13 @@ module.exports = grammar({
           seq(
             $.left_value_expression_without_wildcard,
             field('operator', $.assignment_operator),
-            $.flow_expression,
+            $._expression,
           ),
-          seq(
-            $.left_value_expression,
-            field('operator', '='),
-            $.flow_expression,
-          ),
+          seq($.left_value_expression, field('operator', '='), $._expression),
           seq(
             $.tuple_left_value_expression,
             field('operator', '='),
-            $.flow_expression,
+            $._expression,
           ),
         ),
       ),
@@ -887,80 +884,59 @@ module.exports = grammar({
     flow_expression: ($) =>
       prec.left(
         PREC.FLOW,
-        seq(
-          $.coalescing_expression,
-          repeat1(seq($.flow_operator, $.coalescing_expression)),
-        ),
+        seq($._expression, repeat1(seq($.flow_operator, $._expression))),
       ),
 
     coalescing_expression: ($) =>
       prec.left(
         PREC.COALESCING,
-        seq(
-          $.logic_disjunction_expression,
-          repeat1(seq('??', $.logic_disjunction_expression)),
-        ),
+        seq($._expression, repeat1(seq('??', $._expression))),
       ),
 
     logic_disjunction_expression: ($) =>
-      prec.left(
-        PREC.OR,
-        seq(
-          $.logic_conjunction_expression,
-          repeat1(seq('||', $.logic_conjunction_expression)),
-        ),
-      ),
+      prec.left(PREC.OR, seq($._expression, repeat1(seq('||', $._expression)))),
 
     logic_conjunction_expression: ($) =>
       prec.left(
         PREC.AND,
-        seq($.range_expression, repeat1(seq('&&', $.range_expression))),
+        seq($._expression, repeat1(seq('&&', $._expression))),
       ),
 
     range_expression: ($) =>
       prec.left(
         PREC.RANGE,
         seq(
-          $.bitwise_disjunction_expression,
+          $._expression,
           field('operator', choice('..', '..=')),
-          $.bitwise_disjunction_expression,
+          $._expression,
         ),
       ),
 
     bitwise_disjunction_expression: ($) =>
       prec.left(
         PREC.BIT_OR,
-        seq(
-          $.bitwise_xor_expression,
-          repeat1(seq('|', $.bitwise_xor_expression)),
-        ),
+        seq($._expression, repeat1(seq('|', $._expression))),
       ),
 
     bitwise_xor_expression: ($) =>
       prec.left(
         PREC.BIT_XOR,
-        seq(
-          $.bitwise_conjunction_expression,
-          repeat1(seq('^', $.bitwise_conjunction_expression)),
-        ),
+        seq($._expression, repeat1(seq('^', $._expression))),
       ),
 
     bitwise_conjunction_expression: ($) =>
       prec.left(
         PREC.BIT_AND,
-        seq(
-          $.equality_comparison_expression,
-          repeat1(seq('&', $.equality_comparison_expression)),
-        ),
+        seq($._expression, repeat1(seq('&', $._expression))),
       ),
 
     equality_comparison_expression: ($) =>
       prec.left(
         PREC.EQUALITY,
         seq(
-          $.comparison_or_type_expression,
+          $._expression,
           field('operator', choice('==', '!=')),
-          $.comparison_or_type_expression,
+          $._expression,
         ),
       ),
 
@@ -969,72 +945,55 @@ module.exports = grammar({
         PREC.REL,
         choice(
           seq(
-            $.shifting_expression,
+            $._expression,
             field('operator', choice('<', '>', '<=', '>=')),
-            $.shifting_expression,
+            $._expression,
           ),
-          seq($.shifting_expression, field('operator', 'is'), $._type),
-          seq($.shifting_expression, field('operator', 'as'), $._type),
+          seq($._expression, field('operator', 'is'), $._type),
+          seq($._expression, field('operator', 'as'), $._type),
         ),
       ),
 
     shifting_expression: ($) =>
       prec.left(
         PREC.SHIFT,
-        seq(
-          $.additive_expression,
-          repeat1(seq(choice('<<', '>>'), $.additive_expression)),
-        ),
+        seq($._expression, repeat1(seq(choice('<<', '>>'), $._expression))),
       ),
 
     additive_expression: ($) =>
       prec.left(
         PREC.ADD,
-        seq(
-          $.multiplicative_expression,
-          repeat1(seq(choice('+', '-'), $.multiplicative_expression)),
-        ),
+        seq($._expression, repeat1(seq(choice('+', '-'), $._expression))),
       ),
 
     multiplicative_expression: ($) =>
       prec.left(
         PREC.MULT,
-        seq(
-          $.exponent_expression,
-          repeat1(seq(choice('*', '/', '%'), $.exponent_expression)),
-        ),
+        seq($._expression, repeat1(seq(choice('*', '/', '%'), $._expression))),
       ),
 
     exponent_expression: ($) =>
       prec.left(
         PREC.EXP,
-        seq(
-          $.prefix_unary_expression,
-          repeat1(seq('**', $.prefix_unary_expression)),
-        ),
+        seq($._expression, repeat1(seq('**', $._expression))),
       ),
 
     prefix_unary_expression: ($) =>
-      seq(repeat1($.prefix_unary_operator), $.inc_and_dec_expression),
+      prec.left(PREC.UNARY, seq($.prefix_unary_operator, $._expression)),
 
     inc_and_dec_expression: ($) =>
-      prec.left(PREC.UNARY, seq($.postfix_expression, choice('++', '--'))),
+      prec.left(PREC.UNARY, seq($._expression, choice('++', '--'))),
 
     postfix_expression: ($) =>
       prec.left(
+        PREC.ARRAY,
         choice(
-          $._atomic_expression,
           seq($._type, '.', $.identifier),
+          seq($._expression, '.', $.identifier, optional($.type_arguments)),
+          seq($._expression, $.call_suffix),
+          seq($._expression, $.index_access),
           seq(
-            $.postfix_expression,
-            '.',
-            $.identifier,
-            optional($.type_arguments),
-          ),
-          seq($.postfix_expression, $.call_suffix),
-          seq($.postfix_expression, $.index_access),
-          seq(
-            $.postfix_expression,
+            $._expression,
             '.',
             $.identifier,
             optional($.call_suffix),
@@ -1045,7 +1004,7 @@ module.exports = grammar({
             optional($.call_suffix),
             $.trailing_lambda_expression,
           ),
-          seq($.postfix_expression, repeat(seq('?', $.quest_seperated_items))),
+          seq($._expression, repeat1(seq('?', $.quest_seperated_items))),
         ),
       ),
 
@@ -1098,26 +1057,29 @@ module.exports = grammar({
       ),
 
     _atomic_expression: ($) =>
-      choice(
-        $.literal_constant,
-        $.collection_literal,
-        $.tuple_literal,
-        seq($.identifier, optional($.type_arguments)),
-        $.unit_literal,
-        $.if_expression,
-        $.match_expression,
-        $.loop_expression,
-        $.try_expression,
-        $.jump_expression,
-        $.numeric_type_conv_expr,
-        $.this_super_expression,
-        $.spawn_expression,
-        $.synchronized_expression,
-        $.parenthesized_expression,
-        $.lambda_expression,
-        $.quote_expression,
-        $.macro_expression,
-        $.unsafe_expression,
+      prec.left(
+        PREC.PARENS,
+        choice(
+          $.literal_constant,
+          $.collection_literal,
+          $.tuple_literal,
+          seq($.identifier, optional($.type_arguments)),
+          $.unit_literal,
+          $.if_expression,
+          $.match_expression,
+          $.loop_expression,
+          $.try_expression,
+          $.jump_expression,
+          $.numeric_type_conv_expr,
+          $.this_super_expression,
+          $.spawn_expression,
+          $.synchronized_expression,
+          $.parenthesized_expression,
+          $.lambda_expression,
+          $.quote_expression,
+          $.macro_expression,
+          $.unsafe_expression,
+        ),
       ),
 
     literal_constant: ($) =>
