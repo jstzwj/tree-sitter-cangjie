@@ -4668,11 +4668,6 @@
     }
   },
   {
-    "type": "integer_literal",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "interface_body",
     "named": true,
     "fields": {},
@@ -11614,10 +11609,6 @@
     "named": false
   },
   {
-    "type": "B",
-    "named": false
-  },
-  {
     "type": "Boolean",
     "named": false
   },
@@ -11659,10 +11650,6 @@
   },
   {
     "type": "Nothing",
-    "named": false
-  },
-  {
-    "type": "O",
     "named": false
   },
   {
@@ -11798,18 +11785,6 @@
     "named": false
   },
   {
-    "type": "f16",
-    "named": false
-  },
-  {
-    "type": "f32",
-    "named": false
-  },
-  {
-    "type": "f64",
-    "named": false
-  },
-  {
     "type": "false",
     "named": false
   },
@@ -11847,22 +11822,6 @@
   },
   {
     "type": "get",
-    "named": false
-  },
-  {
-    "type": "i16",
-    "named": false
-  },
-  {
-    "type": "i32",
-    "named": false
-  },
-  {
-    "type": "i64",
-    "named": false
-  },
-  {
-    "type": "i8",
     "named": false
   },
   {
@@ -11908,6 +11867,10 @@
   {
     "type": "int_native",
     "named": false
+  },
+  {
+    "type": "integer_literal",
+    "named": true
   },
   {
     "type": "interface",
@@ -11959,10 +11922,6 @@
   },
   {
     "type": "nothing",
-    "named": false
-  },
-  {
-    "type": "o",
     "named": false
   },
   {
@@ -12083,22 +12042,6 @@
   },
   {
     "type": "u",
-    "named": false
-  },
-  {
-    "type": "u16",
-    "named": false
-  },
-  {
-    "type": "u32",
-    "named": false
-  },
-  {
-    "type": "u64",
-    "named": false
-  },
-  {
-    "type": "u8",
     "named": false
   },
   {

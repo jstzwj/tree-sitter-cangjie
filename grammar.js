@@ -39,6 +39,8 @@ const PREC = {
   CLASS_MODIFIER: 32, // public, private
 };
 
+const INTEGER_SUFFIX = ['i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64']
+
 module.exports = grammar({
   name: 'cangjie',
   extras: ($) => [/[\s\uFEFF\u2028\u2029\u2060\u200B]/, $.comment],
@@ -59,11 +61,10 @@ module.exports = grammar({
     [$._decimal_literal],
     [$.foreign_body, $.foreign_member_declaration],
     [$._expression, $._atomic_expression],
-
+    [$._atomic_expression, $.literal_constant],
     [$.arrow_parameters, $.tuple_type, $.left_aux_expression],
     [$.class_name, $.case_body, $.struct_name],
     [$.user_type, $.left_aux_expression, $._atomic_expression],
-    [$.user_type, $.left_aux_expression, $.postfix_expression],
     [$.user_type, $._atomic_expression],
     [$.left_value_expression_without_wildcard, $._atomic_expression],
     [$.integer_literal, $.float_literal],
@@ -83,7 +84,6 @@ module.exports = grammar({
     [$.enum_pattern],
     [$.function_definition],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
-    [$.user_type, $.left_aux_expression],
     [$.do_while_expression],
     [$.unit_literal, $.tuple_pattern],
     [$.constant_pattern],
@@ -92,8 +92,6 @@ module.exports = grammar({
     [$.line_string_expression],
     [$.resource_specification],
     [$.multi_line_string_expression],
-    [$._binary_literal],
-    [$._octal_literal],
     [$._hexadecimal_digits],
     [$.class_init, $.struct_init],
     [$.class_unnamed_init_param_list],
@@ -106,13 +104,6 @@ module.exports = grammar({
     [$.function_modifier_list],
     [$.struct_name, $.enum_pattern],
     [$.class_primary_init, $.this_super_expression],
-    [$.user_type, $.left_aux_expression, $.lambda_parameter],
-    [
-      $.user_type,
-      $.left_value_expression_without_wildcard,
-      $.left_aux_expression,
-      $._atomic_expression,
-    ],
     [
       $.left_value_expression_without_wildcard,
       $.postfix_expression,
@@ -855,20 +846,23 @@ module.exports = grammar({
       ),
 
     left_aux_expression: ($) =>
-      prec.left(PREC.QUESTION, choice(
-        seq($.identifier, optional($.type_arguments)),
-        $._type,
-        $.this_super_expression,
-        seq(
-          $._expression,
-          optional('?'),
-          optional('.'),
-          $.identifier,
-          optional($.type_arguments),
+      prec.left(
+        PREC.QUESTION,
+        choice(
+          seq($.identifier, optional($.type_arguments)),
+          $._type,
+          $.this_super_expression,
+          seq(
+            $._expression,
+            optional('?'),
+            optional('.'),
+            $.identifier,
+            optional($.type_arguments),
+          ),
+          seq($._expression, optional('?'), $.call_suffix),
+          seq($._expression, optional('?'), $.index_access),
         ),
-        seq($._expression, optional('?'), $.call_suffix),
-        seq($._expression, optional('?'), $.index_access),
-      )),
+      ),
 
     assignable_suffix: ($) => choice($.field_access, $.index_access),
 
@@ -1050,29 +1044,26 @@ module.exports = grammar({
       ),
 
     _atomic_expression: ($) =>
-      prec.left(
-        PREC.PARENS,
-        choice(
-          $.literal_constant,
-          $.collection_literal,
-          $.tuple_literal,
-          seq($.identifier, optional($.type_arguments)),
-          $.unit_literal,
-          $.if_expression,
-          $.match_expression,
-          $.loop_expression,
-          $.try_expression,
-          $.jump_expression,
-          $.numeric_type_conv_expr,
-          $.this_super_expression,
-          $.spawn_expression,
-          $.synchronized_expression,
-          $.parenthesized_expression,
-          $.lambda_expression,
-          $.quote_expression,
-          $.macro_expression,
-          $.unsafe_expression,
-        ),
+      choice(
+        $.literal_constant,
+        $.collection_literal,
+        $.tuple_literal,
+        seq($.identifier, optional($.type_arguments)),
+        $.unit_literal,
+        $.if_expression,
+        $.match_expression,
+        $.loop_expression,
+        $.try_expression,
+        $.jump_expression,
+        $.numeric_type_conv_expr,
+        $.this_super_expression,
+        $.spawn_expression,
+        $.synchronized_expression,
+        $.parenthesized_expression,
+        $.lambda_expression,
+        $.quote_expression,
+        $.macro_expression,
+        $.unsafe_expression,
       ),
 
     literal_constant: ($) =>
@@ -1503,35 +1494,15 @@ module.exports = grammar({
     TRIPLE_QUOTE_CLOSE: ($) => '"""',
 
     // Literals
-    _integer_literal_suffix: ($) =>
-      choice('i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64'),
-
-    integer_literal: ($) =>
+    integer_literal: _ => token(seq(
       choice(
-        seq($._binary_literal, optional($._integer_literal_suffix)),
-        seq($._octal_literal, optional($._integer_literal_suffix)),
-        seq($._decimal_literal, optional($._integer_literal_suffix)),
-        seq($._hexadecimal_literal, optional($._integer_literal_suffix)),
+        /[0-9][0-9_]*/,
+        /0x[0-9a-fA-F_]+/,
+        /0b[01_]+/,
+        /0o[0-7_]+/,
       ),
-
-    _binary_literal: ($) =>
-      seq(
-        '0',
-        choice('b', 'B'),
-        $._bin_digit,
-        repeat(choice($._bin_digit, '_')),
-      ),
-    _bin_digit: ($) => /[01]/,
-
-    _octal_literal: ($) =>
-      seq(
-        '0',
-        choice('o', 'O'),
-        $._octal_digit,
-        repeat(choice($._octal_digit, '_')),
-      ),
-    _octal_digit: ($) => /[0-7]/,
-
+      optional(choice(...INTEGER_SUFFIX)),
+    )),
     _decimal_literal: ($) =>
       choice(
         seq(
@@ -1539,27 +1510,32 @@ module.exports = grammar({
           repeat(choice($._decimal_digit, '_')),
         ),
         $._decimal_digit,
-      ),
+      ), // /([1-9][0-9_]*|[0-9])/
 
-    _decimal_digit_with_out_zero: ($) => /[1-9]/,
-    _decimal_digit: ($) => /[0-9]/,
+    _decimal_digit_with_out_zero: ($) => token(/[1-9]/),
+    _decimal_digit: ($) => token(/[0-9]/),
 
     _hexadecimal_literal: ($) =>
       seq('0', choice('x', 'X'), $._hexadecimal_digits),
     _hexadecimal_digits: ($) =>
       seq($._hexadecimal_digit, repeat(choice($._hexadecimal_digit, '_'))),
-    _hexadecimal_digit: ($) => /[0-9a-fA-F]/,
+    _hexadecimal_digit: ($) => token(/[0-9a-fA-F]/),
 
-    _float_literal_suffix: ($) => choice('f16', 'f32', 'f64'),
+    _float_literal_suffix: ($) => token(choice('f16', 'f32', 'f64')),
 
     float_literal: ($) =>
       choice(
-        seq($._decimal_literal, optional($._decimal_exponent)),
-        seq($._decimal_fraction, optional($._decimal_exponent)),
         seq(
-          $._decimal_literal,
-          $._decimal_fraction,
-          optional($._decimal_exponent),
+          choice(
+            seq($._decimal_literal, $._decimal_exponent),
+            seq($._decimal_fraction, optional($._decimal_exponent)),
+            seq(
+              $._decimal_literal,
+              $._decimal_fraction,
+              optional($._decimal_exponent),
+            ),
+          ),
+          optional($._float_literal_suffix),
         ),
         seq(
           $._hexadecimalprefix,
@@ -1572,11 +1548,11 @@ module.exports = grammar({
         ),
       ),
 
-    _decimal_fraction: ($) => seq('.', $._decimal_fragment),
+    _decimal_fraction: ($) => seq('.', $._decimal_fragment), // /\.[0-9][0-9_]*/
     _decimal_fragment: ($) =>
-      seq($._decimal_digit, repeat(choice($._decimal_digit, '_'))),
+      seq($._decimal_digit, repeat(choice($._decimal_digit, '_'))), // /[0-9][0-9_]*/
     _decimal_exponent: ($) =>
-      seq($._float_e, optional($._sign), $._decimal_fragment),
+      seq($._float_e, optional($._sign), $._decimal_fragment), // /[eE]-?[0-9][0-9_]*/
 
     _hexadecimal_fraction: ($) => seq('.', $._hexadecimal_digits),
     _hexadecimal_exponent: ($) =>
