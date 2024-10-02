@@ -39,8 +39,8 @@ const PREC = {
   CLASS_MODIFIER: 32, // public, private
 };
 
-const INTEGER_SUFFIX = ['i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64']
-
+const INTEGER_SUFFIX = ['i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64'];
+const FLOAT_SUFFIX = ['f16', 'f32', 'f64'];
 module.exports = grammar({
   name: 'cangjie',
   extras: ($) => [/[\s\uFEFF\u2028\u2029\u2060\u200B]/, $.comment],
@@ -1494,15 +1494,13 @@ module.exports = grammar({
     TRIPLE_QUOTE_CLOSE: ($) => '"""',
 
     // Literals
-    integer_literal: _ => token(seq(
-      choice(
-        /[0-9][0-9_]*/,
-        /0x[0-9a-fA-F_]+/,
-        /0b[01_]+/,
-        /0o[0-7_]+/,
+    integer_literal: (_) =>
+      token(
+        seq(
+          choice(/[0-9][0-9_]*/, /0x[0-9a-fA-F_]+/, /0b[01_]+/, /0o[0-7_]+/),
+          optional(choice(...INTEGER_SUFFIX)),
+        ),
       ),
-      optional(choice(...INTEGER_SUFFIX)),
-    )),
     _decimal_literal: ($) =>
       choice(
         seq(
@@ -1518,12 +1516,29 @@ module.exports = grammar({
     _hexadecimal_literal: ($) =>
       seq('0', choice('x', 'X'), $._hexadecimal_digits),
     _hexadecimal_digits: ($) =>
-      seq($._hexadecimal_digit, repeat(choice($._hexadecimal_digit, '_'))),
+      seq($._hexadecimal_digit, repeat(choice($._hexadecimal_digit, '_'))), // /[0-9a-fA-F][0-9a-fA-F_]*/
     _hexadecimal_digit: ($) => token(/[0-9a-fA-F]/),
 
-    _float_literal_suffix: ($) => token(choice('f16', 'f32', 'f64')),
-
     float_literal: ($) =>
+      token(
+        choice(
+          seq(
+            choice(
+              /([1-9][0-9_]*|[0-9])[eE]-?[0-9][0-9_]*/,
+              /\.[0-9][0-9_]*([eE]-?[0-9][0-9_]*)?/,
+              /([1-9][0-9_]*|[0-9])\.[0-9][0-9_]*([eE]-?[0-9][0-9_]*)?/,
+            ),
+            optional(choice(...FLOAT_SUFFIX)),
+          ),
+          seq(
+            /0[xX]/,
+            /(([0-9a-fA-F][0-9a-fA-F_]*)|(\.[0-9a-fA-F][0-9a-fA-F_]*)|([0-9a-fA-F][0-9a-fA-F_]*\.[0-9a-fA-F][0-9a-fA-F_]*))/,
+            /[pP]-?[0-9][0-9_]*/,
+          ),
+        ),
+      ),
+    /*
+    float_literal_old: ($) =>
       choice(
         seq(
           choice(
@@ -1547,22 +1562,22 @@ module.exports = grammar({
           $._hexadecimal_exponent,
         ),
       ),
-
+    */
     _decimal_fraction: ($) => seq('.', $._decimal_fragment), // /\.[0-9][0-9_]*/
     _decimal_fragment: ($) =>
       seq($._decimal_digit, repeat(choice($._decimal_digit, '_'))), // /[0-9][0-9_]*/
     _decimal_exponent: ($) =>
       seq($._float_e, optional($._sign), $._decimal_fragment), // /[eE]-?[0-9][0-9_]*/
 
-    _hexadecimal_fraction: ($) => seq('.', $._hexadecimal_digits),
+    _hexadecimal_fraction: ($) => seq('.', $._hexadecimal_digits), // /\.[0-9a-fA-F][0-9a-fA-F_]*/
     _hexadecimal_exponent: ($) =>
-      seq($._float_p, optional($._sign), $._decimal_fragment),
+      seq($._float_p, optional($._sign), $._decimal_fragment), // /[pP]-?[0-9][0-9_]*/
 
     _float_e: ($) => choice('e', 'E'),
     _float_p: ($) => choice('p', 'P'),
     _sign: ($) => choice('-', ''),
 
-    _hexadecimalprefix: ($) => seq('0', choice('x', 'X')),
+    _hexadecimalprefix: ($) => seq('0', choice('x', 'X')), // /0[xX]/
 
     rune_literal: ($) => seq("'", choice($._single_char, $._escape_seq), "'"),
     _single_char: ($) => /[^'\\\r\n]/,

@@ -3583,11 +3583,6 @@
     }
   },
   {
-    "type": "float_literal",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "flow_expression",
     "named": true,
     "fields": {},
@@ -11803,6 +11798,10 @@
   {
     "type": "float64",
     "named": false
+  },
+  {
+    "type": "float_literal",
+    "named": true
   },
   {
     "type": "for",
