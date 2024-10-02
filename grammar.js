@@ -20,21 +20,23 @@ const PREC = {
   RANGE: 14, // .. ..=
   SHIFT: 15, // <<  >>  >>>
   ADD: 16, // +  -
-  EXP: 17, // **
-  MULT: 18, // *  /  %
-  CAST: 19, // (Type)
-  OBJ_INST: 20, // new
-  UNARY: 21, // ++a  --a  a++  a--  +  -  !  ~
-  ARRAY: 22, // [Index]
-  OBJ_ACCESS: 23, // .
-  PARENS: 24, // (Expression)
-  CLASS_LITERAL: 25, // .
+  MULT: 17, // *  /  %
+  CAST: 18, // (Type)
+  EXP: 19, // **
+  NEG: 20, // +  -
+  NOT: 21, // !
+  QUESTION: 22, // ?
+  INC: 23, // a++  a--
+  ARRAY: 24, // [Index]
+  OBJ_ACCESS: 25, // .
+  PARENS: 26, // (Expression)
+  CLASS_LITERAL: 27, // .
 
-  PROPERTY_MODIFIER: 26, // public, private
-  VARIABLE_MODIFIER: 27, // public, private
-  INTERFACE_MODIFIER: 28, // public, private
-  FUNCTION_MODIFIER: 29, // public, private
-  CLASS_MODIFIER: 30, // public, private
+  PROPERTY_MODIFIER: 28, // public, private
+  VARIABLE_MODIFIER: 29, // public, private
+  INTERFACE_MODIFIER: 30, // public, private
+  FUNCTION_MODIFIER: 31, // public, private
+  CLASS_MODIFIER: 32, // public, private
 };
 
 module.exports = grammar({
@@ -49,39 +51,23 @@ module.exports = grammar({
     [$.interface_body],
     [$.foreign_body],
     [$.upper_bounds],
+    [$.class_init],
+    [$.static_init],
+    [$.variable_declaration],
     [$.expression_or_declarations],
     [$.generic_constraints],
+    [$._decimal_literal],
     [$.foreign_body, $.foreign_member_declaration],
     [$._expression, $._atomic_expression],
-    [$._expression, $.postfix_expression],
 
+    [$.arrow_parameters, $.tuple_type, $.left_aux_expression],
     [$.class_name, $.case_body, $.struct_name],
     [$.user_type, $.left_aux_expression, $._atomic_expression],
     [$.user_type, $.left_aux_expression, $.postfix_expression],
     [$.user_type, $._atomic_expression],
-    [$.postfix_expression, $._atomic_expression],
-    [
-      $.user_type,
-      $.left_aux_expression,
-      $.postfix_expression,
-      $._atomic_expression,
-    ],
     [$.left_value_expression_without_wildcard, $._atomic_expression],
-    [$._decimal_literal],
-    [$.left_aux_expression, $.postfix_expression],
-    [$.char_lang_types, $.numeric_type_conv_expr],
-    [$._atomic_expression, $.literal_constant],
-    [$.left_aux_expression, $._atomic_expression],
     [$.integer_literal, $.float_literal],
     [$._decimal_fragment],
-    [$.lambda_expression, $.block],
-    [$._atomic_expression, $.lambda_parameter],
-    [
-      $.user_type,
-      $.left_aux_expression,
-      $._atomic_expression,
-      $.lambda_parameter,
-    ],
     [$.var_binding_pattern, $.enum_pattern],
     [$.user_type, $.var_binding_pattern, $.enum_pattern],
     [$.tuple_literal, $.unit_literal],
@@ -105,7 +91,6 @@ module.exports = grammar({
     [$.class_name, $.struct_name, $.var_binding_pattern, $.enum_pattern],
     [$.line_string_expression],
     [$.resource_specification],
-    [$.quest_seperated_item],
     [$.multi_line_string_expression],
     [$._binary_literal],
     [$._octal_literal],
@@ -246,6 +231,7 @@ module.exports = grammar({
         'init',
         $.function_parameters,
         $.block,
+        repeat($._end),
       ),
     static_init: ($) =>
       seq(
@@ -256,6 +242,7 @@ module.exports = grammar({
         '{',
         optional($.expression_or_declarations),
         '}',
+        repeat($._end),
       ),
     class_primary_init: ($) =>
       seq(
@@ -366,6 +353,7 @@ module.exports = grammar({
         optional(seq(':', $._type)),
         optional($.generic_constraints),
         optional($.block),
+        repeat($._end),
       ),
     function_modifier_list: ($) => repeat1($.function_modifier),
     function_modifier: ($) =>
@@ -398,6 +386,7 @@ module.exports = grammar({
         optional($._type),
         optional($.generic_constraints),
         optional($.block),
+        repeat($._end),
       ),
 
     function_parameters: ($) =>
@@ -443,6 +432,7 @@ module.exports = grammar({
           seq(optional(seq(':', $._type)), optional(seq('=', $._expression))),
           seq(':', $._type),
         ),
+        repeat($._end),
       ),
     variable_modifier: ($) =>
       choice('public', 'protected', 'internal', 'private'),
@@ -690,6 +680,7 @@ module.exports = grammar({
         choice($.macro_without_attr_param, $.macro_with_attr_param),
         optional(seq(':', $.identifier)),
         optional(seq('=', $._expression)),
+        repeat($._end),
       ),
 
     macro_without_attr_param: ($) => seq('(', $.macro_input_decl, ')'),
@@ -709,6 +700,7 @@ module.exports = grammar({
         ':',
         $._type,
         optional($.property_body),
+        repeat($._end),
       ),
 
     property_body: ($) =>
@@ -853,29 +845,30 @@ module.exports = grammar({
       ),
 
     left_value_expression: ($) =>
-      choice($.left_value_expression_without_wildcard, '*'),
+      choice($.left_value_expression_without_wildcard, '_'),
 
     left_value_expression_without_wildcard: ($) =>
       choice(
         $.identifier,
+        $.left_aux_expression,
         seq($.left_aux_expression, optional('?'), $.assignable_suffix),
       ),
 
     left_aux_expression: ($) =>
-      choice(
-        $.identifier,
-        seq($._type, optional($.type_arguments)),
+      prec.left(PREC.QUESTION, choice(
+        seq($.identifier, optional($.type_arguments)),
+        $._type,
         $.this_super_expression,
         seq(
-          $.left_aux_expression,
+          $._expression,
           optional('?'),
           optional('.'),
           $.identifier,
           optional($.type_arguments),
         ),
-        seq($.left_aux_expression, optional('?'), $.call_suffix),
-        seq($.left_aux_expression, optional('?'), $.index_access),
-      ),
+        seq($._expression, optional('?'), $.call_suffix),
+        seq($._expression, optional('?'), $.index_access),
+      )),
 
     assignable_suffix: ($) => choice($.field_access, $.index_access),
 
@@ -979,10 +972,10 @@ module.exports = grammar({
       ),
 
     prefix_unary_expression: ($) =>
-      prec.left(PREC.UNARY, seq($.prefix_unary_operator, $._expression)),
+      prec.left(PREC.NEG, seq($.prefix_unary_operator, $._expression)),
 
     inc_and_dec_expression: ($) =>
-      prec.left(PREC.UNARY, seq($._expression, choice('++', '--'))),
+      prec.left(PREC.INC, seq($._expression, choice('++', '--'))),
 
     postfix_expression: ($) =>
       prec.left(
