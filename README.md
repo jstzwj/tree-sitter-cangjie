@@ -6,4 +6,3 @@ Cangjie language grammar for tree-sitter.
 Reference material for this repository: [Cangjie Programming Language Specification](https://developer.huawei.com/consumer/cn/doc/cangjie-guides-V5/cj-lan-spec-V5)
 
 本仓库按照官方公布的语言规约进行编写，并使用文档代码进行测试。
-
