@@ -131,6 +131,8 @@ module.exports = grammar({
     [$.left_aux_expression, $.exponent_expression, $.postfix_expression],
     [$.left_aux_expression, $.flow_expression, $.postfix_expression],
     [$._atomic_expression, $.lambda_parameter],
+    [$._expression, $.lambda_parameter],
+    [$.user_type, $._expression],
   ],
   rules: {
     source_file: ($) =>
@@ -1065,11 +1067,11 @@ module.exports = grammar({
             optional($.call_suffix),
             $.trailing_lambda_expression,
           ),
-          seq(
-            $.identifier,
-            optional($.call_suffix),
-            $.trailing_lambda_expression,
-          ),
+          // prec(-1, seq(
+          //   $.identifier,
+          //   optional($.call_suffix),
+          //   $.trailing_lambda_expression,
+          // )),
           seq($._expression, repeat1(seq('?', $.quest_seperated_items))),
         ),
       ),

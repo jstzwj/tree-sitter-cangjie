@@ -101,3 +101,31 @@ enum RGBColor {
         print("RGBColor")
     }
 }
+
+----------
+
+(source_file
+  (enum_definition
+    (identifier)
+    (enum_body
+      (case_body
+        (identifier))
+      (case_body
+        (identifier))
+      (case_body
+        (identifier))
+      (function_definition
+        (function_modifier_list
+          (function_modifier)
+          (function_modifier))
+        name: (identifier)
+        parameters: (function_parameters)
+        body: (block
+          (expression_or_declarations
+            (postfix_expression
+              (identifier)
+              (call_suffix
+                (value_argument
+                  (literal_constant
+                    (string_literal
+                      (line_string_literal))))))))))))

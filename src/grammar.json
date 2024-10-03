@@ -5343,29 +5343,33 @@
             ]
           },
           {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "identifier"
-              },
-              {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "call_suffix"
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              },
-              {
-                "type": "SYMBOL",
-                "name": "trailing_lambda_expression"
-              }
-            ]
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "call_suffix"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "trailing_lambda_expression"
+                }
+              ]
+            }
           },
           {
             "type": "SEQ",
@@ -9786,6 +9790,14 @@
     [
       "_atomic_expression",
       "lambda_parameter"
+    ],
+    [
+      "_expression",
+      "lambda_parameter"
+    ],
+    [
+      "user_type",
+      "_expression"
     ]
   ],
   "precedences": [],
