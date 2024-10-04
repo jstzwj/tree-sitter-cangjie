@@ -44,11 +44,12 @@ const INTEGER_SUFFIX = ['i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64'];
 const FLOAT_SUFFIX = ['f16', 'f32', 'f64'];
 module.exports = grammar({
   name: 'cangjie',
-  extras: ($) => [/[\s\uFEFF\u2028\u2029\u2060\u200B]/, $.comment],
+  extras: ($) => [/[\s]/, /[\n]/, /[\r\n]/, $.comment],
   word: ($) => $.identifier,
   conflicts: ($) => [
     [$._expression_or_declarations],
     [$.foreign_body],
+    [$.class_definition],
     [$.class_body],
     [$.interface_body],
     [$.function_definition],
@@ -73,15 +74,12 @@ module.exports = grammar({
     [$.function_modifier_list],
     [$.foreign_body, $.foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
-    [$.class_name, $.case_body, $.struct_name],
     [$._atomic_expression, $.literal_constant],
     [
       $.user_type,
       $.left_value_expression_without_wildcard,
       $.left_aux_expression,
     ],
-    [$.class_name, $.struct_name, $.var_binding_pattern, $.enum_pattern],
-    [$.class_name, $.enum_pattern],
     [$.user_type, $._atomic_expression],
     [$.wildcard_pattern, $.exception_type_pattern],
     [$.tuple_literal, $.parenthesized_expression],
@@ -146,14 +144,13 @@ module.exports = grammar({
     [$.left_aux_expression, $.spread_element],
     [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
     [$.left_aux_expression, $.resource_specification],
-    [$.left_aux_expression, $.postfix_expression, $._expression_or_declaration],
-    [$.left_aux_expression, $.postfix_expression, $.tuple_literal],
-    [$.left_aux_expression, $.postfix_expression, $.expression_element],
+    [$.class_primary_init, $.case_body, $.struct_name],
+    [$.class_primary_init, $.struct_name, $.var_binding_pattern, $.enum_pattern],
+    [$.unnamed_parameter, $.type_pattern],
     [$.left_aux_expression, $.postfix_expression, $.jump_expression],
     [$.left_aux_expression, $.postfix_expression],
     [$.left_aux_expression, $.postfix_expression, $.spread_element],
     [$.variable_declaration, $.left_aux_expression, $.postfix_expression],
-    [$.class_name, $.struct_name, $.enum_pattern],
   ],
   rules: {
     source_file: ($) =>
@@ -164,6 +161,7 @@ module.exports = grammar({
       ),
 
     _end: ($) => choice('\n', '\r\n', ';'),
+    _nl: ($) => choice('\n', '\r\n'),
 
     // Preamble, package, and import definitions
     preamble: ($) => seq(optional($.package_header), repeat1($.import_list)),
@@ -201,8 +199,11 @@ module.exports = grammar({
         'class',
         field('name', $.identifier),
         field('type_parameters', optional($.type_parameters)),
+        repeat($._nl),
         optional(seq('<:', optional($.super_class_or_interfaces))),
+        repeat($._nl),
         optional($.generic_constraints),
+        repeat($._nl),
         $.class_body,
       ),
 
@@ -284,7 +285,7 @@ module.exports = grammar({
     class_primary_init: ($) =>
       seq(
         optional(choice($.class_non_static_member_modifier, 'const')),
-        $.class_name,
+        field('name', $.identifier),
         '(',
         $.class_primary_init_param_lists,
         ')',
@@ -295,7 +296,6 @@ module.exports = grammar({
         '}',
       ),
 
-    class_name: ($) => $.identifier,
     class_primary_init_param_lists: ($) =>
       choice(
         seq(
@@ -389,8 +389,11 @@ module.exports = grammar({
         field('name', $.identifier),
         field('type_parameters', optional($.type_parameters)),
         field('parameters', $.function_parameters),
+        repeat($._nl),
         optional(seq(':', field('return_type', $._type))),
+        repeat($._nl),
         optional($.generic_constraints),
+        repeat($._nl),
         field('body', optional($.block)),
       ),
     function_modifier_list: ($) => repeat1($.function_modifier),

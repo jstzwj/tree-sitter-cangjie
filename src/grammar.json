@@ -55,6 +55,19 @@
         }
       ]
     },
+    "_nl": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\n"
+        },
+        {
+          "type": "STRING",
+          "value": "\r\n"
+        }
+      ]
+    },
     "preamble": {
       "type": "SEQ",
       "members": [
@@ -329,6 +342,13 @@
           }
         },
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_nl"
+          }
+        },
+        {
           "type": "CHOICE",
           "members": [
             {
@@ -358,6 +378,13 @@
           ]
         },
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_nl"
+          }
+        },
+        {
           "type": "CHOICE",
           "members": [
             {
@@ -368,6 +395,13 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_nl"
+          }
         },
         {
           "type": "SYMBOL",
@@ -841,8 +875,12 @@
           ]
         },
         {
-          "type": "SYMBOL",
-          "name": "class_name"
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
         },
         {
           "type": "STRING",
@@ -905,10 +943,6 @@
           "value": "}"
         }
       ]
-    },
-    "class_name": {
-      "type": "SYMBOL",
-      "name": "identifier"
     },
     "class_primary_init_param_lists": {
       "type": "CHOICE",
@@ -1511,6 +1545,13 @@
           }
         },
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_nl"
+          }
+        },
+        {
           "type": "CHOICE",
           "members": [
             {
@@ -1536,6 +1577,13 @@
           ]
         },
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_nl"
+          }
+        },
+        {
           "type": "CHOICE",
           "members": [
             {
@@ -1546,6 +1594,13 @@
               "type": "BLANK"
             }
           ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_nl"
+          }
         },
         {
           "type": "FIELD",
@@ -9536,7 +9591,15 @@
   "extras": [
     {
       "type": "PATTERN",
-      "value": "[\\s\\uFEFF\\u2028\\u2029\\u2060\\u200B]"
+      "value": "[\\s]"
+    },
+    {
+      "type": "PATTERN",
+      "value": "[\\n]"
+    },
+    {
+      "type": "PATTERN",
+      "value": "[\\r\\n]"
     },
     {
       "type": "SYMBOL",
@@ -9549,6 +9612,9 @@
     ],
     [
       "foreign_body"
+    ],
+    [
+      "class_definition"
     ],
     [
       "class_body"
@@ -9629,11 +9695,6 @@
       "struct_non_static_member_modifier"
     ],
     [
-      "class_name",
-      "case_body",
-      "struct_name"
-    ],
-    [
       "_atomic_expression",
       "literal_constant"
     ],
@@ -9641,16 +9702,6 @@
       "user_type",
       "left_value_expression_without_wildcard",
       "left_aux_expression"
-    ],
-    [
-      "class_name",
-      "struct_name",
-      "var_binding_pattern",
-      "enum_pattern"
-    ],
-    [
-      "class_name",
-      "enum_pattern"
     ],
     [
       "user_type",
@@ -9828,19 +9879,19 @@
       "resource_specification"
     ],
     [
-      "left_aux_expression",
-      "postfix_expression",
-      "_expression_or_declaration"
+      "class_primary_init",
+      "case_body",
+      "struct_name"
     ],
     [
-      "left_aux_expression",
-      "postfix_expression",
-      "tuple_literal"
+      "class_primary_init",
+      "struct_name",
+      "var_binding_pattern",
+      "enum_pattern"
     ],
     [
-      "left_aux_expression",
-      "postfix_expression",
-      "expression_element"
+      "unnamed_parameter",
+      "type_pattern"
     ],
     [
       "left_aux_expression",
@@ -9860,11 +9911,6 @@
       "variable_declaration",
       "left_aux_expression",
       "postfix_expression"
-    ],
-    [
-      "class_name",
-      "struct_name",
-      "enum_pattern"
     ]
   ],
   "precedences": [],
