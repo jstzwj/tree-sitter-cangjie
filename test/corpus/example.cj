@@ -23,11 +23,10 @@ func add(a: Int64, b: Int64): Int64 {
     return_type: (user_type
       (identifier))
     body: (block
-      (expression_or_declarations
         (jump_expression
           (additive_expression
             left: (identifier)
-            right: (identifier)))))))
+            right: (identifier))))))
 ==================
 Function Definition getOrThrow
 ==================
@@ -38,6 +37,40 @@ func getOrThrow(a: ?Int64) {
         case None => throw NoneValueException()
     }
 }
+
+-------
+(source_file
+  (function_definition
+    name: (identifier)
+    parameters: (function_parameters
+      (unnamed_parameter_list
+        (unnamed_parameter
+          (identifier)
+          (prefix_type
+            (prefix_type_operator)
+            (user_type
+              (identifier))))))
+    body: (block
+        (match_expression
+          value: (identifier)
+          (match_body
+            (match_case
+              (pattern
+                (enum_pattern
+                  (identifier)
+                  (enum_pattern_parameters
+                    (pattern
+                      (var_binding_pattern
+                        (identifier))))))
+              (identifier))
+            (match_case
+              (pattern
+                (var_binding_pattern
+                  (identifier)))
+              (jump_expression
+                (postfix_expression
+                  (identifier)
+                  (call_suffix)))))))))
 
 ==================
 Enum Definition RGBColor
@@ -121,11 +154,81 @@ enum RGBColor {
         name: (identifier)
         parameters: (function_parameters)
         body: (block
-          (expression_or_declarations
             (postfix_expression
               (identifier)
               (call_suffix
                 (value_argument
                   (literal_constant
                     (string_literal
-                      (line_string_literal))))))))))))
+                      (line_string_literal)))))))))))
+
+==================
+Option Definition
+==================
+main
+(
+
+) 
+{
+    let a: Option<Int64> = Some(100)
+let b: ?Int64 = Some(100)
+let c: Option<String> = Some("Hello")
+let d: ?String = None
+}
+
+----------
+
+(source_file
+  (main_definition
+    (function_parameters)
+    (block
+        (variable_declaration
+          name: (var_binding_pattern
+            (identifier))
+          type: (user_type
+            (identifier)
+            (type_arguments
+              (user_type
+                (identifier))))
+          value: (postfix_expression
+            (identifier)
+            (call_suffix
+              (value_argument
+                (literal_constant
+                  (integer_literal))))))
+        (variable_declaration
+          name: (var_binding_pattern
+            (identifier))
+          type: (prefix_type
+            (prefix_type_operator)
+            (user_type
+              (identifier)))
+          value: (postfix_expression
+            (identifier)
+            (call_suffix
+              (value_argument
+                (literal_constant
+                  (integer_literal))))))
+        (variable_declaration
+          name: (var_binding_pattern
+            (identifier))
+          type: (user_type
+            (identifier)
+            (type_arguments
+              (user_type
+                (identifier))))
+          value: (postfix_expression
+            (identifier)
+            (call_suffix
+              (value_argument
+                (literal_constant
+                  (string_literal
+                    (line_string_literal)))))))
+        (variable_declaration
+          name: (var_binding_pattern
+            (identifier))
+          type: (prefix_type
+            (prefix_type_operator)
+            (user_type
+              (identifier)))
+          value: (identifier)))))

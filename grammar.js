@@ -47,6 +47,7 @@ module.exports = grammar({
   extras: ($) => [/[\s\uFEFF\u2028\u2029\u2060\u200B]/, $.comment],
   word: ($) => $.identifier,
   conflicts: ($) => [
+    [$._expression_or_declarations],
     [$.foreign_body],
     [$.class_body],
     [$.interface_body],
@@ -65,6 +66,7 @@ module.exports = grammar({
     [$.static_init],
     [$.match_expression],
     [$.match_case],
+    [$.match_body],
     [$.var_binding_pattern, $.enum_pattern],
     [$.wildcard_pattern, $.type_pattern],
     [$.var_binding_pattern, $.type_pattern, $.enum_pattern],
@@ -133,6 +135,25 @@ module.exports = grammar({
     [$._atomic_expression, $.lambda_parameter],
     [$._expression, $.lambda_parameter],
     [$.user_type, $._expression],
+    [$.user_type, $.left_aux_expression, $._atomic_expression],
+    [$.left_aux_expression, $._atomic_expression],
+    [$.left_aux_expression, $._expression_or_declaration],
+    [$.left_aux_expression, $.tuple_literal],
+    [$.left_aux_expression, $.expression_element],
+    [$.left_aux_expression, $.jump_expression],
+    [$.user_type, $.left_aux_expression],
+    [$.left_aux_expression],
+    [$.left_aux_expression, $.spread_element],
+    [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
+    [$.left_aux_expression, $.resource_specification],
+    [$.left_aux_expression, $.postfix_expression, $._expression_or_declaration],
+    [$.left_aux_expression, $.postfix_expression, $.tuple_literal],
+    [$.left_aux_expression, $.postfix_expression, $.expression_element],
+    [$.left_aux_expression, $.postfix_expression, $.jump_expression],
+    [$.left_aux_expression, $.postfix_expression],
+    [$.left_aux_expression, $.postfix_expression, $.spread_element],
+    [$.variable_declaration, $.left_aux_expression, $.postfix_expression],
+    [$.class_name, $.struct_name, $.enum_pattern],
   ],
   rules: {
     source_file: ($) =>
@@ -239,6 +260,7 @@ module.exports = grammar({
         $.operator_function_definition,
         $.macro_expression,
         $.property_definition,
+        $.class_finalizer,
       ),
     class_init: ($) =>
       seq(
@@ -246,7 +268,7 @@ module.exports = grammar({
         'init',
         $.function_parameters,
         $.block,
-        repeat($._end),
+        repeat1($._end),
       ),
     static_init: ($) =>
       seq(
@@ -255,9 +277,9 @@ module.exports = grammar({
         '(',
         ')',
         '{',
-        optional($.expression_or_declarations),
+        optional($._expression_or_declarations),
         '}',
-        repeat($._end),
+        repeat1($._end),
       ),
     class_primary_init: ($) =>
       seq(
@@ -269,7 +291,7 @@ module.exports = grammar({
         '{',
         optional(seq('super', $.call_suffix)),
         repeat($._end),
-        optional($.expression_or_declarations),
+        optional($._expression_or_declarations),
         '}',
       ),
 
@@ -322,7 +344,9 @@ module.exports = grammar({
       ),
 
     class_non_static_member_modifier: ($) =>
-      choice('public', 'private', 'protected', 'internal'),
+      prec.left(PREC.CLASS_MODIFIER, choice('public', 'private', 'protected', 'internal')),
+
+    class_finalizer: ($) => seq('~', 'init', '(', ')', $.block),
 
     // Interface definition
     interface_definition: ($) =>
@@ -368,7 +392,7 @@ module.exports = grammar({
         optional(seq(':', field('return_type', $._type))),
         optional($.generic_constraints),
         field('body', optional($.block)),
-        repeat($._end),
+        repeat1($._end),
       ),
     function_modifier_list: ($) => repeat1($.function_modifier),
     function_modifier: ($) =>
@@ -401,7 +425,7 @@ module.exports = grammar({
         optional($._type),
         optional($.generic_constraints),
         optional($.block),
-        repeat($._end),
+        repeat1($._end),
       ),
 
     function_parameters: ($) =>
@@ -443,7 +467,7 @@ module.exports = grammar({
         seq(
           field('modifier', repeat($.variable_modifier)),
           choice('let', 'var', 'const'),
-          field('name', $.patterns_maybe_irrefutable),
+          field('name', $._patterns_maybe_irrefutable),
           choice(
             seq(
               optional(seq(':', field('type', $._type))),
@@ -451,7 +475,7 @@ module.exports = grammar({
             ),
             seq(':', field('type', $._type)),
           ),
-          repeat($._end),
+          repeat1($._end),
         ),
       ),
     variable_modifier: ($) =>
@@ -535,7 +559,7 @@ module.exports = grammar({
         optional($.struct_primary_init_param_lists),
         ')',
         '{',
-        optional($.expression_or_declarations),
+        optional($._expression_or_declarations),
         '}',
       ),
     struct_name: ($) => $.identifier,
@@ -596,10 +620,10 @@ module.exports = grammar({
       ),
 
     struct_modifier: ($) =>
-      choice('public', 'protected', 'internal', 'private'),
+      prec.left(PREC.CLASS_MODIFIER, choice('public', 'protected', 'internal', 'private')),
 
     struct_non_static_member_modifier: ($) =>
-      choice('public', 'protected', 'internal', 'private'),
+      prec.left(PREC.CLASS_MODIFIER, choice('public', 'protected', 'internal', 'private')),
 
     // Type Alias
     type_alias: ($) =>
@@ -700,7 +724,7 @@ module.exports = grammar({
         choice($.macro_without_attr_param, $.macro_with_attr_param),
         optional(seq(':', $.identifier)),
         optional(seq('=', $._expression)),
-        repeat($._end),
+        repeat1($._end),
       ),
 
     macro_without_attr_param: ($) => seq('(', $.macro_input_decl, ')'),
@@ -720,7 +744,7 @@ module.exports = grammar({
         ':',
         $._type,
         optional($.property_body),
-        repeat($._end),
+        repeat1($._end),
       ),
 
     property_body: ($) =>
@@ -785,7 +809,7 @@ module.exports = grammar({
       ),
 
     numeric_types: ($) =>
-      choice(
+      token(choice(
         'int8',
         'int16',
         'int32',
@@ -799,7 +823,7 @@ module.exports = grammar({
         'float16',
         'float32',
         'float64',
-      ),
+      )),
 
     user_type: ($) =>
       prec.left(
@@ -812,7 +836,7 @@ module.exports = grammar({
 
     parenthesized_type: ($) => seq('(', $._type, ')'),
 
-    type_arguments: ($) => seq('<', $._type, repeat(seq(',', $._type)), '>'),
+    type_arguments: ($) => prec.left(PREC.PARENS, seq('<', $._type, repeat(seq(',', $._type)), '>')),
 
     // Expression
     _expression: ($) =>
@@ -883,7 +907,7 @@ module.exports = grammar({
       prec.left(
         PREC.DECL,
         choice(
-          seq($.identifier, optional($.type_arguments)),
+          // seq($.identifier, optional($.type_arguments)),
           $._type,
           $.this_super_expression,
           seq(
@@ -997,12 +1021,12 @@ module.exports = grammar({
         PREC.REL,
         choice(
           seq(
-            $._expression,
+            field('left', $._expression),
             field('operator', choice('<', '>', '<=', '>=')),
-            $._expression,
+            field('right', $._expression),
           ),
-          seq($._expression, field('operator', 'is'), $._type),
-          seq($._expression, field('operator', 'as'), $._type),
+          seq(field('left', $._expression), field('operator', 'is'), field('right', $._type)),
+          seq(field('left', $._expression), field('operator', 'as'), field('right', $._type)),
         ),
       ),
 
@@ -1056,7 +1080,7 @@ module.exports = grammar({
       prec.left(
         PREC.ARRAY,
         choice(
-          seq($._type, '.', $.identifier),
+          // seq($._type, '.', $.identifier),
           seq($._expression, '.', $.identifier, optional($.type_arguments)),
           seq($._expression, $.call_suffix),
           seq($._expression, $.index_access),
@@ -1226,7 +1250,7 @@ module.exports = grammar({
       seq(
         'if',
         '(',
-        optional(seq('let', $.deconstruct_pattern, '=>')),
+        optional(seq('let', $.deconstruct_pattern, '<-')),
         $._expression,
         ')',
         $.block,
@@ -1243,37 +1267,20 @@ module.exports = grammar({
       ),
 
     match_expression: ($) =>
-      choice(
+      prec.left(PREC.COMMENT, choice(
         seq(
           'match',
           repeat($._end),
           '(',
-          $._expression,
+          field('value', $._expression),
           ')',
           repeat($._end),
-          '{',
-          repeat($._end),
-          repeat($.match_case),
-          repeat($._end),
-          '}',
+          $.match_body,
         ),
-        seq(
-          'match',
-          optional($._end),
-          '{',
-          optional($._end),
-          repeat(
-            seq(
-              'case',
-              choice($._expression, '_'),
-              '=>',
-              $._expression_or_declaration,
-              repeat(seq($._end, $._expression_or_declaration)),
-            ),
-          ),
-          '}',
-        ),
-      ),
+      )),
+
+    match_body: ($) =>
+      seq('{', repeat($._end), repeat($.match_case), repeat($._end), '}'),
 
     match_case: ($) =>
       seq(
@@ -1282,7 +1289,7 @@ module.exports = grammar({
         optional($.pattern_guard),
         '=>',
         $._expression_or_declaration,
-        repeat(seq($._end, $._expression_or_declaration)),
+        repeat(seq(repeat1($._end), optional($._expression_or_declaration))),
       ),
 
     pattern_guard: ($) => seq('where', $._expression),
@@ -1305,7 +1312,7 @@ module.exports = grammar({
         ),
       ),
 
-    wildcard_pattern: ($) => '_',
+    wildcard_pattern: ($) => token('_'),
 
     var_binding_pattern: ($) => $.identifier,
 
@@ -1348,7 +1355,7 @@ module.exports = grammar({
         optional(
           seq(
             '(',
-            optional($.patterns_maybe_irrefutable),
+            optional($._patterns_maybe_irrefutable),
             'in',
             $._expression,
             optional($.pattern_guard),
@@ -1358,7 +1365,7 @@ module.exports = grammar({
         $.block,
       ),
 
-    patterns_maybe_irrefutable: ($) =>
+    _patterns_maybe_irrefutable: ($) =>
       choice(
         $.wildcard_pattern,
         $.var_binding_pattern,
@@ -1422,23 +1429,23 @@ module.exports = grammar({
       ),
 
     jump_expression: ($) =>
-      choice(
+      prec.left(PREC.COMMENT, choice(
         seq('throw', $._expression),
         seq('return', $._expression),
         prec(PREC.CLOSURE, 'return'),
         'continue',
         'break',
-      ),
+      )),
     numeric_type_conv_expr: ($) =>
       seq($.numeric_types, '(', $._expression, ')'),
 
-    this_super_expression: ($) => choice('this', 'super'),
+    this_super_expression: ($) => token(choice('this', 'super')),
 
     lambda_expression: ($) =>
       seq(
         '{',
         optional($.lambda_parameters),
-        optional(seq('=>', optional($.expression_or_declarations))),
+        optional(seq('=>', optional($._expression_or_declarations))),
         '}',
       ),
 
@@ -1446,7 +1453,7 @@ module.exports = grammar({
       seq(
         '{',
         optional(seq(optional($.lambda_parameters), '=>')),
-        optional($.expression_or_declarations),
+        optional($._expression_or_declarations),
         '}',
       ),
 
@@ -1471,12 +1478,11 @@ module.exports = grammar({
     parenthesized_expression: ($) =>
       prec.left(PREC.PARENS, seq('(', $._expression, ')')),
 
-    block: ($) => seq('{', optional($.expression_or_declarations), '}'),
+    block: ($) => seq('{', optional($._expression_or_declarations), '}'),
 
     unsafe_expression: ($) => seq('unsafe', $.block),
 
-    expression_or_declarations: ($) =>
-      repeat1(seq($._expression_or_declaration, $._end)),
+    _expression_or_declarations: ($) => seq(repeat($._end), sepBy1(repeat1($._end), $._expression_or_declaration), repeat($._end)),
 
     _expression_or_declaration: ($) =>
       choice($._expression, $._var_or_func_declaration),
