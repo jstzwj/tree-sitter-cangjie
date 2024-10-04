@@ -201,7 +201,7 @@ module.exports = grammar({
         'class',
         field('name', $.identifier),
         field('type_parameters', optional($.type_parameters)),
-        optional(seq('upperbound', optional($.super_class_or_interfaces))),
+        optional(seq('<:', optional($.super_class_or_interfaces))),
         optional($.generic_constraints),
         $.class_body,
       ),
@@ -227,14 +227,14 @@ module.exports = grammar({
     generic_constraints: ($) =>
       seq(
         'where',
-        choice($.identifier, 'thistype'),
-        'upperbound',
+        choice($.identifier, 'This'),
+        '<:',
         $.upper_bounds,
         repeat(
           seq(
             ',',
-            choice($.identifier, 'thistype'),
-            'upperbound',
+            choice($.identifier, 'This'),
+            '<:',
             $.upper_bounds,
           ),
         ),
@@ -355,7 +355,7 @@ module.exports = grammar({
         'interface',
         $.identifier,
         optional($.type_parameters),
-        optional(seq('upperbound', $.super_interfaces)),
+        optional(seq('<:', $.super_interfaces)),
         optional($.generic_constraints),
         $.interface_body,
       ),
@@ -384,7 +384,7 @@ module.exports = grammar({
     // Function definition
     function_definition: ($) =>
       seq(
-        optional($.function_modifier_list),
+        field('modifier', optional($.function_modifier_list)),
         'func',
         field('name', $.identifier),
         field('type_parameters', optional($.type_parameters)),
@@ -392,7 +392,6 @@ module.exports = grammar({
         optional(seq(':', field('return_type', $._type))),
         optional($.generic_constraints),
         field('body', optional($.block)),
-        repeat1($._end),
       ),
     function_modifier_list: ($) => repeat1($.function_modifier),
     function_modifier: ($) =>
@@ -425,7 +424,6 @@ module.exports = grammar({
         optional($._type),
         optional($.generic_constraints),
         optional($.block),
-        repeat1($._end),
       ),
 
     function_parameters: ($) =>
@@ -475,7 +473,6 @@ module.exports = grammar({
             ),
             seq(':', field('type', $._type)),
           ),
-          repeat1($._end),
         ),
       ),
     variable_modifier: ($) =>
@@ -488,7 +485,7 @@ module.exports = grammar({
         'enum',
         $.identifier,
         optional(seq($.type_parameters)),
-        optional(seq('upperbound', $.super_interfaces)),
+        optional(seq('<:', $.super_interfaces)),
         optional($.generic_constraints),
         '{',
         optional($.enum_body),
@@ -522,7 +519,7 @@ module.exports = grammar({
         'struct',
         field('name', $.identifier),
         field('type_parameters', optional(seq($.type_parameters))),
-        optional(seq('upperbound', $.super_interfaces)),
+        optional(seq('<:', $.super_interfaces)),
         optional($.generic_constraints),
         $.struct_body,
       ),
@@ -643,7 +640,7 @@ module.exports = grammar({
       seq(
         'extend',
         optional($.extend_type),
-        optional(seq('upperbound', $.super_interfaces)),
+        optional(seq('<:', $.super_interfaces)),
         optional($.generic_constraints),
         $.extend_body,
       ),
@@ -724,7 +721,6 @@ module.exports = grammar({
         choice($.macro_without_attr_param, $.macro_with_attr_param),
         optional(seq(':', $.identifier)),
         optional(seq('=', $._expression)),
-        repeat1($._end),
       ),
 
     macro_without_attr_param: ($) => seq('(', $.macro_input_decl, ')'),
@@ -744,7 +740,6 @@ module.exports = grammar({
         ':',
         $._type,
         optional($.property_body),
-        repeat1($._end),
       ),
 
     property_body: ($) =>
@@ -868,15 +863,15 @@ module.exports = grammar({
         PREC.ASSIGN,
         choice(
           seq(
-            $.left_value_expression_without_wildcard,
+            field('left', $.left_value_expression_without_wildcard),
             field('operator', $.assignment_operator),
-            $._expression,
+            field('right', $._expression),
           ),
-          seq($.left_value_expression, field('operator', '='), $._expression),
+          seq(field('left', $.left_value_expression), field('operator', '='), field('right', $._expression)),
           seq(
-            $.tuple_left_value_expression,
+            field('left', $.tuple_left_value_expression),
             field('operator', '='),
-            $._expression,
+            field('right', $._expression),
           ),
         ),
       ),
@@ -1377,7 +1372,7 @@ module.exports = grammar({
       seq(
         'while',
         '(',
-        optional(seq('let', $.deconstruct_pattern, 'backarrow')),
+        optional(seq('let', $.deconstruct_pattern, '<-')),
         $._expression,
         ')',
         $.block,

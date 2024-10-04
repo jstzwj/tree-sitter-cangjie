@@ -635,6 +635,24 @@
     "type": "assignment_expression",
     "named": true,
     "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "left_value_expression",
+            "named": true
+          },
+          {
+            "type": "left_value_expression_without_wildcard",
+            "named": true
+          },
+          {
+            "type": "tuple_left_value_expression",
+            "named": true
+          }
+        ]
+      },
       "operator": {
         "multiple": false,
         "required": true,
@@ -648,177 +666,165 @@
             "named": true
           }
         ]
+      },
+      "right": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "additive_expression",
+            "named": true
+          },
+          {
+            "type": "assignment_expression",
+            "named": true
+          },
+          {
+            "type": "bitwise_conjunction_expression",
+            "named": true
+          },
+          {
+            "type": "bitwise_disjunction_expression",
+            "named": true
+          },
+          {
+            "type": "bitwise_xor_expression",
+            "named": true
+          },
+          {
+            "type": "coalescing_expression",
+            "named": true
+          },
+          {
+            "type": "collection_literal",
+            "named": true
+          },
+          {
+            "type": "comparison_or_type_expression",
+            "named": true
+          },
+          {
+            "type": "equality_comparison_expression",
+            "named": true
+          },
+          {
+            "type": "exponent_expression",
+            "named": true
+          },
+          {
+            "type": "flow_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "if_expression",
+            "named": true
+          },
+          {
+            "type": "inc_and_dec_expression",
+            "named": true
+          },
+          {
+            "type": "jump_expression",
+            "named": true
+          },
+          {
+            "type": "lambda_expression",
+            "named": true
+          },
+          {
+            "type": "literal_constant",
+            "named": true
+          },
+          {
+            "type": "logic_conjunction_expression",
+            "named": true
+          },
+          {
+            "type": "logic_disjunction_expression",
+            "named": true
+          },
+          {
+            "type": "loop_expression",
+            "named": true
+          },
+          {
+            "type": "macro_expression",
+            "named": true
+          },
+          {
+            "type": "match_expression",
+            "named": true
+          },
+          {
+            "type": "multiplicative_expression",
+            "named": true
+          },
+          {
+            "type": "numeric_type_conv_expr",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "postfix_expression",
+            "named": true
+          },
+          {
+            "type": "prefix_unary_expression",
+            "named": true
+          },
+          {
+            "type": "quote_expression",
+            "named": true
+          },
+          {
+            "type": "range_expression",
+            "named": true
+          },
+          {
+            "type": "shifting_expression",
+            "named": true
+          },
+          {
+            "type": "spawn_expression",
+            "named": true
+          },
+          {
+            "type": "synchronized_expression",
+            "named": true
+          },
+          {
+            "type": "this_super_expression",
+            "named": true
+          },
+          {
+            "type": "try_expression",
+            "named": true
+          },
+          {
+            "type": "tuple_literal",
+            "named": true
+          },
+          {
+            "type": "type_arguments",
+            "named": true
+          },
+          {
+            "type": "unit_literal",
+            "named": true
+          },
+          {
+            "type": "unsafe_expression",
+            "named": true
+          }
+        ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "additive_expression",
-          "named": true
-        },
-        {
-          "type": "assignment_expression",
-          "named": true
-        },
-        {
-          "type": "bitwise_conjunction_expression",
-          "named": true
-        },
-        {
-          "type": "bitwise_disjunction_expression",
-          "named": true
-        },
-        {
-          "type": "bitwise_xor_expression",
-          "named": true
-        },
-        {
-          "type": "coalescing_expression",
-          "named": true
-        },
-        {
-          "type": "collection_literal",
-          "named": true
-        },
-        {
-          "type": "comparison_or_type_expression",
-          "named": true
-        },
-        {
-          "type": "equality_comparison_expression",
-          "named": true
-        },
-        {
-          "type": "exponent_expression",
-          "named": true
-        },
-        {
-          "type": "flow_expression",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "if_expression",
-          "named": true
-        },
-        {
-          "type": "inc_and_dec_expression",
-          "named": true
-        },
-        {
-          "type": "jump_expression",
-          "named": true
-        },
-        {
-          "type": "lambda_expression",
-          "named": true
-        },
-        {
-          "type": "left_value_expression",
-          "named": true
-        },
-        {
-          "type": "left_value_expression_without_wildcard",
-          "named": true
-        },
-        {
-          "type": "literal_constant",
-          "named": true
-        },
-        {
-          "type": "logic_conjunction_expression",
-          "named": true
-        },
-        {
-          "type": "logic_disjunction_expression",
-          "named": true
-        },
-        {
-          "type": "loop_expression",
-          "named": true
-        },
-        {
-          "type": "macro_expression",
-          "named": true
-        },
-        {
-          "type": "match_expression",
-          "named": true
-        },
-        {
-          "type": "multiplicative_expression",
-          "named": true
-        },
-        {
-          "type": "numeric_type_conv_expr",
-          "named": true
-        },
-        {
-          "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "postfix_expression",
-          "named": true
-        },
-        {
-          "type": "prefix_unary_expression",
-          "named": true
-        },
-        {
-          "type": "quote_expression",
-          "named": true
-        },
-        {
-          "type": "range_expression",
-          "named": true
-        },
-        {
-          "type": "shifting_expression",
-          "named": true
-        },
-        {
-          "type": "spawn_expression",
-          "named": true
-        },
-        {
-          "type": "synchronized_expression",
-          "named": true
-        },
-        {
-          "type": "this_super_expression",
-          "named": true
-        },
-        {
-          "type": "try_expression",
-          "named": true
-        },
-        {
-          "type": "tuple_left_value_expression",
-          "named": true
-        },
-        {
-          "type": "tuple_literal",
-          "named": true
-        },
-        {
-          "type": "type_arguments",
-          "named": true
-        },
-        {
-          "type": "unit_literal",
-          "named": true
-        },
-        {
-          "type": "unsafe_expression",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -5541,6 +5547,16 @@
           }
         ]
       },
+      "modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "function_modifier_list",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -5603,13 +5619,9 @@
       }
     },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
-        {
-          "type": "function_modifier_list",
-          "named": true
-        },
         {
           "type": "generic_constraints",
           "named": true
@@ -14681,6 +14693,10 @@
     "named": false
   },
   {
+    "type": "<:",
+    "named": false
+  },
+  {
     "type": "<<",
     "named": false
   },
@@ -14777,6 +14793,10 @@
     "named": false
   },
   {
+    "type": "This",
+    "named": false
+  },
+  {
     "type": "Uint16",
     "named": false
   },
@@ -14846,10 +14866,6 @@
   },
   {
     "type": "b'",
-    "named": false
-  },
-  {
-    "type": "backarrow",
     "named": false
   },
   {
@@ -15133,10 +15149,6 @@
     "named": false
   },
   {
-    "type": "thistype",
-    "named": false
-  },
-  {
     "type": "throw",
     "named": false
   },
@@ -15162,10 +15174,6 @@
   },
   {
     "type": "unsafe",
-    "named": false
-  },
-  {
-    "type": "upperbound",
     "named": false
   },
   {
