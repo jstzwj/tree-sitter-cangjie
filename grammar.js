@@ -42,6 +42,32 @@ const PREC = {
 
 const INTEGER_SUFFIX = ['i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64'];
 const FLOAT_SUFFIX = ['f16', 'f32', 'f64'];
+
+const SINGLE_CHAR_BYTE = /[\u0000-\u0009\u000B\u000C\u000E-\u0021\u0023-\u0026\u0028-\u005B\u005D-\u007F]/;
+const SINGLE_CHAR = /[^'\\\r\n]/;
+const UNI_CHARACTER_LITERAL = /\\u\{[0-9a-fA-F]{1,8}\}/;
+const ESCAPED_IDENTIFIER = /\\[tbrn'"\\fv0$]/;
+const ESCAPE_SEQ = choice(UNI_CHARACTER_LITERAL, ESCAPED_IDENTIFIER);
+
+const HEX_CHAR_BYTE = seq('\\u{', /[0-9a-fA-F]{1,4}/, '}');
+const BYTE_ESCAPED_IDENTIFIER = /\\[tbrn'"\\fv0]/;
+const BYTE_ESCAPE_SEQ = choice(HEX_CHAR_BYTE, BYTE_ESCAPED_IDENTIFIER);
+
+const DECIMAL_DIGIT_WITHOUT_ZERO = /[1-9]/;
+const DECIMAL_DIGIT = /[0-9]/;
+const HEXADECIMAL_LITERAL = /0[xX]/;
+const HEXADECIMAL_DIGITS = /[0-9a-fA-F][0-9a-fA-F_]*/;
+const HEXADECIMAL_DIGIT = /[0-9a-fA-F]/;
+
+const DECIMAL_LITERAL = /([1-9][0-9_]*|[0-9])/;
+const DECIMAL_FRACTION = /\.[0-9][0-9_]*/;
+const DECIMAL_FRAGMENT = /[0-9][0-9_]*/;
+const DECIMAL_EXPONENT = /[eE][+-]?[0-9][0-9_]*/;
+
+const HEXADECIMAL_PREFIX = /0[xX]/;
+const HEXADECIMAL_FRACTION = /\.[0-9a-fA-F][0-9a-fA-F_]*/;
+const HEXADECIMAL_EXPONENT = /[pP][+-]?[0-9][0-9_]*/;
+
 module.exports = grammar({
   name: 'cangjie',
   extras: ($) => [/[\s]/, /[\n]/, /[\r\n]/, $.comment],
@@ -49,7 +75,6 @@ module.exports = grammar({
   conflicts: ($) => [
     [$._expression_or_declarations],
     [$.foreign_body],
-    [$.class_definition],
     [$.class_body],
     [$.interface_body],
     [$.function_definition],
@@ -72,9 +97,9 @@ module.exports = grammar({
     [$.wildcard_pattern, $.type_pattern],
     [$.var_binding_pattern, $.type_pattern, $.enum_pattern],
     [$.function_modifier_list],
-    [$.foreign_body, $.foreign_member_declaration],
+    [$.foreign_body, $._foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
-    [$._atomic_expression, $.literal_constant],
+    [$._atomic_expression, $._literal_constant],
     [
       $.user_type,
       $.left_value_expression_without_wildcard,
@@ -126,31 +151,27 @@ module.exports = grammar({
       $.equality_comparison_expression,
       $.postfix_expression,
     ],
-    [$.left_aux_expression, $.shifting_expression, $.postfix_expression],
-    [$.left_aux_expression, $.additive_expression, $.postfix_expression],
-    [$.left_aux_expression, $.exponent_expression, $.postfix_expression],
-    [$.left_aux_expression, $.flow_expression, $.postfix_expression],
     [$._atomic_expression, $.lambda_parameter],
     [$._expression, $.lambda_parameter],
     [$.user_type, $._expression],
     [$.user_type, $.left_aux_expression, $._atomic_expression],
-    [$.left_aux_expression, $._atomic_expression],
-    [$.left_aux_expression, $._expression_or_declaration],
-    [$.left_aux_expression, $.tuple_literal],
-    [$.left_aux_expression, $.expression_element],
-    [$.left_aux_expression, $.jump_expression],
     [$.user_type, $.left_aux_expression],
     [$.left_aux_expression],
     [$.left_aux_expression, $.spread_element],
     [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
     [$.left_aux_expression, $.resource_specification],
     [$.class_primary_init, $.case_body, $.struct_name],
-    [$.class_primary_init, $.struct_name, $.var_binding_pattern, $.enum_pattern],
+    [
+      $.class_primary_init,
+      $.struct_name,
+      $.var_binding_pattern,
+      $.enum_pattern,
+    ],
     [$.unnamed_parameter, $.type_pattern],
-    [$.left_aux_expression, $.postfix_expression, $.jump_expression],
-    [$.left_aux_expression, $.postfix_expression],
-    [$.left_aux_expression, $.postfix_expression, $.spread_element],
-    [$.variable_declaration, $.left_aux_expression, $.postfix_expression],
+    [$.left_aux_expression, $.shifting_expression, $.postfix_expression],
+    [$.left_aux_expression, $.additive_expression, $.postfix_expression],
+    [$.left_aux_expression, $.exponent_expression, $.postfix_expression],
+    [$.left_aux_expression, $.flow_expression, $.postfix_expression],
   ],
   rules: {
     source_file: ($) =>
@@ -160,19 +181,19 @@ module.exports = grammar({
         optional($.main_definition),
       ),
 
-    _end: ($) => choice('\n', '\r\n', ';'),
-    _nl: ($) => choice('\n', '\r\n'),
+    _end: ($) => token(choice(';', '\n', '\r\n')),
 
     // Preamble, package, and import definitions
     preamble: ($) => seq(optional($.package_header), repeat1($.import_list)),
-    package_header: ($) => seq('package', $.package_name_identifier, $._end),
+    package_header: ($) =>
+      seq('package', $.package_name_identifier, optional($._end)),
     package_name_identifier: ($) => sepBy1('.', $.identifier),
     import_list: ($) =>
       seq(
         optional(seq('from', $.identifier)),
         'import',
         sepBy1(',', $.import_part),
-        $._end,
+        optional($._end),
       ),
     import_part: ($) => sepBy1('.', choice('*', $.identifier)),
     import_alias: ($) => seq('as', $.identifier),
@@ -199,12 +220,9 @@ module.exports = grammar({
         'class',
         field('name', $.identifier),
         field('type_parameters', optional($.type_parameters)),
-        repeat($._nl),
         optional(seq('<:', optional($.super_class_or_interfaces))),
-        repeat($._nl),
         optional($.generic_constraints),
-        repeat($._nl),
-        $.class_body,
+        field('body', $.class_body),
       ),
 
     super_class_or_interfaces: ($) => sepBy1('&', $.super_interfaces),
@@ -231,28 +249,21 @@ module.exports = grammar({
         choice($.identifier, 'This'),
         '<:',
         $.upper_bounds,
-        repeat(
-          seq(
-            ',',
-            choice($.identifier, 'This'),
-            '<:',
-            $.upper_bounds,
-          ),
-        ),
+        repeat(seq(',', choice($.identifier, 'This'), '<:', $.upper_bounds)),
       ),
     upper_bounds: ($) => sepBy1('&', $._type),
     class_body: ($) =>
       seq(
         '{',
         repeat($._end),
-        repeat($.class_member_declaration),
+        repeat($._class_member_declaration),
         optional($.class_primary_init),
-        repeat($.class_member_declaration),
+        repeat($._class_member_declaration),
         repeat($._end),
         '}',
       ),
 
-    class_member_declaration: ($) =>
+    _class_member_declaration: ($) =>
       choice(
         $.class_init,
         $.static_init,
@@ -269,7 +280,7 @@ module.exports = grammar({
         'init',
         $.function_parameters,
         $.block,
-        repeat1($._end),
+        repeat($._end),
       ),
     static_init: ($) =>
       seq(
@@ -280,7 +291,7 @@ module.exports = grammar({
         '{',
         optional($._expression_or_declarations),
         '}',
-        repeat1($._end),
+        repeat($._end),
       ),
     class_primary_init: ($) =>
       seq(
@@ -344,7 +355,10 @@ module.exports = grammar({
       ),
 
     class_non_static_member_modifier: ($) =>
-      prec.left(PREC.CLASS_MODIFIER, choice('public', 'private', 'protected', 'internal')),
+      prec.left(
+        PREC.CLASS_MODIFIER,
+        choice('public', 'private', 'protected', 'internal'),
+      ),
 
     class_finalizer: ($) => seq('~', 'init', '(', ')', $.block),
 
@@ -363,11 +377,11 @@ module.exports = grammar({
       seq(
         '{',
         repeat($._end),
-        repeat($.interface_member_declaration),
+        repeat($._interface_member_declaration),
         repeat($._end),
         '}',
       ),
-    interface_member_declaration: ($) =>
+    _interface_member_declaration: ($) =>
       choice(
         $.function_definition,
         $.operator_function_definition,
@@ -389,11 +403,8 @@ module.exports = grammar({
         field('name', $.identifier),
         field('type_parameters', optional($.type_parameters)),
         field('parameters', $.function_parameters),
-        repeat($._nl),
         optional(seq(':', field('return_type', $._type))),
-        repeat($._nl),
         optional($.generic_constraints),
-        repeat($._nl),
         field('body', optional($.block)),
       ),
     function_modifier_list: ($) => repeat1($.function_modifier),
@@ -524,17 +535,17 @@ module.exports = grammar({
         field('type_parameters', optional(seq($.type_parameters))),
         optional(seq('<:', $.super_interfaces)),
         optional($.generic_constraints),
-        $.struct_body,
+        field('body', $.struct_body),
       ),
     struct_body: ($) =>
       seq(
         '{',
         repeat(
-          choice($.struct_member_declaration, $.struct_primary_init, $._end),
+          choice($._struct_member_declaration, $.struct_primary_init, $._end),
         ),
         '}',
       ),
-    struct_member_declaration: ($) =>
+    _struct_member_declaration: ($) =>
       choice(
         $.struct_init,
         $.static_init,
@@ -620,10 +631,16 @@ module.exports = grammar({
       ),
 
     struct_modifier: ($) =>
-      prec.left(PREC.CLASS_MODIFIER, choice('public', 'protected', 'internal', 'private')),
+      prec.left(
+        PREC.CLASS_MODIFIER,
+        choice('public', 'protected', 'internal', 'private'),
+      ),
 
     struct_non_static_member_modifier: ($) =>
-      prec.left(PREC.CLASS_MODIFIER, choice('public', 'protected', 'internal', 'private')),
+      prec.left(
+        PREC.CLASS_MODIFIER,
+        choice('public', 'protected', 'internal', 'private'),
+      ),
 
     // Type Alias
     type_alias: ($) =>
@@ -669,8 +686,8 @@ module.exports = grammar({
         'Nothing',
         'Unit',
       ),
-    extend_body: ($) => seq('{', repeat($.extend_member_declaration), '}'),
-    extend_member_declaration: ($) =>
+    extend_body: ($) => seq('{', repeat($._extend_member_declaration), '}'),
+    _extend_member_declaration: ($) =>
       choice(
         $.function_definition,
         $.operator_function_definition,
@@ -679,18 +696,18 @@ module.exports = grammar({
       ),
 
     foreign_declaration: ($) =>
-      seq('foreign', choice($.foreign_body, $.foreign_member_declaration)),
+      seq('foreign', choice($.foreign_body, $._foreign_member_declaration)),
 
     foreign_body: ($) =>
       seq(
         '{',
         repeat($._end),
-        repeat($.foreign_member_declaration),
+        repeat($._foreign_member_declaration),
         repeat($._end),
         '}',
       ),
 
-    foreign_member_declaration: ($) =>
+    _foreign_member_declaration: ($) =>
       choice(
         $.class_definition,
         $.interface_definition,
@@ -807,21 +824,23 @@ module.exports = grammar({
       ),
 
     numeric_types: ($) =>
-      token(choice(
-        'int8',
-        'int16',
-        'int32',
-        'int64',
-        'int_native',
-        'uint8',
-        'uint16',
-        'uint32',
-        'uint64',
-        'uint_native',
-        'float16',
-        'float32',
-        'float64',
-      )),
+      token(
+        choice(
+          'int8',
+          'int16',
+          'int32',
+          'int64',
+          'int_native',
+          'uint8',
+          'uint16',
+          'uint32',
+          'uint64',
+          'uint_native',
+          'float16',
+          'float32',
+          'float64',
+        ),
+      ),
 
     user_type: ($) =>
       prec.left(
@@ -834,7 +853,8 @@ module.exports = grammar({
 
     parenthesized_type: ($) => seq('(', $._type, ')'),
 
-    type_arguments: ($) => prec.left(PREC.PARENS, seq('<', $._type, repeat(seq(',', $._type)), '>')),
+    type_arguments: ($) =>
+      prec.left(PREC.PARENS, seq('<', $._type, repeat(seq(',', $._type)), '>')),
 
     // Expression
     _expression: ($) =>
@@ -870,7 +890,11 @@ module.exports = grammar({
             field('operator', $.assignment_operator),
             field('right', $._expression),
           ),
-          seq(field('left', $.left_value_expression), field('operator', '='), field('right', $._expression)),
+          seq(
+            field('left', $.left_value_expression),
+            field('operator', '='),
+            field('right', $._expression),
+          ),
           seq(
             field('left', $.tuple_left_value_expression),
             field('operator', '='),
@@ -882,8 +906,8 @@ module.exports = grammar({
     tuple_left_value_expression: ($) =>
       seq(
         '(',
-        seq($.left_value_expression, ','),
-        repeat(seq($.left_value_expression, ',')),
+        choice($.left_value_expression, $.tuple_left_value_expression),
+        repeat(seq(',', choice($.left_value_expression, $.tuple_left_value_expression))),
         optional(','),
         ')',
       ),
@@ -1023,8 +1047,16 @@ module.exports = grammar({
             field('operator', choice('<', '>', '<=', '>=')),
             field('right', $._expression),
           ),
-          seq(field('left', $._expression), field('operator', 'is'), field('right', $._type)),
-          seq(field('left', $._expression), field('operator', 'as'), field('right', $._type)),
+          seq(
+            field('left', $._expression),
+            field('operator', 'is'),
+            field('right', $._type),
+          ),
+          seq(
+            field('left', $._expression),
+            field('operator', 'as'),
+            field('right', $._type),
+          ),
         ),
       ),
 
@@ -1119,7 +1151,7 @@ module.exports = grammar({
 
     call_suffix: ($) =>
       seq(
-        '(',
+        token.immediate('('),
         optional(seq($.value_argument, repeat(seq(',', $.value_argument)))),
         ')',
       ),
@@ -1134,7 +1166,7 @@ module.exports = grammar({
     ref_transfer_expression: ($) =>
       seq('inout', optional(seq($._expression, '.', $.identifier))),
 
-    index_access: ($) => seq('[', choice($._expression, $.range_element), ']'),
+    index_access: ($) => seq(token.immediate('['), choice($._expression, $.range_element), ']'),
 
     range_element: ($) =>
       prec.left(
@@ -1148,7 +1180,7 @@ module.exports = grammar({
 
     _atomic_expression: ($) =>
       choice(
-        $.literal_constant,
+        $._literal_constant,
         $.collection_literal,
         $.tuple_literal,
         seq($.identifier, optional($.type_arguments)),
@@ -1169,7 +1201,7 @@ module.exports = grammar({
         $.unsafe_expression,
       ),
 
-    literal_constant: ($) =>
+    _literal_constant: ($) =>
       choice(
         $.integer_literal,
         $.float_literal,
@@ -1193,11 +1225,16 @@ module.exports = grammar({
     _line_string_content: ($) => $._line_str_text,
 
     line_string_literal: ($) =>
-      seq(
+      choice(seq(
         '"',
         repeat(choice($.line_string_expression, $._line_string_content)),
         '"',
       ),
+      seq(
+        '\'',
+        repeat(choice($.line_string_expression, $._line_string_content)),
+        '\'',
+      )),
 
     line_string_expression: ($) =>
       seq(
@@ -1240,7 +1277,7 @@ module.exports = grammar({
 
     spread_element: ($) => seq('*', $._expression),
 
-    tuple_literal: ($) => seq('(', repeat($._expression), ')'),
+    tuple_literal: ($) => seq('(', sepBy1(',', $._expression), ')'),
 
     unit_literal: ($) => token(seq('(', ')')),
 
@@ -1265,17 +1302,20 @@ module.exports = grammar({
       ),
 
     match_expression: ($) =>
-      prec.left(PREC.COMMENT, choice(
-        seq(
-          'match',
-          repeat($._end),
-          '(',
-          field('value', $._expression),
-          ')',
-          repeat($._end),
-          $.match_body,
+      prec.left(
+        PREC.COMMENT,
+        choice(
+          seq(
+            'match',
+            repeat($._end),
+            '(',
+            field('value', $._expression),
+            ')',
+            repeat($._end),
+            $.match_body,
+          ),
         ),
-      )),
+      ),
 
     match_body: ($) =>
       seq('{', repeat($._end), repeat($.match_case), repeat($._end), '}'),
@@ -1283,16 +1323,17 @@ module.exports = grammar({
     match_case: ($) =>
       seq(
         'case',
-        optional(seq($.pattern)),
+        optional(seq($._pattern)),
         optional($.pattern_guard),
         '=>',
         $._expression_or_declaration,
-        repeat(seq(repeat1($._end), optional($._expression_or_declaration))),
+        repeat(seq(repeat($._end), $._expression_or_declaration)),
+        repeat($._end),
       ),
 
     pattern_guard: ($) => seq('where', $._expression),
 
-    pattern: ($) =>
+    _pattern: ($) =>
       choice(
         $.constant_pattern,
         $.wildcard_pattern,
@@ -1305,8 +1346,8 @@ module.exports = grammar({
     constant_pattern: ($) =>
       prec.left(
         seq(
-          $.literal_constant,
-          optional(seq('|', optional($.literal_constant))),
+          $._literal_constant,
+          optional(seq('|', optional($._literal_constant))),
         ),
       ),
 
@@ -1315,7 +1356,7 @@ module.exports = grammar({
     var_binding_pattern: ($) => $.identifier,
 
     tuple_pattern: ($) =>
-      seq('(', repeat(seq($.pattern, optional(seq(',', $.pattern)))), ')'),
+      seq('(', repeat(seq($._pattern, optional(seq(',', $._pattern)))), ')'),
 
     type_pattern: ($) =>
       seq(choice('_', $.identifier), optional(seq(':', $._type))),
@@ -1342,7 +1383,7 @@ module.exports = grammar({
       ),
 
     enum_pattern_parameters: ($) =>
-      seq('(', repeat(seq($.pattern, optional(seq(',', $.pattern)))), ')'),
+      seq('(', repeat(seq($._pattern, optional(seq(',', $._pattern)))), ')'),
 
     loop_expression: ($) =>
       choice($.for_in_expression, $.while_expression, $.do_while_expression),
@@ -1427,13 +1468,16 @@ module.exports = grammar({
       ),
 
     jump_expression: ($) =>
-      prec.left(PREC.COMMENT, choice(
-        seq('throw', $._expression),
-        seq('return', $._expression),
-        prec(PREC.CLOSURE, 'return'),
-        'continue',
-        'break',
-      )),
+      prec.left(
+        PREC.COMMENT,
+        choice(
+          seq('throw', $._expression),
+          seq('return', $._expression),
+          prec(PREC.CLOSURE, 'return'),
+          'continue',
+          'break',
+        ),
+      ),
     numeric_type_conv_expr: ($) =>
       seq($.numeric_types, '(', $._expression, ')'),
 
@@ -1480,7 +1524,12 @@ module.exports = grammar({
 
     unsafe_expression: ($) => seq('unsafe', $.block),
 
-    _expression_or_declarations: ($) => seq(repeat($._end), sepBy1(repeat1($._end), $._expression_or_declaration), repeat($._end)),
+    _expression_or_declarations: ($) =>
+      seq(
+        repeat($._end),
+        sepBy1(repeat1($._end), $._expression_or_declaration),
+        repeat($._end),
+      ),
 
     _expression_or_declaration: ($) =>
       choice($._expression, $._var_or_func_declaration),
@@ -1617,209 +1666,54 @@ module.exports = grammar({
           optional(choice(...INTEGER_SUFFIX)),
         ),
       ),
-    _decimal_literal: ($) =>
-      choice(
-        seq(
-          $._decimal_digit_with_out_zero,
-          repeat(choice($._decimal_digit, '_')),
-        ),
-        $._decimal_digit,
-      ), // /([1-9][0-9_]*|[0-9])/
-
-    _decimal_digit_with_out_zero: ($) => token(/[1-9]/),
-    _decimal_digit: ($) => token(/[0-9]/),
-
-    _hexadecimal_literal: ($) =>
-      seq('0', choice('x', 'X'), $._hexadecimal_digits),
-    _hexadecimal_digits: ($) =>
-      seq($._hexadecimal_digit, repeat(choice($._hexadecimal_digit, '_'))), // /[0-9a-fA-F][0-9a-fA-F_]*/
-    _hexadecimal_digit: ($) => token(/[0-9a-fA-F]/),
-
     float_literal: ($) =>
-      token(
-        choice(
-          seq(
-            choice(
-              /([1-9][0-9_]*|[0-9])[eE]-?[0-9][0-9_]*/,
-              /\.[0-9][0-9_]*([eE]-?[0-9][0-9_]*)?/,
-              /([1-9][0-9_]*|[0-9])\.[0-9][0-9_]*([eE]-?[0-9][0-9_]*)?/,
-            ),
-            optional(choice(...FLOAT_SUFFIX)),
-          ),
-          seq(
-            /0[xX]/,
-            /(([0-9a-fA-F][0-9a-fA-F_]*)|(\.[0-9a-fA-F][0-9a-fA-F_]*)|([0-9a-fA-F][0-9a-fA-F_]*\.[0-9a-fA-F][0-9a-fA-F_]*))/,
-            /[pP]-?[0-9][0-9_]*/,
-          ),
-        ),
-      ),
-    /*
-    float_literal_old: ($) =>
-      choice(
+      token(choice(
         seq(
           choice(
-            seq($._decimal_literal, $._decimal_exponent),
-            seq($._decimal_fraction, optional($._decimal_exponent)),
+            seq(DECIMAL_LITERAL, DECIMAL_EXPONENT),
+            seq(DECIMAL_FRACTION, optional(DECIMAL_EXPONENT)),
             seq(
-              $._decimal_literal,
-              $._decimal_fraction,
-              optional($._decimal_exponent),
+              DECIMAL_LITERAL,
+              DECIMAL_FRACTION,
+              optional(DECIMAL_EXPONENT),
             ),
           ),
-          optional($._float_literal_suffix),
+          optional(choice(...FLOAT_SUFFIX)),
         ),
         seq(
-          $._hexadecimalprefix,
+          HEXADECIMAL_PREFIX,
           choice(
-            $._hexadecimal_digits,
-            $._hexadecimal_fraction,
-            seq($._hexadecimal_digits, $._hexadecimal_fraction),
+            HEXADECIMAL_DIGITS,
+            HEXADECIMAL_FRACTION,
+            seq(HEXADECIMAL_DIGITS, HEXADECIMAL_FRACTION),
           ),
-          $._hexadecimal_exponent,
+          HEXADECIMAL_EXPONENT,
         ),
-      ),
-    */
-    _decimal_fraction: ($) => seq('.', $._decimal_fragment), // /\.[0-9][0-9_]*/
-    _decimal_fragment: ($) =>
-      seq($._decimal_digit, repeat(choice($._decimal_digit, '_'))), // /[0-9][0-9_]*/
-    _decimal_exponent: ($) =>
-      seq($._float_e, optional($._sign), $._decimal_fragment), // /[eE]-?[0-9][0-9_]*/
+      )),
 
-    _hexadecimal_fraction: ($) => seq('.', $._hexadecimal_digits), // /\.[0-9a-fA-F][0-9a-fA-F_]*/
-    _hexadecimal_exponent: ($) =>
-      seq($._float_p, optional($._sign), $._decimal_fragment), // /[pP]-?[0-9][0-9_]*/
-
-    _float_e: ($) => choice('e', 'E'),
-    _float_p: ($) => choice('p', 'P'),
-    _sign: ($) => choice('-', ''),
-
-    _hexadecimalprefix: ($) => seq('0', choice('x', 'X')), // /0[xX]/
-
-    rune_literal: ($) => seq("'", choice($._single_char, $._escape_seq), "'"),
-    _single_char: ($) => /[^'\\\r\n]/,
-    _escape_seq: ($) => choice($.uni_character_literal, $.escaped_identifier),
-
-    uni_character_literal: ($) =>
-      choice(
-        seq('\\', 'u', '{', $._hexadecimal_digit, '}'),
-        seq(
-          '\\',
-          'u',
-          '{',
-          seq($._hexadecimal_digit, $._hexadecimal_digit),
-          '}',
-        ),
-        seq(
-          '\\',
-          'u',
-          '{',
-          seq($._hexadecimal_digit, $._hexadecimal_digit, $._hexadecimal_digit),
-          '}',
-        ),
-        seq(
-          '\\',
-          'u',
-          '{',
-          seq(
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-          ),
-          '}',
-        ),
-        seq(
-          '\\',
-          'u',
-          '{',
-          seq(
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-          ),
-          '}',
-        ),
-        seq(
-          '\\',
-          'u',
-          '{',
-          seq(
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-          ),
-          '}',
-        ),
-        seq(
-          '\\',
-          'u',
-          '{',
-          seq(
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-          ),
-          '}',
-        ),
-        seq(
-          '\\',
-          'u',
-          '{',
-          seq(
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-            $._hexadecimal_digit,
-          ),
-          '}',
-        ),
-      ),
-
-    escaped_identifier: ($) =>
-      seq('\\', choice('t', 'b', 'r', 'n', "'", '"', '\\', 'f', 'v', '0', '$')),
+    rune_literal: ($) => token(seq("r'", choice(SINGLE_CHAR, ESCAPE_SEQ), "'")),
 
     byte_literal: ($) =>
-      seq("b'", choice($.single_char_byte, $.byte_escape_seq), "'"),
-    byte_escape_seq: ($) => $.hex_char_byte,
-    hex_char_byte: ($) =>
-      choice($.byte_escaped_identifier, $.hex_char_byte_alt),
-    single_char_byte: ($) =>
-      /[\u0000-\u0009\u000B\u000C\u000E-\u0021\u0023-\u0026\u0028-\u005B\u005D-\u007F]/,
-    byte_escaped_identifier: ($) =>
-      seq('\\', choice('t', 'b', 'r', 'n', "'", '"', '\\', 'f', 'v', '0')),
-    hex_char_byte_alt: ($) => seq('\\', 'u', '{', $._hexadecimal_digit, '}'),
+      token(seq("b'", choice(SINGLE_CHAR_BYTE, BYTE_ESCAPE_SEQ), "'")),
     byte_string_array_literal: ($) =>
-      seq('b"', repeat(choice($.single_char_byte, $.byte_escape_seq)), '"'),
+      token(seq('b"', repeat(choice(SINGLE_CHAR_BYTE, BYTE_ESCAPE_SEQ)), '"')),
     j_string_literal: ($) =>
-      seq('j"', repeat(choice($.single_char_byte, $._escape_seq)), '"'),
+      token(seq('j"', repeat(choice(SINGLE_CHAR_BYTE, ESCAPE_SEQ)), '"')),
     _line_str_text: ($) =>
       choice(
         /[^\\\r\n]/, // Match any character except for backslash, carriage return, or newline
-        $._escape_seq,
+        ESCAPE_SEQ,
       ),
-    triple_quote_close: ($) => seq(optional($.multi_line_string_quote), '"""'),
-
-    multi_line_string_quote: ($) => repeat1('"'),
-    multi_line_str_text: ($) => choice(/[^\\]/, $._escape_seq),
+    triple_quote_close: ($) => seq(optional(/"{1,}/), '"""'),
+    multi_line_str_text: ($) => choice(/[^\\]/, ESCAPE_SEQ),
+    // TODO: multi_line_raw_string_literal
     multi_line_raw_string_literal: ($) => $.multi_line_raw_string_content,
     multi_line_raw_string_content: ($) =>
       prec.left(
         choice(
-          seq('#', repeat($.multi_line_raw_string_content), '#'),
-          seq('#', '"', /.*/, '"', '#'),
+          seq('#', $.multi_line_raw_string_content, '#'),
+          seq('#"', optional(/[^#].*?[^#]|./), '"#'),
+          seq('#\'', optional(/[^#].*?[^#]|./), '\'#'),
         ),
       ),
   },

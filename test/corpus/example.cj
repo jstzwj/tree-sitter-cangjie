@@ -51,26 +51,25 @@ func getOrThrow(a: ?Int64) {
             (user_type
               (identifier))))))
     body: (block
-        (match_expression
-          value: (identifier)
-          (match_body
-            (match_case
-              (pattern
-                (enum_pattern
-                  (identifier)
-                  (enum_pattern_parameters
-                    (pattern
-                      (var_binding_pattern
-                        (identifier))))))
+      (match_expression
+        value: (identifier)
+        (match_body
+          (match_case
+            (pattern
+              (enum_pattern
+                (identifier)
+                (enum_pattern_parameters
+                  (pattern
+                    (var_binding_pattern
+                      (identifier))))))
+            (identifier))
+          (match_case
+            (pattern
+              (var_binding_pattern
+                (identifier)))
+            (jump_expression
               (identifier))
-            (match_case
-              (pattern
-                (var_binding_pattern
-                  (identifier)))
-              (jump_expression
-                (postfix_expression
-                  (identifier)
-                  (call_suffix)))))))))
+            (unit_literal)))))))
 
 ==================
 Enum Definition RGBColor
@@ -148,7 +147,7 @@ enum RGBColor {
       (case_body
         (identifier))
       (function_definition
-        (function_modifier_list
+        modifier: (function_modifier_list
           (function_modifier)
           (function_modifier))
         name: (identifier)
