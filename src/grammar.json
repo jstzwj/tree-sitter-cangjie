@@ -8598,7 +8598,7 @@
           },
           {
             "type": "STRING",
-            "value": "not"
+            "value": "!"
           }
         ]
       }
