@@ -80,6 +80,8 @@ module.exports = grammar({
   ],
   word: ($) => $.identifier,
   conflicts: ($) => [
+    [$.source_file],
+    [$.block],
     [$._atomic_expression],
     [$.quest_seperated_item],
     [$.item_after_quest],
@@ -98,6 +100,7 @@ module.exports = grammar({
     [$.static_init],
     [$.match_case],
     [$.match_body],
+    [$.if_expression],
     [$.line_string_expression],
     [$.multi_line_string_expression],
     [$._expression_or_declarations],
@@ -182,6 +185,7 @@ module.exports = grammar({
         optional($.preamble),
         repeat($._top_level_object),
         optional($.main_definition),
+        repeat($._top_level_object),
       ),
 
     _end: ($) => token(choice(';', '\n', '\r\n')),
@@ -263,11 +267,11 @@ module.exports = grammar({
       seq(
         '{',
         repeat($._end),
-        sepBy($._end, $._class_member_declaration),
+        sepBy(repeat1($._end), $._class_member_declaration),
         repeat($._end),
         optional($.class_primary_init),
         repeat($._end),
-        sepBy($._end, $._class_member_declaration),
+        sepBy(repeat1($._end), $._class_member_declaration),
         repeat($._end),
         '}',
       ),
@@ -1317,6 +1321,7 @@ module.exports = grammar({
         field('condition', $._expression),
         ')',
         field('consequence', $.block),
+        repeat($._end),
         optional(seq('else', field('alternative', choice($.if_expression, $.block)))),
       ),
 
