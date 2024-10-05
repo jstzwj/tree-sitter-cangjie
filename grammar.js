@@ -80,9 +80,9 @@ module.exports = grammar({
   ],
   word: ($) => $.identifier,
   conflicts: ($) => [
+    [$._atomic_expression],
     [$.quest_seperated_item],
     [$.item_after_quest],
-    [$._expression_or_declarations],
     [$.foreign_body],
     [$.class_body],
     [$.interface_body],
@@ -90,17 +90,19 @@ module.exports = grammar({
     [$.class_unnamed_init_param_list],
     [$.named_parameter_list],
     [$.class_init],
-    [$.line_string_expression],
-    [$.do_while_expression],
     [$.struct_unnamed_init_param_list],
     [$.unnamed_parameter_list],
-    [$.multi_line_string_expression],
     [$.operator_function_definition],
     [$.property_definition],
     [$.resource_specification],
     [$.static_init],
     [$.match_case],
     [$.match_body],
+    [$.line_string_expression],
+    [$.multi_line_string_expression],
+    [$._expression_or_declarations],
+    [$.do_while_expression],
+    [$._atomic_expression, $._literal_constant],
     [$.unit_literal, $.tuple_pattern],
     [$.unnamed_tuple_type, $.parenthesized_type],
     [$.unnamed_parameter, $.tuple_type],
@@ -111,7 +113,6 @@ module.exports = grammar({
     [$.foreign_body, $._foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
     [$.tuple_type, $.user_type, $.left_value_expression_without_wildcard, $.left_aux_expression, $._atomic_expression],
-    [$._atomic_expression, $._literal_constant],
     [$.wildcard_pattern, $.exception_type_pattern],
     [$.tuple_literal, $.parenthesized_expression],
     [$.left_aux_expression, $.prefix_unary_expression, $.postfix_expression],
@@ -262,9 +263,11 @@ module.exports = grammar({
       seq(
         '{',
         repeat($._end),
-        repeat($._class_member_declaration),
+        sepBy($._end, $._class_member_declaration),
+        repeat($._end),
         optional($.class_primary_init),
-        repeat($._class_member_declaration),
+        repeat($._end),
+        sepBy($._end, $._class_member_declaration),
         repeat($._end),
         '}',
       ),
@@ -1294,7 +1297,7 @@ module.exports = grammar({
 
     array_literal: ($) => seq('[', optional(seq($.elements)), ']'),
 
-    elements: ($) => repeat1(seq($.element, optional(seq(',', $.element)))),
+    elements: ($) => sepBy1(',', $.element),
 
     element: ($) => choice($.expression_element, $.spread_element),
 
@@ -1310,11 +1313,11 @@ module.exports = grammar({
       seq(
         'if',
         '(',
-        optional(seq('let', $.deconstruct_pattern, '<-')),
-        $._expression,
+        field('deconstruct', optional(seq('let', $.deconstruct_pattern, '<-'))),
+        field('condition', $._expression),
         ')',
-        $.block,
-        optional(seq('else', choice($.if_expression, $.block))),
+        field('consequence', $.block),
+        optional(seq('else', field('alternative', choice($.if_expression, $.block)))),
       ),
 
     deconstruct_pattern: ($) =>
@@ -1512,7 +1515,8 @@ module.exports = grammar({
       seq(
         '{',
         optional($.lambda_parameters),
-        optional(seq('=>', optional($._expression_or_declarations))),
+        '=>',
+        optional($._expression_or_declarations),
         '}',
       ),
 
@@ -1525,7 +1529,7 @@ module.exports = grammar({
       ),
 
     lambda_parameters: ($) =>
-      repeat1(seq($.lambda_parameter, optional(seq(',', $.lambda_parameter)))),
+      seq(sepBy1(',', $.lambda_parameter), optional(',')),
 
     lambda_parameter: ($) =>
       seq(choice($.identifier, '_'), optional(seq(':', $._type))),
@@ -1623,6 +1627,7 @@ module.exports = grammar({
           '/=',
           '%=',
           '&=',
+          '^=',
           '|=',
           '&&=',
           '||=',
