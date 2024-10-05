@@ -2188,6 +2188,10 @@
         {
           "type": "STRING",
           "value": "private"
+        },
+        {
+          "type": "STRING",
+          "value": "static"
         }
       ]
     },
@@ -9359,23 +9363,12 @@
       "tuple_type",
       "user_type",
       "left_value_expression_without_wildcard",
-      "left_aux_expression"
-    ],
-    [
-      "tuple_type",
-      "user_type",
-      "left_value_expression_without_wildcard",
       "left_aux_expression",
       "_atomic_expression"
     ],
     [
       "_atomic_expression",
       "_literal_constant"
-    ],
-    [
-      "user_type",
-      "left_value_expression_without_wildcard",
-      "left_aux_expression"
     ],
     [
       "wildcard_pattern",

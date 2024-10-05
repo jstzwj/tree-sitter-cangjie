@@ -113,14 +113,8 @@ module.exports = grammar({
     [$.function_modifier_list],
     [$.foreign_body, $._foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
-    [$.tuple_type, $.user_type, $.left_value_expression_without_wildcard, $.left_aux_expression],
     [$.tuple_type, $.user_type, $.left_value_expression_without_wildcard, $.left_aux_expression, $._atomic_expression],
     [$._atomic_expression, $._literal_constant],
-    [
-      $.user_type,
-      $.left_value_expression_without_wildcard,
-      $.left_aux_expression,
-    ],
     [$.wildcard_pattern, $.exception_type_pattern],
     [$.tuple_literal, $.parenthesized_expression],
     [$.left_aux_expression, $.prefix_unary_expression, $.postfix_expression],
@@ -506,7 +500,7 @@ module.exports = grammar({
         ),
       ),
     variable_modifier: ($) =>
-      choice('public', 'protected', 'internal', 'private'),
+      choice('public', 'protected', 'internal', 'private', 'static'),
 
     // Enum Definition
     enum_definition: ($) =>
