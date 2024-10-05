@@ -80,6 +80,8 @@ module.exports = grammar({
   ],
   word: ($) => $.identifier,
   conflicts: ($) => [
+    [$.quest_seperated_item],
+    [$.item_after_quest],
     [$._expression_or_declarations],
     [$.foreign_body],
     [$.class_body],
@@ -97,10 +99,10 @@ module.exports = grammar({
     [$.property_definition],
     [$.resource_specification],
     [$.static_init],
-    [$.match_expression],
     [$.match_case],
     [$.match_body],
     [$.tuple_type, $.user_type],
+    [$.unnamed_tuple_type, $.parenthesized_type],
     [$.tuple_type, $.left_value_expression],
     [$.tuple_type, $.user_type, $._atomic_expression],
     [$.unnamed_parameter, $.tuple_type],
@@ -110,13 +112,14 @@ module.exports = grammar({
     [$.function_modifier_list],
     [$.foreign_body, $._foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
+    [$.tuple_type, $.user_type, $.left_value_expression_without_wildcard, $.left_aux_expression],
+    [$.tuple_type, $.user_type, $.left_value_expression_without_wildcard, $.left_aux_expression, $._atomic_expression],
     [$._atomic_expression, $._literal_constant],
     [
       $.user_type,
       $.left_value_expression_without_wildcard,
       $.left_aux_expression,
     ],
-    [$.user_type, $._atomic_expression],
     [$.wildcard_pattern, $.exception_type_pattern],
     [$.tuple_literal, $.parenthesized_expression],
     [$.left_aux_expression, $.prefix_unary_expression, $.postfix_expression],
@@ -163,13 +166,9 @@ module.exports = grammar({
       $.postfix_expression,
     ],
     [$._atomic_expression, $.lambda_parameter],
-    [$._expression, $.lambda_parameter],
     [$.user_type, $._expression],
-    [$.user_type, $.left_aux_expression, $._atomic_expression],
     [$.user_type, $.left_aux_expression],
     [$.left_aux_expression],
-    [$.left_aux_expression, $.spread_element],
-    [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
     [$.left_aux_expression, $.resource_specification],
     [$.class_primary_init, $.case_body, $.struct_name],
     [
@@ -183,6 +182,7 @@ module.exports = grammar({
     [$.left_aux_expression, $.additive_expression, $.postfix_expression],
     [$.left_aux_expression, $.exponent_expression, $.postfix_expression],
     [$.left_aux_expression, $.flow_expression, $.postfix_expression],
+    [$.user_type, $._atomic_expression],
   ],
   rules: {
     source_file: ($) =>
@@ -512,7 +512,7 @@ module.exports = grammar({
       seq(
         optional($.enum_modifier),
         'enum',
-        $.identifier,
+        field('name', $.identifier),
         optional(seq($.type_parameters)),
         optional(seq('<:', $.super_interfaces)),
         optional($.generic_constraints),
@@ -771,9 +771,9 @@ module.exports = grammar({
       seq(
         repeat($.property_modifier),
         'prop',
-        $.identifier,
+        field('name' ,$.identifier),
         ':',
-        $._type,
+        field('type', $._type),
         optional($.property_body),
       ),
 
@@ -817,13 +817,20 @@ module.exports = grammar({
     arrow_type: ($) => seq($.arrow_parameters, '->', $._type),
 
     arrow_parameters: ($) =>
-      seq('(', optional(seq($._type, repeat(seq(',', $._type)))), ')'),
+      choice(
+        $.unnamed_arrow_parameters,
+        $.named_arrow_parameters,
+      ),
+    unnamed_arrow_parameters: ($) => seq('(', sepBy(',', $._type), ')'),
+    named_arrow_parameters: ($) => seq('(', sepBy1(',', seq(choice('_', $.identifier), ':', $._type)), ')'),
 
     tuple_type: ($) =>
       choice(
-        seq('(', $._type, repeat(seq(',', $._type)), ')'),
-        seq(choice('_', $.identifier), optional(seq(':', $._type))),
+        $.unnamed_tuple_type,
+        $.named_tuple_type,
       ),
+    unnamed_tuple_type: ($) => seq('(', sepBy1(',', $._type), ')'),
+    named_tuple_type: ($) => seq('(', sepBy1(',', seq(choice('_', $.identifier), ':', $._type)), ')'),
 
     prefix_type: ($) => seq($.prefix_type_operator, $._type),
 
@@ -959,7 +966,7 @@ module.exports = grammar({
           seq(
             $._expression,
             optional('?'),
-            optional('.'),
+            '.',
             $.identifier,
             optional($.type_arguments),
           ),
@@ -1159,11 +1166,11 @@ module.exports = grammar({
     quest_seperated_item: ($) =>
       seq(
         $.item_after_quest,
-        choice(
+        optional(choice(
           $.call_suffix,
           seq(optional($.call_suffix), $.trailing_lambda_expression),
-        ),
-        $.index_access,
+          $.index_access,
+        )),
       ),
     item_after_quest: ($) =>
       choice(
