@@ -1647,7 +1647,7 @@ module.exports = grammar({
     additive_operator: ($) => token(choice('+', '-')),
     exponent_operator: ($) => token('**'),
     multiplicative_operator: ($) => token(choice('*', '/', '%')),
-    prefix_unary_operator: ($) => token(choice('-', 'not')),
+    prefix_unary_operator: ($) => token(choice('-', '!')),
 
     overloaded_operators: ($) =>
       token(
