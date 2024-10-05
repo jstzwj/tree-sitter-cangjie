@@ -6407,20 +6407,17 @@
       ]
     },
     "unit_literal": {
-      "type": "TOKEN",
-      "content": {
-        "type": "SEQ",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "("
-          },
-          {
-            "type": "STRING",
-            "value": ")"
-          }
-        ]
-      }
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
     },
     "if_expression": {
       "type": "SEQ",
@@ -9308,6 +9305,10 @@
     ],
     [
       "match_body"
+    ],
+    [
+      "unit_literal",
+      "tuple_pattern"
     ],
     [
       "tuple_type",

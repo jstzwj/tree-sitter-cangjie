@@ -34,13 +34,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v1
-      - name: Set up examples
-        run: |-
-          git clone https://github.com/rust-lang-nursery/bitflags examples/bitflags --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/rust-lang/libc examples/libc --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/rust-lang/regex examples/regex --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/serde-rs/serde examples/serde --single-branch --depth=1 --filter=blob:none
-          git clone https://github.com/tokio-rs/tokio examples/tokio --single-branch --depth=1 --filter=blob:none
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
@@ -48,4 +41,4 @@ jobs:
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
-          files: examples/**/*.rs
+          files: examples/**/*.cj

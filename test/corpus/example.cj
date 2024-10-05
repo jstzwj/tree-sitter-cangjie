@@ -55,21 +55,19 @@ func getOrThrow(a: ?Int64) {
         value: (identifier)
         (match_body
           (match_case
-            (pattern
               (enum_pattern
                 (identifier)
                 (enum_pattern_parameters
-                  (pattern
                     (var_binding_pattern
-                      (identifier))))))
+                      (identifier))))
             (identifier))
           (match_case
-            (pattern
               (var_binding_pattern
-                (identifier)))
-            (jump_expression
-              (identifier))
-            (unit_literal)))))))
+                (identifier))
+                (jump_expression
+                  (postfix_expression
+                    (identifier)
+                    (call_suffix)))))))))
 
 ==================
 Enum Definition RGBColor
@@ -138,7 +136,7 @@ enum RGBColor {
 
 (source_file
   (enum_definition
-    (identifier)
+    name: (identifier)
     (enum_body
       (case_body
         (identifier))
@@ -157,9 +155,8 @@ enum RGBColor {
               (identifier)
               (call_suffix
                 (value_argument
-                  (literal_constant
-                    (string_literal
-                      (line_string_literal)))))))))))
+                  (string_literal
+                    (line_string_literal))))))))))
 
 ==================
 Option Definition
@@ -193,8 +190,7 @@ let d: ?String = None
             (identifier)
             (call_suffix
               (value_argument
-                (literal_constant
-                  (integer_literal))))))
+                (integer_literal)))))
         (variable_declaration
           name: (var_binding_pattern
             (identifier))
@@ -206,8 +202,7 @@ let d: ?String = None
             (identifier)
             (call_suffix
               (value_argument
-                (literal_constant
-                  (integer_literal))))))
+                (integer_literal)))))
         (variable_declaration
           name: (var_binding_pattern
             (identifier))
@@ -220,9 +215,8 @@ let d: ?String = None
             (identifier)
             (call_suffix
               (value_argument
-                (literal_constant
-                  (string_literal
-                    (line_string_literal)))))))
+                (string_literal
+                  (line_string_literal))))))
         (variable_declaration
           name: (var_binding_pattern
             (identifier))

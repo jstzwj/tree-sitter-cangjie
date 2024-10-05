@@ -101,6 +101,7 @@ module.exports = grammar({
     [$.static_init],
     [$.match_case],
     [$.match_body],
+    [$.unit_literal, $.tuple_pattern],
     [$.tuple_type, $.user_type],
     [$.unnamed_tuple_type, $.parenthesized_type],
     [$.tuple_type, $.left_value_expression],
@@ -1313,7 +1314,7 @@ module.exports = grammar({
 
     tuple_literal: ($) => seq('(', sepBy1(',', $._expression), ')'),
 
-    unit_literal: ($) => token(seq('(', ')')),
+    unit_literal: ($) => seq('(', ')'),
 
     if_expression: ($) =>
       seq(

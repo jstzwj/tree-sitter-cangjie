@@ -15211,6 +15211,11 @@
     }
   },
   {
+    "type": "unit_literal",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "unnamed_arrow_parameters",
     "named": true,
     "fields": {},
@@ -16619,10 +16624,6 @@
   {
     "type": "unit",
     "named": false
-  },
-  {
-    "type": "unit_literal",
-    "named": true
   },
   {
     "type": "unsafe",
