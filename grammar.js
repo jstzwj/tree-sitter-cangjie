@@ -102,10 +102,7 @@ module.exports = grammar({
     [$.match_case],
     [$.match_body],
     [$.unit_literal, $.tuple_pattern],
-    [$.tuple_type, $.user_type],
     [$.unnamed_tuple_type, $.parenthesized_type],
-    [$.tuple_type, $.left_value_expression],
-    [$.tuple_type, $.user_type, $._atomic_expression],
     [$.unnamed_parameter, $.tuple_type],
     [$.var_binding_pattern, $.enum_pattern],
     [$.wildcard_pattern, $.type_pattern],
@@ -163,7 +160,6 @@ module.exports = grammar({
     [$._atomic_expression, $.lambda_parameter],
     [$.user_type, $._expression],
     [$.user_type, $.left_aux_expression],
-    [$.left_aux_expression],
     [$.left_aux_expression, $.resource_specification],
     [$.class_primary_init, $.case_body, $.struct_name],
     [

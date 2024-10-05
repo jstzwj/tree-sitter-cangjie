@@ -32,15 +32,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up tree-sitter
         uses: tree-sitter/setup-action/cli@v1
         with:
-            install-lib: false
-      - run: tree-sitter generate
+            tree-sitter-ref: v0.23.0
       - name: Run tests
         uses: tree-sitter/parser-test-action@v2
         with:
           test-rust: ${{runner.os == 'Linux'}}
+
       - name: Parse examples
         uses: tree-sitter/parse-action@v4
         with:
