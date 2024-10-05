@@ -1,15 +1,5 @@
 [
   {
-    "type": "TRIPLE_QUOTE_CLOSE",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "TRIPLE_QUOTE_OPEN",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "additive_expression",
     "named": true,
     "fields": {
@@ -3452,25 +3442,6 @@
       "types": [
         {
           "type": "array_literal",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "comment",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "delimited_comment",
-          "named": true
-        },
-        {
-          "type": "line_comment",
           "named": true
         }
       ]
@@ -9819,16 +9790,8 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "TRIPLE_QUOTE_CLOSE",
-          "named": true
-        },
-        {
-          "type": "TRIPLE_QUOTE_OPEN",
-          "named": true
-        },
         {
           "type": "multi_line_string_content",
           "named": true
@@ -15011,7 +14974,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "arrow_type",
@@ -15019,6 +14982,10 @@
         },
         {
           "type": "char_lang_types",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         },
         {

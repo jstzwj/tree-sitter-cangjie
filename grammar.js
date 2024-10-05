@@ -43,7 +43,8 @@ const PREC = {
 const INTEGER_SUFFIX = ['i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64'];
 const FLOAT_SUFFIX = ['f16', 'f32', 'f64'];
 
-const SINGLE_CHAR_BYTE = /[\u0000-\u0009\u000B\u000C\u000E-\u0021\u0023-\u0026\u0028-\u005B\u005D-\u007F]/;
+const SINGLE_CHAR_BYTE =
+  /[\u0000-\u0009\u000B\u000C\u000E-\u0021\u0023-\u0026\u0028-\u005B\u005D-\u007F]/;
 const SINGLE_CHAR = /[^'\\\r\n]/;
 const UNI_CHARACTER_LITERAL = /\\u\{[0-9a-fA-F]{1,8}\}/;
 const ESCAPED_IDENTIFIER = /\\[tbrn'"\\fv0$]/;
@@ -70,7 +71,13 @@ const HEXADECIMAL_EXPONENT = /[pP][+-]?[0-9][0-9_]*/;
 
 module.exports = grammar({
   name: 'cangjie',
-  extras: ($) => [/[\s]/, /[\n]/, /[\r\n]/, $.comment],
+  extras: ($) => [
+    /[\s]/,
+    /[\n]/,
+    /[\r\n]/,
+    $.line_comment,
+    $.delimited_comment,
+  ],
   word: ($) => $.identifier,
   conflicts: ($) => [
     [$._expression_or_declarations],
@@ -93,6 +100,10 @@ module.exports = grammar({
     [$.match_expression],
     [$.match_case],
     [$.match_body],
+    [$.tuple_type, $.user_type],
+    [$.tuple_type, $.left_value_expression],
+    [$.tuple_type, $.user_type, $._atomic_expression],
+    [$.unnamed_parameter, $.tuple_type],
     [$.var_binding_pattern, $.enum_pattern],
     [$.wildcard_pattern, $.type_pattern],
     [$.var_binding_pattern, $.type_pattern, $.enum_pattern],
@@ -184,7 +195,11 @@ module.exports = grammar({
     _end: ($) => token(choice(';', '\n', '\r\n')),
 
     // Preamble, package, and import definitions
-    preamble: ($) => seq(optional($.package_header), repeat1($.import_list)),
+    preamble: ($) =>
+      choice(
+        $.package_header,
+        seq(optional($.package_header), repeat1($.import_list)),
+      ),
     package_header: ($) =>
       seq('package', $.package_name_identifier, optional($._end)),
     package_name_identifier: ($) => sepBy1('.', $.identifier),
@@ -804,7 +819,11 @@ module.exports = grammar({
     arrow_parameters: ($) =>
       seq('(', optional(seq($._type, repeat(seq(',', $._type)))), ')'),
 
-    tuple_type: ($) => seq('(', $._type, repeat(seq(',', $._type)), ')'),
+    tuple_type: ($) =>
+      choice(
+        seq('(', $._type, repeat(seq(',', $._type)), ')'),
+        seq(choice('_', $.identifier), optional(seq(':', $._type))),
+      ),
 
     prefix_type: ($) => seq($.prefix_type_operator, $._type),
 
@@ -907,7 +926,12 @@ module.exports = grammar({
       seq(
         '(',
         choice($.left_value_expression, $.tuple_left_value_expression),
-        repeat(seq(',', choice($.left_value_expression, $.tuple_left_value_expression))),
+        repeat(
+          seq(
+            ',',
+            choice($.left_value_expression, $.tuple_left_value_expression),
+          ),
+        ),
         optional(','),
         ')',
       ),
@@ -1166,7 +1190,8 @@ module.exports = grammar({
     ref_transfer_expression: ($) =>
       seq('inout', optional(seq($._expression, '.', $.identifier))),
 
-    index_access: ($) => seq(token.immediate('['), choice($._expression, $.range_element), ']'),
+    index_access: ($) =>
+      seq(token.immediate('['), choice($._expression, $.range_element), ']'),
 
     range_element: ($) =>
       prec.left(
@@ -1225,16 +1250,18 @@ module.exports = grammar({
     _line_string_content: ($) => $._line_str_text,
 
     line_string_literal: ($) =>
-      choice(seq(
-        '"',
-        repeat(choice($.line_string_expression, $._line_string_content)),
-        '"',
+      choice(
+        seq(
+          '"',
+          repeat(choice($.line_string_expression, $._line_string_content)),
+          '"',
+        ),
+        seq(
+          "'",
+          repeat(choice($.line_string_expression, $._line_string_content)),
+          "'",
+        ),
       ),
-      seq(
-        '\'',
-        repeat(choice($.line_string_expression, $._line_string_content)),
-        '\'',
-      )),
 
     line_string_expression: ($) =>
       seq(
@@ -1249,11 +1276,11 @@ module.exports = grammar({
 
     multi_line_string_literal: ($) =>
       seq(
-        $.TRIPLE_QUOTE_OPEN,
+        '"""',
         repeat(
           choice($.multi_line_string_expression, $.multi_line_string_content),
         ),
-        $.TRIPLE_QUOTE_CLOSE,
+        '"""',
       ),
 
     multi_line_string_expression: ($) =>
@@ -1648,15 +1675,13 @@ module.exports = grammar({
 
     // Comments
     comment: ($) => choice($.line_comment, $.delimited_comment),
-    line_comment: ($) => token(seq('//', /.*/)),
+    line_comment: ($) => token(prec(PREC.COMMENT, seq('//', /.*/))),
     delimited_comment: ($) =>
-      token(seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '*/')),
+      token(prec(PREC.COMMENT, seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))),
 
     // Delimiters
     QUOTE_OPEN: ($) => '"',
     QUOTE_CLOSE: ($) => '"',
-    TRIPLE_QUOTE_OPEN: ($) => '"""',
-    TRIPLE_QUOTE_CLOSE: ($) => '"""',
 
     // Literals
     integer_literal: (_) =>
@@ -1667,29 +1692,31 @@ module.exports = grammar({
         ),
       ),
     float_literal: ($) =>
-      token(choice(
-        seq(
-          choice(
-            seq(DECIMAL_LITERAL, DECIMAL_EXPONENT),
-            seq(DECIMAL_FRACTION, optional(DECIMAL_EXPONENT)),
-            seq(
-              DECIMAL_LITERAL,
-              DECIMAL_FRACTION,
-              optional(DECIMAL_EXPONENT),
+      token(
+        choice(
+          seq(
+            choice(
+              seq(DECIMAL_LITERAL, DECIMAL_EXPONENT),
+              seq(DECIMAL_FRACTION, optional(DECIMAL_EXPONENT)),
+              seq(
+                DECIMAL_LITERAL,
+                DECIMAL_FRACTION,
+                optional(DECIMAL_EXPONENT),
+              ),
             ),
+            optional(choice(...FLOAT_SUFFIX)),
           ),
-          optional(choice(...FLOAT_SUFFIX)),
-        ),
-        seq(
-          HEXADECIMAL_PREFIX,
-          choice(
-            HEXADECIMAL_DIGITS,
-            HEXADECIMAL_FRACTION,
-            seq(HEXADECIMAL_DIGITS, HEXADECIMAL_FRACTION),
+          seq(
+            HEXADECIMAL_PREFIX,
+            choice(
+              HEXADECIMAL_DIGITS,
+              HEXADECIMAL_FRACTION,
+              seq(HEXADECIMAL_DIGITS, HEXADECIMAL_FRACTION),
+            ),
+            HEXADECIMAL_EXPONENT,
           ),
-          HEXADECIMAL_EXPONENT,
         ),
-      )),
+      ),
 
     rune_literal: ($) => token(seq("r'", choice(SINGLE_CHAR, ESCAPE_SEQ), "'")),
 
@@ -1713,7 +1740,7 @@ module.exports = grammar({
         choice(
           seq('#', $.multi_line_raw_string_content, '#'),
           seq('#"', optional(/[^#].*?[^#]|./), '"#'),
-          seq('#\'', optional(/[^#].*?[^#]|./), '\'#'),
+          seq("#'", optional(/[^#].*?[^#]|./), "'#"),
         ),
       ),
   },
