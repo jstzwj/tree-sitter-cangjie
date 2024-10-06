@@ -189,6 +189,7 @@ module.exports = grammar({
       ),
 
     _end: ($) => token(choice(';', '\n', '\r\n')),
+    _nl: ($) => token(choice('\n', '\r\n')),
 
     // Preamble, package, and import definitions
     preamble: ($) =>
@@ -1024,6 +1025,8 @@ module.exports = grammar({
           field('left', $._expression),
           field('operator', choice('..', '..=')),
           field('right', $._expression),
+          repeat($._nl),
+          optional(field('step', seq(':', $._expression)))
         ),
       ),
 
@@ -1321,7 +1324,7 @@ module.exports = grammar({
         field('condition', $._expression),
         ')',
         field('consequence', $.block),
-        repeat($._end),
+        repeat($._nl),
         optional(seq('else', field('alternative', choice($.if_expression, $.block)))),
       ),
 
