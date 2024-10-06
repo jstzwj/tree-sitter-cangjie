@@ -11717,11 +11717,43 @@
       "required": false,
       "types": [
         {
+          "type": "boolean_literal",
+          "named": true
+        },
+        {
+          "type": "byte_literal",
+          "named": true
+        },
+        {
+          "type": "byte_string_array_literal",
+          "named": true
+        },
+        {
           "type": "dollar_identifier",
           "named": true
         },
         {
+          "type": "float_literal",
+          "named": true
+        },
+        {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "integer_literal",
+          "named": true
+        },
+        {
+          "type": "rune_literal",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "unit_literal",
           "named": true
         }
       ]
@@ -16307,6 +16339,10 @@
     "named": false
   },
   {
+    "type": "!in",
+    "named": false
+  },
+  {
     "type": "\"",
     "named": false
   },
@@ -16343,11 +16379,23 @@
     "named": false
   },
   {
+    "type": "%=",
+    "named": false
+  },
+  {
     "type": "&",
     "named": false
   },
   {
     "type": "&&",
+    "named": false
+  },
+  {
+    "type": "&&=",
+    "named": false
+  },
+  {
+    "type": "&=",
     "named": false
   },
   {
@@ -16375,11 +16423,23 @@
     "named": false
   },
   {
+    "type": "**=",
+    "named": false
+  },
+  {
+    "type": "*=",
+    "named": false
+  },
+  {
     "type": "+",
     "named": false
   },
   {
     "type": "++",
+    "named": false
+  },
+  {
+    "type": "+=",
     "named": false
   },
   {
@@ -16395,6 +16455,10 @@
     "named": false
   },
   {
+    "type": "-=",
+    "named": false
+  },
+  {
     "type": "->",
     "named": false
   },
@@ -16407,11 +16471,19 @@
     "named": false
   },
   {
+    "type": "...",
+    "named": false
+  },
+  {
     "type": "..=",
     "named": false
   },
   {
     "type": "/",
+    "named": false
+  },
+  {
+    "type": "/=",
     "named": false
   },
   {
@@ -16436,6 +16508,10 @@
   },
   {
     "type": "<<",
+    "named": false
+  },
+  {
+    "type": "<<=",
     "named": false
   },
   {
@@ -16467,6 +16543,10 @@
     "named": false
   },
   {
+    "type": ">>=",
+    "named": false
+  },
+  {
     "type": "?",
     "named": false
   },
@@ -16476,6 +16556,10 @@
   },
   {
     "type": "@",
+    "named": false
+  },
+  {
+    "type": "Bool",
     "named": false
   },
   {
@@ -16527,6 +16611,22 @@
     "named": false
   },
   {
+    "type": "UInt16",
+    "named": false
+  },
+  {
+    "type": "UInt32",
+    "named": false
+  },
+  {
+    "type": "UInt64",
+    "named": false
+  },
+  {
+    "type": "UInt8",
+    "named": false
+  },
+  {
     "type": "Uint16",
     "named": false
   },
@@ -16555,6 +16655,10 @@
     "named": false
   },
   {
+    "type": "\\",
+    "named": false
+  },
+  {
     "type": "]",
     "named": false
   },
@@ -16563,7 +16667,15 @@
     "named": false
   },
   {
+    "type": "^=",
+    "named": false
+  },
+  {
     "type": "_",
+    "named": false
+  },
+  {
+    "type": "`",
     "named": false
   },
   {
@@ -16636,6 +16748,10 @@
   },
   {
     "type": "extend",
+    "named": false
+  },
+  {
+    "type": "false",
     "named": false
   },
   {
@@ -16807,6 +16923,10 @@
     "named": true
   },
   {
+    "type": "sealed",
+    "named": false
+  },
+  {
     "type": "set",
     "named": false
   },
@@ -16831,6 +16951,10 @@
     "named": false
   },
   {
+    "type": "this",
+    "named": false
+  },
+  {
     "type": "this_super_expression",
     "named": true
   },
@@ -16840,6 +16964,10 @@
   },
   {
     "type": "throw",
+    "named": false
+  },
+  {
+    "type": "true",
     "named": false
   },
   {
@@ -16879,7 +17007,19 @@
     "named": false
   },
   {
+    "type": "|=",
+    "named": false
+  },
+  {
+    "type": "|>",
+    "named": false
+  },
+  {
     "type": "||",
+    "named": false
+  },
+  {
+    "type": "||=",
     "named": false
   },
   {
@@ -16888,6 +17028,10 @@
   },
   {
     "type": "~",
+    "named": false
+  },
+  {
+    "type": "~>",
     "named": false
   }
 ]

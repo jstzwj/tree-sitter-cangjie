@@ -48,7 +48,7 @@ const SINGLE_CHAR_BYTE =
 const SINGLE_CHAR = /[^'\\\r\n]/;
 const UNI_CHARACTER_LITERAL = /\\u\{[0-9a-fA-F]{1,8}\}/;
 const ESCAPED_IDENTIFIER = /\\[tbrn'"\\fv0$]/;
-const ESCAPE_SEQ = choice(UNI_CHARACTER_LITERAL, ESCAPED_IDENTIFIER);
+const ESCAPE_SEQ = /\\u\{[0-9a-fA-F]{1,8}\}|\\[tbrn'"\\fv0$]/ // choice(UNI_CHARACTER_LITERAL, ESCAPED_IDENTIFIER);
 
 const HEX_CHAR_BYTE = seq('\\u{', /[0-9a-fA-F]{1,4}/, '}');
 const BYTE_ESCAPED_IDENTIFIER = /\\[tbrn'"\\fv0]/;
@@ -105,6 +105,21 @@ module.exports = grammar({
     [$._expression_or_declarations],
     [$.do_while_expression],
     [$._end, $.block],
+    [$.unit_literal, $.quote_token],
+    [$.quote_token, $.macro_input_expr_with_parens],
+    [$.quote_token, $.macro_expression],
+    [$.quote_token, $.multi_line_raw_string_content],
+    [$.quote_token, $.dollar_identifier],
+    [$.quote_token, $.macro_attr_expr],
+    [$.quote_expr, $.quote_token],
+    [$.quote_token, $.quote_interpolate],
+    [$.quote_parameters],
+    [$.try_expression],
+    [$.unnamed_arrow_parameters, $.unnamed_tuple_type, $.parenthesized_type],
+    [$.unnamed_arrow_parameters, $.unit_literal],
+    [$.unnamed_arrow_parameters, $.unnamed_tuple_type],
+    [$.unnamed_arrow_parameters, $.named_tuple_type],
+    [$.named_arrow_parameters, $.named_tuple_type],
     [$.class_primary_init, $.enum_pattern_parameters],
     [$._atomic_expression, $._literal_constant],
     [$.left_aux_expression, $._atomic_expression],
@@ -1585,7 +1600,33 @@ module.exports = grammar({
       repeat1(choice($.quote_token, $.quote_interpolate, $.macro_expression)),
 
     // TODO
-    quote_token: ($) => choice('.', ',', $.identifier, $.dollar_identifier),
+    quote_token: ($) => choice(
+      '.', ',', '(', ')', '[', ']', '{', '}', '**', '*', '%', '/', '+', 
+      '-', '|>', '~>', 
+      '++', '--', '&&', '||', '!', '&', '|', '^', '<<', '>>', ':', ';', 
+      '=', '+=', '-=', '*=', '**=', '/=', '%=', 
+      '&&=', '||=', '&=', '|=', '^=', '<<=', '>>=', 
+      '->', '=>', '...', '..=', '..', '#', '@', '?', '<:', '<', '>', 
+      '<=', '>=', '!=', '==', 
+      '_', '\\', '`', '$', 
+      'Int8', 'Int16', 'Int32', 'Int64', 'UInt8', 'UInt16', 'UInt32', 
+      'UInt64', 'Float16', 
+      'Float32', 'Float64', 'Rune', 'Bool', 'Unit', 'Nothing', 
+      'struct', 'enum', 'This', 
+      'package', 'import', 'class', 'interface', 'func', 'let', 'var', 
+      'type', 'init', 'this', 'super', 'if', 'else', 
+      'case', 'try', 'catch', 'finally', 
+      'for', 'do', 'while', 'throw', 'return', 'continue', 'break', 
+      'as', 'in', '!in', 
+      'match', 'from', 'where', 'extend', 'spawn', 'synchronized', 
+      'macro', 'quote', 
+      'true', 'false', 
+      'sealed', 'static', 'public', 'private', 'protected', 
+      'override', 'abstract', 'open', 'operator', 'foreign', 
+      $.identifier, 
+      $.dollar_identifier, 
+      $._literal_constant
+    ),
 
     quote_interpolate: ($) => seq('$', $.quote_expression),
 
@@ -1689,7 +1730,7 @@ module.exports = grammar({
 
     // Comments
     comment: ($) => choice($.line_comment, $.delimited_comment),
-    line_comment: ($) => token(prec(PREC.COMMENT, seq('//', /.*/))),
+    line_comment: ($) => token(prec(PREC.COMMENT, seq('//', /[^\n]*/))),
     delimited_comment: ($) =>
       token(prec(PREC.COMMENT, seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))),
 
@@ -1742,8 +1783,8 @@ module.exports = grammar({
       token(seq('j"', repeat(choice(SINGLE_CHAR_BYTE, ESCAPE_SEQ)), '"')),
     _line_str_text: ($) =>
       choice(
-        /[^\\\r\n]/, // Match any character except for backslash, carriage return, or newline
-        ESCAPE_SEQ,
+        token.immediate(prec(PREC.DECL, /[^\\\r\n"']/)), // Match any character except for backslash, carriage return, or newline
+        token.immediate(prec(PREC.DECL, ESCAPE_SEQ)),
       ),
     triple_quote_close: ($) => seq(optional(/"{1,}/), '"""'),
     multi_line_str_text: ($) => choice(/[^\\]/, ESCAPE_SEQ),
