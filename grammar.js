@@ -1380,7 +1380,7 @@ module.exports = grammar({
       prec.left(
         seq(
           $._literal_constant,
-          optional(seq('|', optional($._literal_constant))),
+          repeat(seq('|', optional($._literal_constant))),
         ),
       ),
 
