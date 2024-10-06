@@ -81,7 +81,6 @@ module.exports = grammar({
   word: ($) => $.identifier,
   conflicts: ($) => [
     [$.source_file],
-    [$.block],
     [$._atomic_expression],
     [$.quest_seperated_item],
     [$.item_after_quest],
@@ -105,13 +104,19 @@ module.exports = grammar({
     [$.multi_line_string_expression],
     [$._expression_or_declarations],
     [$.do_while_expression],
+    [$.class_primary_init, $.enum_pattern_parameters],
     [$._atomic_expression, $._literal_constant],
+    [$.left_aux_expression, $._atomic_expression],
+    [$.left_aux_expression, $.item_after_quest],
+    [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
     [$.unit_literal, $.tuple_pattern],
     [$.unnamed_tuple_type, $.parenthesized_type],
     [$.unnamed_parameter, $.tuple_type],
     [$.var_binding_pattern, $.enum_pattern],
     [$.wildcard_pattern, $.type_pattern],
+    [$.user_type, $.left_value_expression_without_wildcard],
     [$.var_binding_pattern, $.type_pattern, $.enum_pattern],
+    [$.user_type, $.left_value_expression_without_wildcard, $._atomic_expression],
     [$.function_modifier_list],
     [$.foreign_body, $._foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
@@ -163,7 +168,6 @@ module.exports = grammar({
     ],
     [$._atomic_expression, $.lambda_parameter],
     [$.user_type, $._expression],
-    [$.user_type, $.left_aux_expression],
     [$.left_aux_expression, $.resource_specification],
     [$.class_primary_init, $.case_body, $.struct_name],
     [
@@ -188,8 +192,8 @@ module.exports = grammar({
         repeat($._top_level_object),
       ),
 
-    _end: ($) => token(choice(';', '\n', '\r\n')),
-    _nl: ($) => token(choice('\n', '\r\n')),
+    _end: ($) => choice(';', '\n', '\r\n'),
+    _nl: ($) => choice('\n', '\r\n'),
 
     // Preamble, package, and import definitions
     preamble: ($) =>
@@ -312,7 +316,7 @@ module.exports = grammar({
         optional(choice($.class_non_static_member_modifier, 'const')),
         field('name', $.identifier),
         '(',
-        $.class_primary_init_param_lists,
+        optional($.class_primary_init_param_lists),
         ')',
         '{',
         optional(seq('super', $.call_suffix)),
@@ -947,7 +951,7 @@ module.exports = grammar({
 
     left_value_expression_without_wildcard: ($) =>
       prec.left(
-        PREC.DECL,
+        PREC.COMMENT,
         choice(
           $.identifier,
           $.left_aux_expression,
@@ -957,7 +961,7 @@ module.exports = grammar({
 
     left_aux_expression: ($) =>
       prec.left(
-        PREC.DECL,
+        PREC.COMMENT,
         choice(
           // seq($.identifier, optional($.type_arguments)),
           $._type,

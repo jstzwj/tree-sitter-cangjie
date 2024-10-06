@@ -46,40 +46,34 @@
       ]
     },
     "_end": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": ";"
-          },
-          {
-            "type": "STRING",
-            "value": "\n"
-          },
-          {
-            "type": "STRING",
-            "value": "\r\n"
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": ";"
+        },
+        {
+          "type": "STRING",
+          "value": "\n"
+        },
+        {
+          "type": "STRING",
+          "value": "\r\n"
+        }
+      ]
     },
     "_nl": {
-      "type": "TOKEN",
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "\n"
-          },
-          {
-            "type": "STRING",
-            "value": "\r\n"
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "\n"
+        },
+        {
+          "type": "STRING",
+          "value": "\r\n"
+        }
+      ]
     },
     "preamble": {
       "type": "CHOICE",
@@ -980,8 +974,16 @@
           "value": "("
         },
         {
-          "type": "SYMBOL",
-          "name": "class_primary_init_param_lists"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "class_primary_init_param_lists"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "STRING",
@@ -4818,7 +4820,7 @@
     },
     "left_value_expression_without_wildcard": {
       "type": "PREC_LEFT",
-      "value": 2,
+      "value": 0,
       "content": {
         "type": "CHOICE",
         "members": [
@@ -4860,7 +4862,7 @@
     },
     "left_aux_expression": {
       "type": "PREC_LEFT",
-      "value": 2,
+      "value": 0,
       "content": {
         "type": "CHOICE",
         "members": [
@@ -9388,9 +9390,6 @@
       "source_file"
     ],
     [
-      "block"
-    ],
-    [
       "_atomic_expression"
     ],
     [
@@ -9460,8 +9459,25 @@
       "do_while_expression"
     ],
     [
+      "class_primary_init",
+      "enum_pattern_parameters"
+    ],
+    [
       "_atomic_expression",
       "_literal_constant"
+    ],
+    [
+      "left_aux_expression",
+      "_atomic_expression"
+    ],
+    [
+      "left_aux_expression",
+      "item_after_quest"
+    ],
+    [
+      "assignment_expression",
+      "left_aux_expression",
+      "postfix_expression"
     ],
     [
       "unit_literal",
@@ -9484,9 +9500,18 @@
       "type_pattern"
     ],
     [
+      "user_type",
+      "left_value_expression_without_wildcard"
+    ],
+    [
       "var_binding_pattern",
       "type_pattern",
       "enum_pattern"
+    ],
+    [
+      "user_type",
+      "left_value_expression_without_wildcard",
+      "_atomic_expression"
     ],
     [
       "function_modifier_list"
@@ -9607,10 +9632,6 @@
     [
       "user_type",
       "_expression"
-    ],
-    [
-      "user_type",
-      "left_aux_expression"
     ],
     [
       "left_aux_expression",
