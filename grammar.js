@@ -104,6 +104,7 @@ module.exports = grammar({
     [$.multi_line_string_expression],
     [$._expression_or_declarations],
     [$.do_while_expression],
+    [$._end, $.block],
     [$.class_primary_init, $.enum_pattern_parameters],
     [$._atomic_expression, $._literal_constant],
     [$.left_aux_expression, $._atomic_expression],
@@ -111,7 +112,6 @@ module.exports = grammar({
     [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
     [$.unit_literal, $.tuple_pattern],
     [$.unnamed_tuple_type, $.parenthesized_type],
-    [$.unnamed_parameter, $.tuple_type],
     [$.var_binding_pattern, $.enum_pattern],
     [$.wildcard_pattern, $.type_pattern],
     [$.user_type, $.left_value_expression_without_wildcard],
@@ -120,7 +120,6 @@ module.exports = grammar({
     [$.function_modifier_list],
     [$.foreign_body, $._foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
-    [$.tuple_type, $.user_type, $.left_value_expression_without_wildcard, $.left_aux_expression, $._atomic_expression],
     [$.wildcard_pattern, $.exception_type_pattern],
     [$.tuple_literal, $.parenthesized_expression],
     [$.left_aux_expression, $.prefix_unary_expression, $.postfix_expression],
@@ -192,7 +191,7 @@ module.exports = grammar({
         repeat($._top_level_object),
       ),
 
-    _end: ($) => choice(';', '\n', '\r\n'),
+    _end: ($) => choice(';', $._nl),
     _nl: ($) => choice('\n', '\r\n'),
 
     // Preamble, package, and import definitions
@@ -1561,7 +1560,7 @@ module.exports = grammar({
     parenthesized_expression: ($) =>
       prec.left(PREC.PARENS, seq('(', $._expression, ')')),
 
-    block: ($) => seq('{', optional($._expression_or_declarations), '}'),
+    block: ($) => seq('{', optional($._expression_or_declarations), repeat($._nl),  '}'),
 
     unsafe_expression: ($) => seq('unsafe', $.block),
 

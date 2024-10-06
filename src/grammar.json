@@ -53,12 +53,8 @@
           "value": ";"
         },
         {
-          "type": "STRING",
-          "value": "\n"
-        },
-        {
-          "type": "STRING",
-          "value": "\r\n"
+          "type": "SYMBOL",
+          "name": "_nl"
         }
       ]
     },
@@ -8103,6 +8099,13 @@
           ]
         },
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_nl"
+          }
+        },
+        {
           "type": "STRING",
           "value": "}"
         }
@@ -9459,6 +9462,10 @@
       "do_while_expression"
     ],
     [
+      "_end",
+      "block"
+    ],
+    [
       "class_primary_init",
       "enum_pattern_parameters"
     ],
@@ -9486,10 +9493,6 @@
     [
       "unnamed_tuple_type",
       "parenthesized_type"
-    ],
-    [
-      "unnamed_parameter",
-      "tuple_type"
     ],
     [
       "var_binding_pattern",
@@ -9523,13 +9526,6 @@
     [
       "class_non_static_member_modifier",
       "struct_non_static_member_modifier"
-    ],
-    [
-      "tuple_type",
-      "user_type",
-      "left_value_expression_without_wildcard",
-      "left_aux_expression",
-      "_atomic_expression"
     ],
     [
       "wildcard_pattern",
