@@ -148,7 +148,6 @@ module.exports = grammar({
       $.postfix_expression,
     ],
     [$.user_type, $.var_binding_pattern, $.enum_pattern],
-    [$.class_primary_init, $.this_super_expression],
     [$.user_type, $.enum_pattern],
     [$.upper_bounds],
     [$.generic_constraints],
@@ -196,6 +195,14 @@ module.exports = grammar({
     [$.left_aux_expression, $.exponent_expression, $.postfix_expression],
     [$.left_aux_expression, $.flow_expression, $.postfix_expression],
     [$.user_type, $._atomic_expression],
+    [$.class_modifier, $.interface_modifier, $.function_modifier, $.variable_modifier],
+    [$.class_modifier, $.interface_modifier, $.function_modifier],
+    [$.function_modifier, $.variable_modifier],
+    [$.function_modifier, $.property_modifier],
+    [$.function_modifier, $.operator_function_definition],
+    [$.class_modifier, $.interface_modifier, $.function_modifier, $.variable_modifier, $.property_modifier],
+    [$.class_modifier, $.interface_modifier, $.function_modifier, $.property_modifier],
+    [$.function_modifier, $.variable_modifier, $.property_modifier],
   ],
   rules: {
     source_file: ($) =>
@@ -258,16 +265,13 @@ module.exports = grammar({
     super_class_or_interfaces: ($) => sepBy1('&', $.super_interfaces),
     class_modifier_list: ($) => repeat1($.class_modifier),
     class_modifier: ($) =>
-      prec.left(
-        PREC.CLASS_MODIFIER,
-        choice(
-          'public',
-          'protected',
-          'internal',
-          'private',
-          'abstract',
-          'open',
-        ),
+      choice(
+        'public',
+        'protected',
+        'internal',
+        'private',
+        'abstract',
+        'open',
       ),
     type_parameters: ($) => seq('<', sepBy1(',', $.identifier), '>'),
     class_type: ($) =>
@@ -422,10 +426,7 @@ module.exports = grammar({
       ),
     interface_modifier_list: ($) => repeat1($.interface_modifier),
     interface_modifier: ($) =>
-      prec.left(
-        PREC.INTERFACE_MODIFIER,
         choice('public', 'protected', 'internal', 'private', 'open'),
-      ),
 
     // Function definition
     function_definition: ($) =>
@@ -441,22 +442,19 @@ module.exports = grammar({
       ),
     function_modifier_list: ($) => repeat1($.function_modifier),
     function_modifier: ($) =>
-      prec.left(
-        PREC.FUNCTION_MODIFIER,
-        choice(
-          'public',
-          'private',
-          'protected',
-          'internal',
-          'static',
-          'open',
-          'override',
-          'operator',
-          'redef',
-          'mut',
-          'unsafe',
-          'const',
-        ),
+      choice(
+        'public',
+        'private',
+        'protected',
+        'internal',
+        'static',
+        'open',
+        'override',
+        'operator',
+        'redef',
+        'mut',
+        'unsafe',
+        'const',
       ),
 
     operator_function_definition: ($) =>
@@ -804,19 +802,16 @@ module.exports = grammar({
       ),
 
     property_modifier: ($) =>
-      prec.left(
-        PREC.PROPERTY_MODIFIER,
-        choice(
-          'public',
-          'private',
-          'protected',
-          'internal',
-          'static',
-          'open',
-          'override',
-          'redef',
-          'mut',
-        ),
+      choice(
+        'public',
+        'private',
+        'protected',
+        'internal',
+        'static',
+        'open',
+        'override',
+        'redef',
+        'mut',
       ),
     // Main Definition
     main_definition: ($) =>
@@ -859,29 +854,29 @@ module.exports = grammar({
     char_lang_types: ($) =>
       choice(
         $.numeric_types,
-        'rune',
-        'boolean',
-        'nothing',
-        'unit',
-        'this_type',
+        'Rune',
+        'Boolean',
+        'Nothing',
+        'Unit',
+        'This',
       ),
 
     numeric_types: ($) =>
       token(
         choice(
-          'int8',
-          'int16',
-          'int32',
-          'int64',
-          'int_native',
-          'uint8',
-          'uint16',
-          'uint32',
-          'uint64',
-          'uint_native',
-          'float16',
-          'float32',
-          'float64',
+          'Int8',
+          'Int16',
+          'Int32',
+          'Int64',
+          'IntNative',
+          'Uint8',
+          'Uint16',
+          'Uint32',
+          'Uint64',
+          'UintNative',
+          'Float16',
+          'Float32',
+          'Float64',
         ),
       ),
 
@@ -1160,7 +1155,7 @@ module.exports = grammar({
       prec.left(
         PREC.ARRAY,
         choice(
-          // seq($._type, '.', $.identifier),
+          seq($._type, '.', $.identifier),
           seq($._expression, '.', $.identifier, optional($.type_arguments)),
           seq($._expression, $.call_suffix),
           seq($._expression, $.index_access),

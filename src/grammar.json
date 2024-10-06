@@ -453,37 +453,33 @@
       }
     },
     "class_modifier": {
-      "type": "PREC_LEFT",
-      "value": 32,
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "public"
-          },
-          {
-            "type": "STRING",
-            "value": "protected"
-          },
-          {
-            "type": "STRING",
-            "value": "internal"
-          },
-          {
-            "type": "STRING",
-            "value": "private"
-          },
-          {
-            "type": "STRING",
-            "value": "abstract"
-          },
-          {
-            "type": "STRING",
-            "value": "open"
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "public"
+        },
+        {
+          "type": "STRING",
+          "value": "protected"
+        },
+        {
+          "type": "STRING",
+          "value": "internal"
+        },
+        {
+          "type": "STRING",
+          "value": "private"
+        },
+        {
+          "type": "STRING",
+          "value": "abstract"
+        },
+        {
+          "type": "STRING",
+          "value": "open"
+        }
+      ]
     },
     "type_parameters": {
       "type": "SEQ",
@@ -1552,33 +1548,29 @@
       }
     },
     "interface_modifier": {
-      "type": "PREC_LEFT",
-      "value": 30,
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "public"
-          },
-          {
-            "type": "STRING",
-            "value": "protected"
-          },
-          {
-            "type": "STRING",
-            "value": "internal"
-          },
-          {
-            "type": "STRING",
-            "value": "private"
-          },
-          {
-            "type": "STRING",
-            "value": "open"
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "public"
+        },
+        {
+          "type": "STRING",
+          "value": "protected"
+        },
+        {
+          "type": "STRING",
+          "value": "internal"
+        },
+        {
+          "type": "STRING",
+          "value": "private"
+        },
+        {
+          "type": "STRING",
+          "value": "open"
+        }
+      ]
     },
     "function_definition": {
       "type": "SEQ",
@@ -1698,61 +1690,57 @@
       }
     },
     "function_modifier": {
-      "type": "PREC_LEFT",
-      "value": 31,
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "public"
-          },
-          {
-            "type": "STRING",
-            "value": "private"
-          },
-          {
-            "type": "STRING",
-            "value": "protected"
-          },
-          {
-            "type": "STRING",
-            "value": "internal"
-          },
-          {
-            "type": "STRING",
-            "value": "static"
-          },
-          {
-            "type": "STRING",
-            "value": "open"
-          },
-          {
-            "type": "STRING",
-            "value": "override"
-          },
-          {
-            "type": "STRING",
-            "value": "operator"
-          },
-          {
-            "type": "STRING",
-            "value": "redef"
-          },
-          {
-            "type": "STRING",
-            "value": "mut"
-          },
-          {
-            "type": "STRING",
-            "value": "unsafe"
-          },
-          {
-            "type": "STRING",
-            "value": "const"
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "public"
+        },
+        {
+          "type": "STRING",
+          "value": "private"
+        },
+        {
+          "type": "STRING",
+          "value": "protected"
+        },
+        {
+          "type": "STRING",
+          "value": "internal"
+        },
+        {
+          "type": "STRING",
+          "value": "static"
+        },
+        {
+          "type": "STRING",
+          "value": "open"
+        },
+        {
+          "type": "STRING",
+          "value": "override"
+        },
+        {
+          "type": "STRING",
+          "value": "operator"
+        },
+        {
+          "type": "STRING",
+          "value": "redef"
+        },
+        {
+          "type": "STRING",
+          "value": "mut"
+        },
+        {
+          "type": "STRING",
+          "value": "unsafe"
+        },
+        {
+          "type": "STRING",
+          "value": "const"
+        }
+      ]
     },
     "operator_function_definition": {
       "type": "SEQ",
@@ -3946,49 +3934,45 @@
       ]
     },
     "property_modifier": {
-      "type": "PREC_LEFT",
-      "value": 28,
-      "content": {
-        "type": "CHOICE",
-        "members": [
-          {
-            "type": "STRING",
-            "value": "public"
-          },
-          {
-            "type": "STRING",
-            "value": "private"
-          },
-          {
-            "type": "STRING",
-            "value": "protected"
-          },
-          {
-            "type": "STRING",
-            "value": "internal"
-          },
-          {
-            "type": "STRING",
-            "value": "static"
-          },
-          {
-            "type": "STRING",
-            "value": "open"
-          },
-          {
-            "type": "STRING",
-            "value": "override"
-          },
-          {
-            "type": "STRING",
-            "value": "redef"
-          },
-          {
-            "type": "STRING",
-            "value": "mut"
-          }
-        ]
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "public"
+        },
+        {
+          "type": "STRING",
+          "value": "private"
+        },
+        {
+          "type": "STRING",
+          "value": "protected"
+        },
+        {
+          "type": "STRING",
+          "value": "internal"
+        },
+        {
+          "type": "STRING",
+          "value": "static"
+        },
+        {
+          "type": "STRING",
+          "value": "open"
+        },
+        {
+          "type": "STRING",
+          "value": "override"
+        },
+        {
+          "type": "STRING",
+          "value": "redef"
+        },
+        {
+          "type": "STRING",
+          "value": "mut"
+        }
+      ]
     },
     "main_definition": {
       "type": "SEQ",
@@ -4386,23 +4370,23 @@
         },
         {
           "type": "STRING",
-          "value": "rune"
+          "value": "Rune"
         },
         {
           "type": "STRING",
-          "value": "boolean"
+          "value": "Boolean"
         },
         {
           "type": "STRING",
-          "value": "nothing"
+          "value": "Nothing"
         },
         {
           "type": "STRING",
-          "value": "unit"
+          "value": "Unit"
         },
         {
           "type": "STRING",
-          "value": "this_type"
+          "value": "This"
         }
       ]
     },
@@ -4413,55 +4397,55 @@
         "members": [
           {
             "type": "STRING",
-            "value": "int8"
+            "value": "Int8"
           },
           {
             "type": "STRING",
-            "value": "int16"
+            "value": "Int16"
           },
           {
             "type": "STRING",
-            "value": "int32"
+            "value": "Int32"
           },
           {
             "type": "STRING",
-            "value": "int64"
+            "value": "Int64"
           },
           {
             "type": "STRING",
-            "value": "int_native"
+            "value": "IntNative"
           },
           {
             "type": "STRING",
-            "value": "uint8"
+            "value": "Uint8"
           },
           {
             "type": "STRING",
-            "value": "uint16"
+            "value": "Uint16"
           },
           {
             "type": "STRING",
-            "value": "uint32"
+            "value": "Uint32"
           },
           {
             "type": "STRING",
-            "value": "uint64"
+            "value": "Uint64"
           },
           {
             "type": "STRING",
-            "value": "uint_native"
+            "value": "UintNative"
           },
           {
             "type": "STRING",
-            "value": "float16"
+            "value": "Float16"
           },
           {
             "type": "STRING",
-            "value": "float32"
+            "value": "Float32"
           },
           {
             "type": "STRING",
-            "value": "float64"
+            "value": "Float64"
           }
         ]
       }
@@ -5654,6 +5638,23 @@
       "content": {
         "type": "CHOICE",
         "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_type"
+              },
+              {
+                "type": "STRING",
+                "value": "."
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            ]
+          },
           {
             "type": "SEQ",
             "members": [
@@ -10105,10 +10106,6 @@
       "enum_pattern"
     ],
     [
-      "class_primary_init",
-      "this_super_expression"
-    ],
-    [
       "user_type",
       "enum_pattern"
     ],
@@ -10208,6 +10205,47 @@
     [
       "user_type",
       "_atomic_expression"
+    ],
+    [
+      "class_modifier",
+      "interface_modifier",
+      "function_modifier",
+      "variable_modifier"
+    ],
+    [
+      "class_modifier",
+      "interface_modifier",
+      "function_modifier"
+    ],
+    [
+      "function_modifier",
+      "variable_modifier"
+    ],
+    [
+      "function_modifier",
+      "property_modifier"
+    ],
+    [
+      "function_modifier",
+      "operator_function_definition"
+    ],
+    [
+      "class_modifier",
+      "interface_modifier",
+      "function_modifier",
+      "variable_modifier",
+      "property_modifier"
+    ],
+    [
+      "class_modifier",
+      "interface_modifier",
+      "function_modifier",
+      "property_modifier"
+    ],
+    [
+      "function_modifier",
+      "variable_modifier",
+      "property_modifier"
     ]
   ],
   "precedences": [],
