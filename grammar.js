@@ -48,7 +48,7 @@ const SINGLE_CHAR_BYTE =
 const SINGLE_CHAR = /[^'\\\r\n]/;
 const UNI_CHARACTER_LITERAL = /\\u\{[0-9a-fA-F]{1,8}\}/;
 const ESCAPED_IDENTIFIER = /\\[tbrn'"\\fv0$]/;
-const ESCAPE_SEQ = /\\u\{[0-9a-fA-F]{1,8}\}|\\[tbrn'"\\fv0$]/ // choice(UNI_CHARACTER_LITERAL, ESCAPED_IDENTIFIER);
+const ESCAPE_SEQ = /\\u\{[0-9a-fA-F]{1,8}\}|\\[tbrn'"\\fv0$]/; // choice(UNI_CHARACTER_LITERAL, ESCAPED_IDENTIFIER);
 
 const HEX_CHAR_BYTE = seq('\\u{', /[0-9a-fA-F]{1,4}/, '}');
 const BYTE_ESCAPED_IDENTIFIER = /\\[tbrn'"\\fv0]/;
@@ -71,16 +71,12 @@ const HEXADECIMAL_EXPONENT = /[pP][+-]?[0-9][0-9_]*/;
 
 module.exports = grammar({
   name: 'cangjie',
-  extras: ($) => [
-    /[\s]/,
-    /[\n]/,
-    /[\r\n]/,
-    $.line_comment,
-    $.delimited_comment,
-  ],
+  extras: ($) => [/[\s]/, /[\n]/, /\r\n/, $.line_comment, $.delimited_comment],
   word: ($) => $.identifier,
   conflicts: ($) => [
+    [$._end, $._nl],
     [$.source_file],
+    [$.block],
     [$._atomic_expression],
     [$.quest_seperated_item],
     [$.item_after_quest],
@@ -104,7 +100,6 @@ module.exports = grammar({
     [$.multi_line_string_expression],
     [$._expression_or_declarations],
     [$.do_while_expression],
-    [$._end, $.block],
     [$.unit_literal, $.quote_token],
     [$.quote_token, $.macro_input_expr_with_parens],
     [$.quote_token, $.macro_expression],
@@ -124,6 +119,7 @@ module.exports = grammar({
     [$._atomic_expression, $._literal_constant],
     [$.left_aux_expression, $._atomic_expression],
     [$.left_aux_expression, $.item_after_quest],
+    [$._end, $._expression_or_declarations],
     [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
     [$.unit_literal, $.tuple_pattern],
     [$.unnamed_tuple_type, $.parenthesized_type],
@@ -131,7 +127,11 @@ module.exports = grammar({
     [$.wildcard_pattern, $.type_pattern],
     [$.user_type, $.left_value_expression_without_wildcard],
     [$.var_binding_pattern, $.type_pattern, $.enum_pattern],
-    [$.user_type, $.left_value_expression_without_wildcard, $._atomic_expression],
+    [
+      $.user_type,
+      $.left_value_expression_without_wildcard,
+      $._atomic_expression,
+    ],
     [$.function_modifier_list],
     [$.foreign_body, $._foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
@@ -195,13 +195,29 @@ module.exports = grammar({
     [$.left_aux_expression, $.exponent_expression, $.postfix_expression],
     [$.left_aux_expression, $.flow_expression, $.postfix_expression],
     [$.user_type, $._atomic_expression],
-    [$.class_modifier, $.interface_modifier, $.function_modifier, $.variable_modifier],
+    [
+      $.class_modifier,
+      $.interface_modifier,
+      $.function_modifier,
+      $.variable_modifier,
+    ],
     [$.class_modifier, $.interface_modifier, $.function_modifier],
     [$.function_modifier, $.variable_modifier],
     [$.function_modifier, $.property_modifier],
     [$.function_modifier, $.operator_function_definition],
-    [$.class_modifier, $.interface_modifier, $.function_modifier, $.variable_modifier, $.property_modifier],
-    [$.class_modifier, $.interface_modifier, $.function_modifier, $.property_modifier],
+    [
+      $.class_modifier,
+      $.interface_modifier,
+      $.function_modifier,
+      $.variable_modifier,
+      $.property_modifier,
+    ],
+    [
+      $.class_modifier,
+      $.interface_modifier,
+      $.function_modifier,
+      $.property_modifier,
+    ],
     [$.function_modifier, $.variable_modifier, $.property_modifier],
   ],
   rules: {
@@ -213,7 +229,7 @@ module.exports = grammar({
         repeat($._top_level_object),
       ),
 
-    _end: ($) => choice(';', $._nl),
+    _end: ($) => choice(';', '\n', '\r\n'),
     _nl: ($) => choice('\n', '\r\n'),
 
     // Preamble, package, and import definitions
@@ -265,14 +281,7 @@ module.exports = grammar({
     super_class_or_interfaces: ($) => sepBy1('&', $.super_interfaces),
     class_modifier_list: ($) => repeat1($.class_modifier),
     class_modifier: ($) =>
-      choice(
-        'public',
-        'protected',
-        'internal',
-        'private',
-        'abstract',
-        'open',
-      ),
+      choice('public', 'protected', 'internal', 'private', 'abstract', 'open'),
     type_parameters: ($) => seq('<', sepBy1(',', $.identifier), '>'),
     class_type: ($) =>
       seq(sepBy1('.', $.identifier), optional($.type_parameters)),
@@ -426,7 +435,7 @@ module.exports = grammar({
       ),
     interface_modifier_list: ($) => repeat1($.interface_modifier),
     interface_modifier: ($) =>
-        choice('public', 'protected', 'internal', 'private', 'open'),
+      choice('public', 'protected', 'internal', 'private', 'open'),
 
     // Function definition
     function_definition: ($) =>
@@ -438,7 +447,9 @@ module.exports = grammar({
         field('parameters', $.function_parameters),
         optional(seq(':', field('return_type', $._type))),
         optional($.generic_constraints),
+        repeat($._nl),
         field('body', optional($.block)),
+        repeat($._end),
       ),
     function_modifier_list: ($) => repeat1($.function_modifier),
     function_modifier: ($) =>
@@ -517,6 +528,7 @@ module.exports = grammar({
             ),
             seq(':', field('type', $._type)),
           ),
+          repeat($._end),
         ),
       ),
     variable_modifier: ($) =>
@@ -786,7 +798,7 @@ module.exports = grammar({
       seq(
         repeat($.property_modifier),
         'prop',
-        field('name' ,$.identifier),
+        field('name', $.identifier),
         ':',
         field('type', $._type),
         optional($.property_body),
@@ -829,20 +841,15 @@ module.exports = grammar({
     arrow_type: ($) => seq($.arrow_parameters, '->', $._type),
 
     arrow_parameters: ($) =>
-      choice(
-        $.unnamed_arrow_parameters,
-        $.named_arrow_parameters,
-      ),
+      choice($.unnamed_arrow_parameters, $.named_arrow_parameters),
     unnamed_arrow_parameters: ($) => seq('(', sepBy(',', $._type), ')'),
-    named_arrow_parameters: ($) => seq('(', sepBy1(',', seq(choice('_', $.identifier), ':', $._type)), ')'),
+    named_arrow_parameters: ($) =>
+      seq('(', sepBy1(',', seq(choice('_', $.identifier), ':', $._type)), ')'),
 
-    tuple_type: ($) =>
-      choice(
-        $.unnamed_tuple_type,
-        $.named_tuple_type,
-      ),
+    tuple_type: ($) => choice($.unnamed_tuple_type, $.named_tuple_type),
     unnamed_tuple_type: ($) => seq('(', sepBy1(',', $._type), ')'),
-    named_tuple_type: ($) => seq('(', sepBy1(',', seq(choice('_', $.identifier), ':', $._type)), ')'),
+    named_tuple_type: ($) =>
+      seq('(', sepBy1(',', seq(choice('_', $.identifier), ':', $._type)), ')'),
 
     prefix_type: ($) => seq($.prefix_type_operator, $._type),
 
@@ -852,14 +859,7 @@ module.exports = grammar({
       choice($.char_lang_types, $.user_type, $.parenthesized_type),
 
     char_lang_types: ($) =>
-      choice(
-        $.numeric_types,
-        'Rune',
-        'Boolean',
-        'Nothing',
-        'Unit',
-        'This',
-      ),
+      choice($.numeric_types, 'Rune', 'Boolean', 'Nothing', 'Unit', 'This'),
 
     numeric_types: ($) =>
       token(
@@ -1039,7 +1039,7 @@ module.exports = grammar({
           field('operator', choice('..', '..=')),
           field('right', $._expression),
           repeat($._nl),
-          optional(field('step', seq(':', $._expression)))
+          optional(field('step', seq(':', $._expression))),
         ),
       ),
 
@@ -1156,7 +1156,13 @@ module.exports = grammar({
         PREC.ARRAY,
         choice(
           seq($._type, '.', $.identifier),
-          seq($._expression, '.', $.identifier, optional($.type_arguments)),
+          seq(
+            $._expression,
+            repeat($._nl),
+            '.',
+            $.identifier,
+            optional($.type_arguments),
+          ),
           seq($._expression, $.call_suffix),
           seq($._expression, $.index_access),
           seq(
@@ -1180,11 +1186,13 @@ module.exports = grammar({
     quest_seperated_item: ($) =>
       seq(
         $.item_after_quest,
-        optional(choice(
-          $.call_suffix,
-          seq(optional($.call_suffix), $.trailing_lambda_expression),
-          $.index_access,
-        )),
+        optional(
+          choice(
+            $.call_suffix,
+            seq(optional($.call_suffix), $.trailing_lambda_expression),
+            $.index_access,
+          ),
+        ),
       ),
     item_after_quest: ($) =>
       choice(
@@ -1338,7 +1346,9 @@ module.exports = grammar({
         ')',
         field('consequence', $.block),
         repeat($._nl),
-        optional(seq('else', field('alternative', choice($.if_expression, $.block)))),
+        optional(
+          seq('else', field('alternative', choice($.if_expression, $.block))),
+        ),
       ),
 
     deconstruct_pattern: ($) =>
@@ -1570,19 +1580,21 @@ module.exports = grammar({
     parenthesized_expression: ($) =>
       prec.left(PREC.PARENS, seq('(', $._expression, ')')),
 
-    block: ($) => seq('{', optional($._expression_or_declarations), repeat($._nl),  '}'),
+    block: ($) => seq('{', optional($._expression_or_declarations), '}'),
 
     unsafe_expression: ($) => seq('unsafe', $.block),
 
     _expression_or_declarations: ($) =>
       seq(
         repeat($._end),
-        sepBy1(repeat1($._end), $._expression_or_declaration),
+        repeat1($._expression_or_declaration),
         repeat($._end),
       ),
 
     _expression_or_declaration: ($) =>
-      choice($._expression, $._var_or_func_declaration),
+      prec.left(
+        choice(seq($._expression, repeat($._end)), $._var_or_func_declaration),
+      ),
 
     _var_or_func_declaration: ($) =>
       choice($.function_definition, $.variable_declaration),
@@ -1594,34 +1606,138 @@ module.exports = grammar({
     quote_parameters: ($) =>
       repeat1(choice($.quote_token, $.quote_interpolate, $.macro_expression)),
 
-    // TODO
-    quote_token: ($) => choice(
-      '.', ',', '(', ')', '[', ']', '{', '}', '**', '*', '%', '/', '+', 
-      '-', '|>', '~>', 
-      '++', '--', '&&', '||', '!', '&', '|', '^', '<<', '>>', ':', ';', 
-      '=', '+=', '-=', '*=', '**=', '/=', '%=', 
-      '&&=', '||=', '&=', '|=', '^=', '<<=', '>>=', 
-      '->', '=>', '...', '..=', '..', '#', '@', '?', '<:', '<', '>', 
-      '<=', '>=', '!=', '==', 
-      '_', '\\', '`', '$', 
-      'Int8', 'Int16', 'Int32', 'Int64', 'UInt8', 'UInt16', 'UInt32', 
-      'UInt64', 'Float16', 
-      'Float32', 'Float64', 'Rune', 'Bool', 'Unit', 'Nothing', 
-      'struct', 'enum', 'This', 
-      'package', 'import', 'class', 'interface', 'func', 'let', 'var', 
-      'type', 'init', 'this', 'super', 'if', 'else', 
-      'case', 'try', 'catch', 'finally', 
-      'for', 'do', 'while', 'throw', 'return', 'continue', 'break', 
-      'as', 'in', '!in', 
-      'match', 'from', 'where', 'extend', 'spawn', 'synchronized', 
-      'macro', 'quote', 
-      'true', 'false', 
-      'sealed', 'static', 'public', 'private', 'protected', 
-      'override', 'abstract', 'open', 'operator', 'foreign', 
-      $.identifier, 
-      $.dollar_identifier, 
-      $._literal_constant
-    ),
+    quote_token: ($) =>
+      choice(
+        '.',
+        ',',
+        '(',
+        ')',
+        '[',
+        ']',
+        '{',
+        '}',
+        '**',
+        '*',
+        '%',
+        '/',
+        '+',
+        '-',
+        '|>',
+        '~>',
+        '++',
+        '--',
+        '&&',
+        '||',
+        '!',
+        '&',
+        '|',
+        '^',
+        '<<',
+        '>>',
+        ':',
+        ';',
+        '=',
+        '+=',
+        '-=',
+        '*=',
+        '**=',
+        '/=',
+        '%=',
+        '&&=',
+        '||=',
+        '&=',
+        '|=',
+        '^=',
+        '<<=',
+        '>>=',
+        '->',
+        '=>',
+        '...',
+        '..=',
+        '..',
+        '#',
+        '@',
+        '?',
+        '<:',
+        '<',
+        '>',
+        '<=',
+        '>=',
+        '!=',
+        '==',
+        '_',
+        '\\',
+        '`',
+        '$',
+        'Int8',
+        'Int16',
+        'Int32',
+        'Int64',
+        'UInt8',
+        'UInt16',
+        'UInt32',
+        'UInt64',
+        'Float16',
+        'Float32',
+        'Float64',
+        'Rune',
+        'Bool',
+        'Unit',
+        'Nothing',
+        'struct',
+        'enum',
+        'This',
+        'package',
+        'import',
+        'class',
+        'interface',
+        'func',
+        'let',
+        'var',
+        'type',
+        'init',
+        'this',
+        'super',
+        'if',
+        'else',
+        'case',
+        'try',
+        'catch',
+        'finally',
+        'for',
+        'do',
+        'while',
+        'throw',
+        'return',
+        'continue',
+        'break',
+        'as',
+        'in',
+        '!in',
+        'match',
+        'from',
+        'where',
+        'extend',
+        'spawn',
+        'synchronized',
+        'macro',
+        'quote',
+        'true',
+        'false',
+        'sealed',
+        'static',
+        'public',
+        'private',
+        'protected',
+        'override',
+        'abstract',
+        'open',
+        'operator',
+        'foreign',
+        $.identifier,
+        $.dollar_identifier,
+        $._literal_constant,
+      ),
 
     quote_interpolate: ($) => seq('$', $.quote_expression),
 

@@ -53,8 +53,12 @@
           "value": ";"
         },
         {
-          "type": "SYMBOL",
-          "name": "_nl"
+          "type": "STRING",
+          "value": "\n"
+        },
+        {
+          "type": "STRING",
+          "value": "\r\n"
         }
       ]
     },
@@ -1665,6 +1669,13 @@
           ]
         },
         {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_nl"
+          }
+        },
+        {
           "type": "FIELD",
           "name": "body",
           "content": {
@@ -1678,6 +1689,13 @@
                 "type": "BLANK"
               }
             ]
+          }
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_end"
           }
         }
       ]
@@ -2247,6 +2265,13 @@
                 ]
               }
             ]
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "_end"
+            }
           }
         ]
       }
@@ -5663,6 +5688,13 @@
                 "name": "_expression"
               },
               {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_nl"
+                }
+              },
+              {
                 "type": "STRING",
                 "value": "."
               },
@@ -8100,13 +8132,6 @@
           ]
         },
         {
-          "type": "REPEAT",
-          "content": {
-            "type": "SYMBOL",
-            "name": "_nl"
-          }
-        },
-        {
           "type": "STRING",
           "value": "}"
         }
@@ -8136,32 +8161,11 @@
           }
         },
         {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "_expression_or_declaration"
-            },
-            {
-              "type": "REPEAT",
-              "content": {
-                "type": "SEQ",
-                "members": [
-                  {
-                    "type": "REPEAT1",
-                    "content": {
-                      "type": "SYMBOL",
-                      "name": "_end"
-                    }
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "_expression_or_declaration"
-                  }
-                ]
-              }
-            }
-          ]
+          "type": "REPEAT1",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_expression_or_declaration"
+          }
         },
         {
           "type": "REPEAT",
@@ -8173,17 +8177,33 @@
       ]
     },
     "_expression_or_declaration": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_expression"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_var_or_func_declaration"
-        }
-      ]
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_expression"
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "_end"
+                }
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_var_or_func_declaration"
+          }
+        ]
+      }
     },
     "_var_or_func_declaration": {
       "type": "CHOICE",
@@ -9856,7 +9876,7 @@
     },
     {
       "type": "PATTERN",
-      "value": "[\\r\\n]"
+      "value": "\\r\\n"
     },
     {
       "type": "SYMBOL",
@@ -9869,7 +9889,14 @@
   ],
   "conflicts": [
     [
+      "_end",
+      "_nl"
+    ],
+    [
       "source_file"
+    ],
+    [
+      "block"
     ],
     [
       "_atomic_expression"
@@ -9939,10 +9966,6 @@
     ],
     [
       "do_while_expression"
-    ],
-    [
-      "_end",
-      "block"
     ],
     [
       "unit_literal",
@@ -10018,6 +10041,10 @@
     [
       "left_aux_expression",
       "item_after_quest"
+    ],
+    [
+      "_end",
+      "_expression_or_declarations"
     ],
     [
       "assignment_expression",
