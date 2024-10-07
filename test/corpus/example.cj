@@ -14,14 +14,14 @@ func add(a: Int64, b: Int64): Int64 {
       (unnamed_parameter_list
         (unnamed_parameter
           (identifier)
-          (user_type
-            (identifier)))
+          (builtin_types
+            (numeric_types)))
         (unnamed_parameter
           (identifier)
-          (user_type
-            (identifier)))))
-    return_type: (user_type
-      (identifier))
+          (builtin_types
+            (numeric_types)))))
+    return_type: (builtin_types
+      (numeric_types))
     body: (block
         (jump_expression
           (additive_expression
