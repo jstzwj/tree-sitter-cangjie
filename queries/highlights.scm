@@ -1,7 +1,7 @@
 ; Identifiers
 
 (identifier) @type
-(char_lang_types) @type.builtin
+(builtin_types) @type.builtin
 (property_definition
   name: (identifier) @property)
 

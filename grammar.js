@@ -249,9 +249,14 @@ module.exports = grammar({
         $.package_header,
         seq(optional($.package_header), repeat1($.import_list)),
       ),
-    package_modifier: ($) => "macro",
+    package_modifier: ($) => 'macro',
     package_header: ($) =>
-      seq(optional($.package_modifier), 'package', $.package_name_identifier, optional($._end)),
+      seq(
+        optional($.package_modifier),
+        'package',
+        $.package_name_identifier,
+        optional($._end),
+      ),
     package_name_identifier: ($) => sepBy1('.', $.identifier),
     import_list: ($) =>
       seq(
@@ -293,7 +298,16 @@ module.exports = grammar({
     super_class_or_interfaces: ($) => sepBy1('&', $.super_interfaces),
     class_modifier_list: ($) => repeat1($.class_modifier),
     class_modifier: ($) =>
-      choice('public', 'protected', 'internal', 'private', 'abstract', 'open', 'sealed', 'override'),
+      choice(
+        'public',
+        'protected',
+        'internal',
+        'private',
+        'abstract',
+        'open',
+        'sealed',
+        'override',
+      ),
     type_parameters: ($) => seq('<', sepBy1(',', $.identifier), '>'),
     class_type: ($) =>
       seq(sepBy1('.', $.identifier), optional($.type_parameters)),
@@ -1273,49 +1287,27 @@ module.exports = grammar({
     _line_str_text_single: ($) =>
       prec.left(
         repeat1(
-          choice($._line_str_text_no_escape, '\'', $._line_str_escape_seq),
+          choice($._line_str_text_no_escape, "'", $._line_str_escape_seq),
         ),
       ),
     _line_str_text_double: ($) =>
-        prec.left(
-          repeat1(
-            choice($._line_str_text_no_escape, '"', $._line_str_escape_seq),
-          ),
+      prec.left(
+        repeat1(
+          choice($._line_str_text_no_escape, '"', $._line_str_escape_seq),
         ),
+      ),
     line_string_content_single: ($) => $._line_str_text_single,
     line_string_content_double: ($) => $._line_str_text_double,
 
     line_string_content_single_parts: ($) =>
       prec.left(
-        choice(
-          seq(
-            $.line_string_expression,
-            repeat(seq($.line_string_content_single, $.line_string_expression)),
-            optional($.line_string_content_single),
-          ),
-          seq(
-            $.line_string_content_single,
-            repeat(seq($.line_string_expression, $.line_string_content_single)),
-            optional($.line_string_expression),
-          ),
-        ),
+        repeat1(choice($.line_string_expression, $.line_string_content_single)),
       ),
-    
-      line_string_content_double_parts: ($) =>
-        prec.left(
-          choice(
-            seq(
-              $.line_string_expression,
-              repeat(seq($.line_string_content_double, $.line_string_expression)),
-              optional($.line_string_content_double),
-            ),
-            seq(
-              $.line_string_content_double,
-              repeat(seq($.line_string_expression, $.line_string_content_double)),
-              optional($.line_string_expression),
-            ),
-          ),
-        ),
+
+    line_string_content_double_parts: ($) =>
+      prec.left(
+        repeat1(choice($.line_string_expression, $.line_string_content_double)),
+      ),
 
     line_string_literal: ($) =>
       prec.left(
