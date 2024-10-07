@@ -65,7 +65,21 @@ const HEXADECIMAL_EXPONENT = /[pP][+-]?[0-9][0-9_]*/;
 
 module.exports = grammar({
   name: 'cangjie',
-  extras: ($) => [/[\u0020\u0009\u000C]/, /\n|\r\n/, $.line_comment, $.delimited_comment],
+  extras: ($) => [
+    /[\u0020\u0009\u000C]/,
+    /\n|\r\n/,
+    $.line_comment,
+    $.delimited_comment,
+  ],
+
+  externals: ($) => [
+    $._line_str_text_no_escape,
+    $._multi_line_str_text_no_escape,
+    $.multi_line_raw_string_start,
+    $.multi_line_raw_string_content,
+    $.multi_line_raw_string_end,
+    $.error_sentinel,
+  ],
   word: ($) => $.identifier,
   conflicts: ($) => [
     [$.source_file],
@@ -240,11 +254,7 @@ module.exports = grammar({
         seq(optional($.package_header), repeat1($.import_list)),
       ),
     package_header: ($) =>
-      seq(
-        'package',
-        $.package_name_identifier,
-        optional($._end),
-      ),
+      seq('package', $.package_name_identifier, optional($._end)),
     package_name_identifier: ($) => sepBy1('.', $.identifier),
     import_list: ($) =>
       seq(
@@ -582,11 +592,7 @@ module.exports = grammar({
       seq(
         '{',
         repeat(
-          choice(
-            $._struct_member_declaration,
-            $.struct_primary_init,
-            $._end,
-          ),
+          choice($._struct_member_declaration, $.struct_primary_init, $._end),
         ),
         '}',
       ),
@@ -802,12 +808,7 @@ module.exports = grammar({
       ),
 
     property_body: ($) =>
-      seq(
-        '{',
-        repeat($._end),
-        repeat1($.property_member_declaration),
-        '}',
-      ),
+      seq('{', repeat($._end), repeat1($.property_member_declaration), '}'),
 
     property_member_declaration: ($) =>
       choice(
@@ -1157,12 +1158,7 @@ module.exports = grammar({
         PREC.ARRAY,
         choice(
           seq($._type, '.', $.identifier),
-          seq(
-            $._expression,
-            '.',
-            $.identifier,
-            optional($.type_arguments),
-          ),
+          seq($._expression, '.', $.identifier, optional($.type_arguments)),
           seq($._expression, $.call_suffix),
           seq($._expression, $.index_access),
           seq(
@@ -1276,32 +1272,63 @@ module.exports = grammar({
         $.multi_line_raw_string_literal,
       ),
 
-    _line_string_content: ($) => $._line_str_text,
+    _line_str_escape_seq: ($) => prec.left(repeat1(ESCAPE_SEQ)),
+    _line_str_text: ($) =>
+      prec.left(
+        repeat1(
+          choice($._line_str_text_no_escape, $._line_str_escape_seq),
+        ),
+      ),
+    line_string_content: ($) => $._line_str_text,
+
+    line_string_content_parts: ($) =>
+      prec.left(
+        choice(
+          seq(
+            $.line_string_expression,
+            repeat(seq($.line_string_content, $.line_string_expression)),
+            optional($.line_string_content),
+          ),
+          seq(
+            $.line_string_content,
+            repeat(seq($.line_string_expression, $.line_string_content)),
+            optional($.line_string_expression),
+          ),
+        ),
+      ),
 
     line_string_literal: ($) =>
-      choice(
-        seq(
-          '"',
-          repeat(choice($.line_string_expression, $._line_string_content)),
-          '"',
-        ),
-        seq(
-          "'",
-          repeat(choice($.line_string_expression, $._line_string_content)),
-          "'",
+      prec.left(
+        choice(
+          seq('"', optional($.line_string_content_parts), '"'),
+          seq("'", optional($.line_string_content_parts), "'"),
         ),
       ),
 
     line_string_expression: ($) =>
-      seq(
-        '${',
-        repeat(';'),
-        repeat($._expression_or_declaration),
-        repeat(';'),
-        '}',
+      prec.left(
+        seq(
+          '${',
+          repeat(';'),
+          sepBy1(';', $._expression_or_declaration),
+          repeat(';'),
+          '}',
+        ),
       ),
 
-    multi_line_string_content: ($) => $.multi_line_str_text,
+    _multi_line_str_escape_seq: ($) => prec.left(repeat1(ESCAPE_SEQ)),
+    _multi_line_str_text: ($) =>
+      prec.left(
+        repeat1(
+          choice(
+            $._multi_line_str_text_no_escape,
+            $._multi_line_str_escape_seq,
+          ),
+        ),
+      ),
+    // _multi_line_str_text: ($) => choice(/[^\\]/, ESCAPE_SEQ),
+
+    multi_line_string_content: ($) => $._multi_line_str_text,
 
     multi_line_string_literal: ($) =>
       seq(
@@ -1361,31 +1388,34 @@ module.exports = grammar({
 
     match_expression: ($) =>
       prec.left(
-        PREC.COMMENT,
         choice(
+          seq('match', '(', field('value', $._expression), ')', $.match_body),
           seq(
             'match',
-            '(',
-            field('value', $._expression),
-            ')',
-            $.match_body,
+            '{',
+            repeat1(
+              seq(
+                'case',
+                choice($._expression, '_'),
+                '=>',
+                repeat1($._expression_or_declaration),
+              ),
+            ),
+            '}',
           ),
         ),
       ),
 
-    match_body: ($) =>
-      seq('{', repeat($.match_case), '}'),
+    match_body: ($) => seq('{', repeat($.match_case), '}'),
 
     match_case: ($) =>
       seq(
         'case',
-        optional(seq($._pattern)),
+        $._pattern,
         optional($.pattern_guard),
         '=>',
         $._expression_or_declaration,
-        repeat(
-          seq(repeat($._end), $._expression_or_declaration),
-        ),
+        repeat(seq(repeat($._end), $._expression_or_declaration)),
         repeat($._end),
       ),
 
@@ -1568,7 +1598,7 @@ module.exports = grammar({
         seq(
           'spawn',
           optional(seq('(', $._expression, ')')),
-          optional(seq($.trailing_lambda_expression)),
+          $.trailing_lambda_expression,
         ),
       ),
 
@@ -1579,18 +1609,14 @@ module.exports = grammar({
       prec.left(PREC.PARENS, seq('(', $._expression, ')')),
 
     block: ($) =>
-      seq(
-        '{',
-        optional($._expression_or_declarations),
-        repeat($._end),
-        '}',
-      ),
+      seq('{', optional($._expression_or_declarations), repeat($._end), '}'),
 
     unsafe_expression: ($) => seq('unsafe', $.block),
 
     _expression_or_declarations: ($) => repeat1($._expression_or_declaration),
 
-    _expression_or_declaration: ($) => choice($._expression, $._var_or_func_declaration, $._end),
+    _expression_or_declaration: ($) =>
+      choice($._expression, $._var_or_func_declaration, $._end),
 
     _var_or_func_declaration: ($) =>
       choice($.function_definition, $.variable_declaration),
@@ -1837,9 +1863,9 @@ module.exports = grammar({
 
     // Comments
     comment: ($) => choice($.line_comment, $.delimited_comment),
-    line_comment: ($) => token(prec(PREC.COMMENT, seq('//', /[^\n]*/))),
+    line_comment: ($) => prec(PREC.COMMENT, seq('//', /[^\r\n]*/)),
     delimited_comment: ($) =>
-      token(prec(PREC.COMMENT, seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/'))),
+      prec(PREC.COMMENT, seq('/*', /[^*]*\*+([^/*][^*]*\*+)*/, '/')),
 
     // Delimiters
     QUOTE_OPEN: ($) => '"',
@@ -1888,21 +1914,13 @@ module.exports = grammar({
       token(seq('b"', repeat(choice(SINGLE_CHAR_BYTE, BYTE_ESCAPE_SEQ)), '"')),
     j_string_literal: ($) =>
       token(seq('j"', repeat(choice(SINGLE_CHAR_BYTE, ESCAPE_SEQ)), '"')),
-    _line_str_text: ($) =>
-      choice(
-        token.immediate(prec(PREC.DECL, /[^\\\r\n"']/)), // Match any character except for backslash, carriage return, or newline
-        token.immediate(prec(PREC.DECL, ESCAPE_SEQ)),
-      ),
     triple_quote_close: ($) => seq(optional(/"{1,}/), '"""'),
-    multi_line_str_text: ($) => choice(/[^\\]/, ESCAPE_SEQ),
-    // TODO: multi_line_raw_string_literal
-    multi_line_raw_string_literal: ($) => $.multi_line_raw_string_content,
-    multi_line_raw_string_content: ($) =>
+    multi_line_raw_string_literal: ($) =>
       prec.left(
-        choice(
-          seq('#', $.multi_line_raw_string_content, '#'),
-          seq('#"', optional(/[^#].*?[^#]|./), '"#'),
-          seq("#'", optional(/[^#].*?[^#]|./), "'#"),
+        seq(
+          $.multi_line_raw_string_start,
+          $.multi_line_raw_string_content,
+          $.multi_line_raw_string_end,
         ),
       ),
   },
