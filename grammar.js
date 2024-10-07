@@ -304,11 +304,11 @@ module.exports = grammar({
       seq(
         '{',
         repeat($._end),
-        sepBy(repeat1($._end), $._class_member_declaration),
+        sepBy(repeat($._end), $._class_member_declaration),
         repeat($._end),
         optional($.class_primary_init),
         repeat($._end),
-        sepBy(repeat1($._end), $._class_member_declaration),
+        sepBy(repeat($._end), $._class_member_declaration),
         repeat($._end),
         '}',
       ),
