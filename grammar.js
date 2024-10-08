@@ -132,16 +132,10 @@ module.exports = grammar({
     [$.wildcard_pattern, $.type_pattern],
     [$.user_type, $.left_value_expression_without_wildcard],
     [$.var_binding_pattern, $.type_pattern, $.enum_pattern],
-    [
-      $.user_type,
-      $.left_value_expression_without_wildcard,
-      $._atomic_expression,
-    ],
     [$.function_modifier_list],
     [$.foreign_body, $._foreign_member_declaration],
     [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
     [$.wildcard_pattern, $.exception_type_pattern],
-    [$.tuple_literal, $.parenthesized_expression],
     [$.left_aux_expression, $.prefix_unary_expression, $.postfix_expression],
     [$.struct_name, $.enum_pattern],
     [$.class_init, $.struct_init],
@@ -186,7 +180,6 @@ module.exports = grammar({
     ],
     [$._atomic_expression, $.lambda_parameter],
     [$.user_type, $._expression],
-    [$.left_aux_expression, $.resource_specification],
     [$.class_primary_init, $.case_body, $.struct_name],
     [
       $.class_primary_init,
@@ -226,12 +219,8 @@ module.exports = grammar({
     [$.function_modifier, $.variable_modifier, $.property_modifier],
     [$.class_modifier, $.function_modifier],
     [$.class_modifier, $.function_modifier, $.property_modifier],
-    [$.postfix_expression, $._atomic_expression],
     [$.postfix_expression, $.tuple_literal, $.parenthesized_expression],
-    [$.left_aux_expression, $._expression_or_declaration],
     [$._expression, $.postfix_expression],
-    [$.postfix_expression],
-    [$.postfix_expression, $._expression_or_declaration],
   ],
   rules: {
     source_file: ($) =>
@@ -1867,7 +1856,7 @@ module.exports = grammar({
       token(
         choice(
           '[]',
-          'not',
+          '!',
           '+',
           '-',
           '**',

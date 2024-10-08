@@ -9,4 +9,15 @@ Reference material for this repository: [Cangjie Programming Language Specificat
 
 
 ## 注意
-本仓库是仓颉语言语法完全开源版本实现。在不违法仓颉语言协议的情况下，仅供学习和研究使用。
+本仓库是仓颉语言语法解析器的完全开源版本实现。在不违法仓颉语言协议的情况下，仅供学习和研究使用。
+
+## Citation
+If you use tree-sitter-cangjie in an academic work we would be really glad if you cite this repository in the following bibtex:
+```bibtex
+@misc{tree_sitter_cangjie_github_repo,
+  author = {XiaHan},
+  title = {{tree-sitter-cangjie}: {Cangjie language grammar for tree-sitter}},
+  howpublished = {\url{https://github.com/jstzwj/tree-sitter-cangjie}},
+  year = {2024/2024},
+}
+```

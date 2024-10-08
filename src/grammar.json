@@ -9355,7 +9355,7 @@
           },
           {
             "type": "STRING",
-            "value": "not"
+            "value": "!"
           },
           {
             "type": "STRING",
@@ -10128,11 +10128,6 @@
       "enum_pattern"
     ],
     [
-      "user_type",
-      "left_value_expression_without_wildcard",
-      "_atomic_expression"
-    ],
-    [
       "function_modifier_list"
     ],
     [
@@ -10146,10 +10141,6 @@
     [
       "wildcard_pattern",
       "exception_type_pattern"
-    ],
-    [
-      "tuple_literal",
-      "parenthesized_expression"
     ],
     [
       "left_aux_expression",
@@ -10242,10 +10233,6 @@
       "_expression"
     ],
     [
-      "left_aux_expression",
-      "resource_specification"
-    ],
-    [
       "class_primary_init",
       "case_body",
       "struct_name"
@@ -10336,27 +10323,12 @@
     ],
     [
       "postfix_expression",
-      "_atomic_expression"
-    ],
-    [
-      "postfix_expression",
       "tuple_literal",
       "parenthesized_expression"
     ],
     [
-      "left_aux_expression",
-      "_expression_or_declaration"
-    ],
-    [
       "_expression",
       "postfix_expression"
-    ],
-    [
-      "postfix_expression"
-    ],
-    [
-      "postfix_expression",
-      "_expression_or_declaration"
     ]
   ],
   "precedences": [],
