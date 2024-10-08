@@ -2381,12 +2381,32 @@
           }
         ]
       },
+      "constraints": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_constraints",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
         "types": [
           {
             "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "super": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "super_class_or_interfaces",
             "named": true
           }
         ]
@@ -2403,19 +2423,11 @@
       }
     },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
           "type": "class_modifier_list",
-          "named": true
-        },
-        {
-          "type": "generic_constraints",
-          "named": true
-        },
-        {
-          "type": "super_class_or_interfaces",
           "named": true
         }
       ]
@@ -4420,6 +4432,36 @@
     "type": "enum_definition",
     "named": true,
     "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "enum_body",
+            "named": true
+          }
+        ]
+      },
+      "constraints": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_constraints",
+            "named": true
+          }
+        ]
+      },
+      "modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "enum_modifier",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -4429,33 +4471,27 @@
             "named": true
           }
         ]
+      },
+      "super": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "super_interfaces",
+            "named": true
+          }
+        ]
+      },
+      "type_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_parameters",
+            "named": true
+          }
+        ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "enum_body",
-          "named": true
-        },
-        {
-          "type": "enum_modifier",
-          "named": true
-        },
-        {
-          "type": "generic_constraints",
-          "named": true
-        },
-        {
-          "type": "super_interfaces",
-          "named": true
-        },
-        {
-          "type": "type_parameters",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -6092,6 +6128,16 @@
           }
         ]
       },
+      "constraints": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_constraints",
+            "named": true
+          }
+        ]
+      },
       "modifier": {
         "multiple": false,
         "required": false,
@@ -6162,16 +6208,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "generic_constraints",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -6499,7 +6535,22 @@
   {
     "type": "inc_and_dec_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "++",
+            "named": false
+          },
+          {
+            "type": "--",
+            "named": false
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -6904,33 +6955,64 @@
   {
     "type": "interface_definition",
     "named": true,
-    "fields": {},
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "interface_body",
+            "named": true
+          }
+        ]
+      },
+      "constraints": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_constraints",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "super": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "super_interfaces",
+            "named": true
+          }
+        ]
+      },
+      "type_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_parameters",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
         {
-          "type": "generic_constraints",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "interface_body",
-          "named": true
-        },
-        {
           "type": "interface_modifier_list",
-          "named": true
-        },
-        {
-          "type": "super_interfaces",
-          "named": true
-        },
-        {
-          "type": "type_parameters",
           "named": true
         }
       ]
@@ -7699,47 +7781,9 @@
     "fields": {}
   },
   {
-    "type": "line_string_content_double_parts",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "line_string_content_double",
-          "named": true
-        },
-        {
-          "type": "line_string_expression",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "line_string_content_single",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "line_string_content_single_parts",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "line_string_content_single",
-          "named": true
-        },
-        {
-          "type": "line_string_expression",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "line_string_expression",
@@ -7941,15 +7985,19 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "line_string_content_double_parts",
+          "type": "line_string_content_double",
           "named": true
         },
         {
-          "type": "line_string_content_single_parts",
+          "type": "line_string_content_single",
+          "named": true
+        },
+        {
+          "type": "line_string_expression",
           "named": true
         }
       ]
@@ -8771,7 +8819,18 @@
   {
     "type": "macro_definition",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -10771,37 +10830,78 @@
   {
     "type": "operator_function_definition",
     "named": true,
-    "fields": {},
+    "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "constraints": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_constraints",
+            "named": true
+          }
+        ]
+      },
+      "modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "function_modifier_list",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "overloaded_operators",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "function_parameters",
+            "named": true
+          }
+        ]
+      },
+      "type_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_parameters",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
         {
           "type": "arrow_type",
           "named": true
         },
         {
-          "type": "block",
-          "named": true
-        },
-        {
           "type": "builtin_types",
-          "named": true
-        },
-        {
-          "type": "function_modifier_list",
-          "named": true
-        },
-        {
-          "type": "function_parameters",
-          "named": true
-        },
-        {
-          "type": "generic_constraints",
-          "named": true
-        },
-        {
-          "type": "overloaded_operators",
           "named": true
         },
         {
@@ -10814,10 +10914,6 @@
         },
         {
           "type": "tuple_type",
-          "named": true
-        },
-        {
-          "type": "type_parameters",
           "named": true
         },
         {
@@ -11568,7 +11664,18 @@
   {
     "type": "prefix_unary_expression",
     "named": true,
-    "fields": {},
+    "fields": {
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "prefix_unary_operator",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -11698,10 +11805,6 @@
           "named": true
         },
         {
-          "type": "prefix_unary_operator",
-          "named": true
-        },
-        {
           "type": "quote_expression",
           "named": true
         },
@@ -11775,6 +11878,26 @@
     "type": "property_definition",
     "named": true,
     "fields": {
+      "body": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "property_body",
+            "named": true
+          }
+        ]
+      },
+      "modifier": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "property_modifier",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
@@ -11815,20 +11938,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "property_body",
-          "named": true
-        },
-        {
-          "type": "property_modifier",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -14266,12 +14375,42 @@
           }
         ]
       },
+      "constraints": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "generic_constraints",
+            "named": true
+          }
+        ]
+      },
+      "modifier": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "struct_modifier",
+            "named": true
+          }
+        ]
+      },
       "name": {
         "multiple": false,
         "required": true,
         "types": [
           {
             "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "super": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "super_interfaces",
             "named": true
           }
         ]
@@ -14286,24 +14425,6 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "generic_constraints",
-          "named": true
-        },
-        {
-          "type": "struct_modifier",
-          "named": true
-        },
-        {
-          "type": "super_interfaces",
-          "named": true
-        }
-      ]
     }
   },
   {

@@ -48,8 +48,8 @@ func getOrThrow(a: ?Int64) {
           (identifier)
           (prefix_type
             (prefix_type_operator)
-            (user_type
-              (identifier))))))
+            (builtin_types
+              (numeric_types))))))
     body: (block
       (match_expression
         value: (identifier)
@@ -137,7 +137,7 @@ enum RGBColor {
 (source_file
   (enum_definition
     name: (identifier)
-    (enum_body
+    body: (enum_body
       (case_body
         (identifier))
       (case_body
@@ -156,7 +156,8 @@ enum RGBColor {
               (call_suffix
                 (value_argument
                   (string_literal
-                    (line_string_literal))))))))))
+                    (line_string_literal
+                        (line_string_content_single)))))))))))
 
 ==================
 Option Definition
@@ -184,8 +185,8 @@ let d: ?String = None
           type: (user_type
             (identifier)
             (type_arguments
-              (user_type
-                (identifier))))
+              (builtin_types
+                (numeric_types))))
           value: (postfix_expression
             (identifier)
             (call_suffix
@@ -196,8 +197,8 @@ let d: ?String = None
             (identifier))
           type: (prefix_type
             (prefix_type_operator)
-            (user_type
-              (identifier)))
+            (builtin_types
+              (numeric_types)))
           value: (postfix_expression
             (identifier)
             (call_suffix
@@ -216,7 +217,8 @@ let d: ?String = None
             (call_suffix
               (value_argument
                 (string_literal
-                  (line_string_literal))))))
+                  (line_string_literal
+                      (line_string_content_single)))))))
         (variable_declaration
           name: (var_binding_pattern
             (identifier))
