@@ -1,18 +1,21 @@
-# tree-sitter-cangjie
+# 🌴tree-sitter-cangjie
+
+> 💡 this grammar is still in development, the structure of the generated AST is not stable
+
 Cangjie language grammar for tree-sitter.
 
-仓颉语言语法的tree-sitter实现。
+## Contributions
+All contributions to this repository are welcome.
 
-Reference material for this repository: [Cangjie Programming Language Specification](https://developer.huawei.com/consumer/cn/doc/cangjie-guides-V5/cj-lan-spec-V5)
+## References
+* Cangjie Programming Language Specification - [Specification](https://developer.huawei.com/consumer/cn/doc/cangjie-guides-V5/cj-lan-spec-V5)
 
-本仓库按照官方公布的语言规约进行编写，并使用文档代码进行测试。
-
-
-## 注意
-本仓库是仓颉语言语法解析器的完全开源版本实现。在不违法仓颉语言协议的情况下，仅供学习和研究使用。
+## Notice
+This repository constitutes a fully open-source and clean-room implementation of the Cangjie grammar parser.
+It is intended for learning and research purposes only, provided that it does not violate the Cangjie Language License.
 
 ## Citation
-If you use tree-sitter-cangjie in an academic work we would be really glad if you cite this repository in the following bibtex:
+If you use tree-sitter-cangjie in an academic work, we would be really glad if you cite this repository in the following bibtex:
 ```bibtex
 @misc{tree_sitter_cangjie_github_repo,
   author = {XiaHan},
