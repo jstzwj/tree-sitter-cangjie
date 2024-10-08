@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-cangjie",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Cangjie Language grammar for tree-sitter",
   "main": "index.js",
   "types": "bindings/node",

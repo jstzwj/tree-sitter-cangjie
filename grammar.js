@@ -110,7 +110,6 @@ module.exports = grammar({
     [$.unit_literal, $.quote_token],
     [$.quote_token, $.macro_input_expr_with_parens],
     [$.quote_token, $.macro_expression],
-    [$.quote_token, $.multi_line_raw_string_content],
     [$.quote_token, $.dollar_identifier],
     [$.quote_token, $.macro_attr_expr],
     [$.quote_expr, $.quote_token],

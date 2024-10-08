@@ -10040,10 +10040,6 @@
     ],
     [
       "quote_token",
-      "multi_line_raw_string_content"
-    ],
-    [
-      "quote_token",
       "dollar_identifier"
     ],
     [
