@@ -122,8 +122,6 @@ module.exports = grammar({
     [$.unnamed_arrow_parameters, $.unnamed_tuple_type],
     [$.named_arrow_parameters, $.named_tuple_type],
     [$.class_primary_init, $.enum_pattern_parameters],
-    [$._atomic_expression, $._literal_constant],
-    [$.left_aux_expression, $._atomic_expression],
     [$.left_aux_expression, $.item_after_quest],
     [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
     [$.unit_literal, $.tuple_pattern],
@@ -139,7 +137,6 @@ module.exports = grammar({
     [$.left_aux_expression, $.prefix_unary_expression, $.postfix_expression],
     [$.struct_name, $.enum_pattern],
     [$.class_init, $.struct_init],
-    [$.tuple_type, $.parenthesized_type],
     [$.left_aux_expression, $.multiplicative_expression, $.postfix_expression],
     [
       $.left_aux_expression,
@@ -178,8 +175,6 @@ module.exports = grammar({
       $.equality_comparison_expression,
       $.postfix_expression,
     ],
-    [$._atomic_expression, $.lambda_parameter],
-    [$.user_type, $._expression],
     [$.class_primary_init, $.case_body, $.struct_name],
     [
       $.class_primary_init,
@@ -192,7 +187,6 @@ module.exports = grammar({
     [$.left_aux_expression, $.additive_expression, $.postfix_expression],
     [$.left_aux_expression, $.exponent_expression, $.postfix_expression],
     [$.left_aux_expression, $.flow_expression, $.postfix_expression],
-    [$.user_type, $._atomic_expression],
     [
       $.class_modifier,
       $.interface_modifier,
@@ -219,8 +213,6 @@ module.exports = grammar({
     [$.function_modifier, $.variable_modifier, $.property_modifier],
     [$.class_modifier, $.function_modifier],
     [$.class_modifier, $.function_modifier, $.property_modifier],
-    [$.postfix_expression, $.tuple_literal, $.parenthesized_expression],
-    [$._expression, $.postfix_expression],
   ],
   rules: {
     source_file: ($) =>
@@ -498,8 +490,8 @@ module.exports = grammar({
       choice(
         seq(
           '(',
-          optional($.unnamed_parameter_list),
-          optional(seq(',', $.named_parameter_list)),
+          field('unnamed_parameters', optional($.unnamed_parameter_list)),
+          field('named_parameters', optional(seq(',', $.named_parameter_list))),
           ')',
         ),
         seq('(', optional($.named_parameter_list), ')'),

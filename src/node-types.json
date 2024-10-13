@@ -6233,17 +6233,38 @@
   {
     "type": "function_parameters",
     "named": true,
-    "fields": {},
+    "fields": {
+      "named_parameters": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": ",",
+            "named": false
+          },
+          {
+            "type": "named_parameter_list",
+            "named": true
+          }
+        ]
+      },
+      "unnamed_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "unnamed_parameter_list",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
           "type": "named_parameter_list",
-          "named": true
-        },
-        {
-          "type": "unnamed_parameter_list",
           "named": true
         }
       ]

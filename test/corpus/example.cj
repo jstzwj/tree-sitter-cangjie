@@ -11,7 +11,7 @@ func add(a: Int64, b: Int64): Int64 {
   (function_definition
     name: (identifier)
     parameters: (function_parameters
-      (unnamed_parameter_list
+      unnamed_parameters: (unnamed_parameter_list
         (unnamed_parameter
           (identifier)
           (builtin_types
@@ -43,7 +43,7 @@ func getOrThrow(a: ?Int64) {
   (function_definition
     name: (identifier)
     parameters: (function_parameters
-      (unnamed_parameter_list
+      unnamed_parameters: (unnamed_parameter_list
         (unnamed_parameter
           (identifier)
           (prefix_type

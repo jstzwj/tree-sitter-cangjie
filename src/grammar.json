@@ -1891,37 +1891,45 @@
               "value": "("
             },
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "unnamed_parameter_list"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+              "type": "FIELD",
+              "name": "unnamed_parameters",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "unnamed_parameter_list"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              }
             },
             {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "STRING",
-                      "value": ","
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "named_parameter_list"
-                    }
-                  ]
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
+              "type": "FIELD",
+              "name": "named_parameters",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": ","
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "named_parameter_list"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              }
             },
             {
               "type": "STRING",
@@ -10086,14 +10094,6 @@
       "enum_pattern_parameters"
     ],
     [
-      "_atomic_expression",
-      "_literal_constant"
-    ],
-    [
-      "left_aux_expression",
-      "_atomic_expression"
-    ],
-    [
       "left_aux_expression",
       "item_after_quest"
     ],
@@ -10154,10 +10154,6 @@
     [
       "class_init",
       "struct_init"
-    ],
-    [
-      "tuple_type",
-      "parenthesized_type"
     ],
     [
       "left_aux_expression",
@@ -10225,14 +10221,6 @@
       "postfix_expression"
     ],
     [
-      "_atomic_expression",
-      "lambda_parameter"
-    ],
-    [
-      "user_type",
-      "_expression"
-    ],
-    [
       "class_primary_init",
       "case_body",
       "struct_name"
@@ -10266,10 +10254,6 @@
       "left_aux_expression",
       "flow_expression",
       "postfix_expression"
-    ],
-    [
-      "user_type",
-      "_atomic_expression"
     ],
     [
       "class_modifier",
@@ -10320,15 +10304,6 @@
       "class_modifier",
       "function_modifier",
       "property_modifier"
-    ],
-    [
-      "postfix_expression",
-      "tuple_literal",
-      "parenthesized_expression"
-    ],
-    [
-      "_expression",
-      "postfix_expression"
     ]
   ],
   "precedences": [],
