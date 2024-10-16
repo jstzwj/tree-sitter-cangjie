@@ -112,6 +112,11 @@ module.exports = grammar({
     [$.user_type, $._atomic_expression],
     [$._atomic_expression, $._literal_constant],
     [$.match_case, $._expression_or_declaration],
+    [$.builtin_types, $.rune_type_conv_expr],
+    [$.builtin_types, $.numeric_type_conv_expr],
+    [$.unnamed_arrow_parameters, $.unnamed_tuple_type, $._expression, $.left_aux_expression],
+    [$.unnamed_arrow_parameters, $.unnamed_tuple_type, $.parenthesized_type, $._expression, $.left_aux_expression],
+    [$._expression, $.left_aux_expression],
     [$._end, $.line_string_expression],
     [
       $.user_type,
@@ -229,6 +234,11 @@ module.exports = grammar({
     [$.function_modifier, $._identifier_or_keyword],
     [$.variable_modifier, $._identifier_or_keyword],
     [$.user_type, $.left_value_expression_without_wildcard, $._identifier_or_keyword],
+    [$.postfix_expression, $._expression_or_declaration],
+    [$.left_aux_expression, $.postfix_expression, $._expression_or_declaration],
+    [$.left_aux_expression, $.postfix_expression],
+    [$.operator_function_definition, $.left_aux_expression, $.postfix_expression],
+    [$.operator_function_definition, $.postfix_expression],
   ],
   rules: {
     source_file: ($) =>
@@ -308,8 +318,7 @@ module.exports = grammar({
         'sealed',
         'override',
       ),
-    type_parameters: ($) =>
-      prec.left(1, seq('<', sepBy1(',', $.identifier), '>')),
+    type_parameters: ($) => seq('<', sepBy1(',', $.identifier), '>'),
     class_type: ($) =>
       seq(sepBy1('.', $.identifier), optional($.type_parameters)),
     super_interfaces: ($) => sepBy1(',', $.class_type),
@@ -877,22 +886,20 @@ module.exports = grammar({
       choice($.numeric_types, 'Rune', 'Boolean', 'Nothing', 'Unit', 'This'),
 
     numeric_types: ($) =>
-      token(
-        choice(
-          'Int8',
-          'Int16',
-          'Int32',
-          'Int64',
-          'IntNative',
-          'Uint8',
-          'Uint16',
-          'Uint32',
-          'Uint64',
-          'UintNative',
-          'Float16',
-          'Float32',
-          'Float64',
-        ),
+      choice(
+        'Int8',
+        'Int16',
+        'Int32',
+        'Int64',
+        'IntNative',
+        'Uint8',
+        'Uint16',
+        'Uint32',
+        'Uint64',
+        'UintNative',
+        'Float16',
+        'Float32',
+        'Float64',
       ),
 
     user_type: ($) =>
@@ -906,8 +913,7 @@ module.exports = grammar({
 
     parenthesized_type: ($) => seq('(', $._type, ')'),
 
-    type_arguments: ($) =>
-      prec.left(1, seq('<', $._type, repeat(seq(',', $._type)), '>')),
+    type_arguments: ($) => seq('<', $._type, repeat(seq(',', $._type)), '>'),
 
     // Expression
     _expression: ($) =>
@@ -1175,27 +1181,19 @@ module.exports = grammar({
     postfix_expression: ($) =>
       prec.left(
         PREC.CALL,
-        choice(
-          seq($._type, '.', $.identifier),
-          seq($._expression, '.', $.identifier, optional($.type_arguments)),
-          seq($._expression, $.call_suffix),
-          seq($._expression, $.index_access),
-          seq($._expression, $.trailing_lambda_expression),
-          // FIXME:
-          // seq(
-          //   $._expression,
-          //   '.',
-          //   $.identifier,
-          //   optional($.call_suffix),
-          //   $.trailing_lambda_expression,
-          // ),
-          // seq(
-          //   $.identifier,
-          //   optional($.call_suffix),
-          //   $.trailing_lambda_expression,
-          // ),
-          seq($._expression, repeat1(seq('?', $.quest_seperated_items))),
-        ),
+        seq(
+          choice(
+            $._type,
+            $._expression,
+          ),
+          choice(
+            seq('.', $.identifier, optional($.type_arguments)),
+            $.call_suffix,
+            $.index_access,
+            $.trailing_lambda_expression,
+            repeat1(seq('?', $.quest_seperated_items)),
+          ),
+        )
       ),
 
     quest_seperated_items: ($) => prec.left(repeat1($.quest_seperated_item)),
@@ -1271,6 +1269,7 @@ module.exports = grammar({
           $.try_expression,
           $.jump_expression,
           $.numeric_type_conv_expr,
+          $.rune_type_conv_expr,
           $.this_super_expression,
           $.spawn_expression,
           $.synchronized_expression,
@@ -1599,6 +1598,9 @@ module.exports = grammar({
       ),
     numeric_type_conv_expr: ($) =>
       seq($.numeric_types, '(', $._expression, ')'),
+
+    rune_type_conv_expr: ($) =>
+      seq('Rune', '(', $._expression, ')'),
 
     this_super_expression: ($) => token(choice('this', 'super')),
 
