@@ -103,6 +103,8 @@ module.exports = grammar({
     [$.line_string_expression],
     [$.multi_line_string_expression],
     [$.do_while_expression],
+    [$._expression],
+    [$.user_type, $.identifier_or_keyword],
     [$.user_type, $._expression],
     [$.user_type, $._expression, $.left_value_expression_without_wildcard],
     [$.left_aux_expression, $._atomic_expression],
@@ -222,6 +224,10 @@ module.exports = grammar({
     [$.function_modifier, $.variable_modifier, $.property_modifier],
     [$.class_modifier, $.function_modifier],
     [$.class_modifier, $.function_modifier, $.property_modifier],
+    [$.function_modifier, $.variable_modifier, $.identifier_or_keyword],
+    [$.function_modifier, $.identifier_or_keyword],
+    [$.variable_modifier, $.identifier_or_keyword],
+    [$.user_type, $.left_value_expression_without_wildcard, $.identifier_or_keyword],
   ],
   rules: {
     source_file: ($) =>
@@ -292,14 +298,14 @@ module.exports = grammar({
     class_modifier_list: ($) => repeat1($.class_modifier),
     class_modifier: ($) =>
       choice(
-        token(prec(-1, 'public')),
-        token(prec(-1, 'protected')),
-        token(prec(-1, 'internal')),
-        token(prec(-1, 'private')),
-        token(prec(-1, 'abstract')),
-        token(prec(-1, 'open')),
-        token(prec(-1, 'sealed')),
-        token(prec(-1, 'override')),
+        'public',
+        'protected',
+        'internal',
+        'private',
+        'abstract',
+        'open',
+        'sealed',
+        'override',
       ),
     type_parameters: ($) =>
       prec.left(1, seq('<', sepBy1(',', $.identifier), '>')),
@@ -452,13 +458,7 @@ module.exports = grammar({
       ),
     interface_modifier_list: ($) => repeat1($.interface_modifier),
     interface_modifier: ($) =>
-      choice(
-        token(prec(-1, 'public')),
-        token(prec(-1, 'protected')),
-        token(prec(-1, 'internal')),
-        token(prec(-1, 'private')),
-        token(prec(-1, 'open')),
-      ),
+      choice('public', 'protected', 'internal', 'private', 'open'),
 
     // Function definition
     function_definition: ($) =>
@@ -475,18 +475,18 @@ module.exports = grammar({
     function_modifier_list: ($) => repeat1($.function_modifier),
     function_modifier: ($) =>
       choice(
-        token(prec(-1, 'public')),
-        token(prec(-1, 'private')),
-        token(prec(-1, 'protected')),
-        token(prec(-1, 'internal')),
-        token(prec(-1, 'static')),
-        token(prec(-1, 'open')),
-        token(prec(-1, 'override')),
-        token(prec(-1, 'operator')),
-        token(prec(-1, 'redef')),
-        token(prec(-1, 'mut')),
-        token(prec(-1, 'unsafe')),
-        token(prec(-1, 'const')),
+        'public',
+        'private',
+        'protected',
+        'internal',
+        'static',
+        'open',
+        'override',
+        'operator',
+        'redef',
+        'mut',
+        'unsafe',
+        'const',
       ),
 
     operator_function_definition: ($) =>
@@ -828,21 +828,16 @@ module.exports = grammar({
       ),
 
     property_modifier: ($) =>
-      token(
-        prec(
-          -1,
-          choice(
-            'public',
-            'private',
-            'protected',
-            'internal',
-            'static',
-            'open',
-            'override',
-            'redef',
-            'mut',
-          ),
-        ),
+      choice(
+        'public',
+        'private',
+        'protected',
+        'internal',
+        'static',
+        'open',
+        'override',
+        'redef',
+        'mut',
       ),
     // Main Definition
     main_definition: ($) =>
@@ -936,7 +931,7 @@ module.exports = grammar({
         $.prefix_unary_expression,
         $.inc_and_dec_expression,
         $.postfix_expression,
-        seq($.identifier, optional($.type_arguments)),
+        seq($.identifier_or_keyword, optional($.type_arguments)),
       ),
 
     assignment_expression: ($) =>
@@ -1897,6 +1892,7 @@ module.exports = grammar({
       token(
         /`[_\p{XID_Start}][_\p{XID_Continue}]*`|[_\p{XID_Start}][_\p{XID_Continue}]*/u,
       ),
+    identifier_or_keyword: ($) => choice($.identifier, 'abstract', 'public', 'private', 'protected', 'internal', 'open', 'redef', 'sealed', 'override', 'get', 'set'),
     dollar_identifier: ($) => seq('$', $.identifier),
 
     // Comments
