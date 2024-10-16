@@ -85,7 +85,6 @@ module.exports = grammar({
   conflicts: ($) => [
     [$.source_file],
     [$.quest_seperated_item],
-    [$.item_after_quest],
     [$.foreign_body],
     [$.class_body],
     [$.interface_body],
@@ -292,7 +291,7 @@ module.exports = grammar({
         'sealed',
         'override',
       ),
-    type_parameters: ($) => seq('<', sepBy1(',', $.identifier), '>'),
+    type_parameters: ($) => prec.left(1, seq('<', sepBy1(',', $.identifier), '>')),
     class_type: ($) =>
       seq(sepBy1('.', $.identifier), optional($.type_parameters)),
     super_interfaces: ($) => sepBy1(',', $.class_type),
@@ -524,7 +523,7 @@ module.exports = grammar({
       prec.left(
         seq(
           field('modifier', repeat($.variable_modifier)),
-          choice('let', 'var', 'const'),
+          field('specifier', choice('let', 'var', 'const')),
           field('name', $._patterns_maybe_irrefutable),
           choice(
             seq(
@@ -890,7 +889,7 @@ module.exports = grammar({
     parenthesized_type: ($) => seq('(', $._type, ')'),
 
     type_arguments: ($) =>
-      prec.left(PREC.PARENS, seq('<', $._type, repeat(seq(',', $._type)), '>')),
+      prec.left(1, seq(token(prec(1, '<')), $._type, repeat(seq(',', $._type)), '>')),
 
     // Expression
     _expression: ($) =>
