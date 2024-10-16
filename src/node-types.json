@@ -7808,7 +7808,7 @@
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "identifier_or_keyword",
           "named": true
         },
         {
@@ -15724,7 +15724,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "constant_pattern",

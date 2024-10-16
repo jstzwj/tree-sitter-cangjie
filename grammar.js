@@ -104,6 +104,7 @@ module.exports = grammar({
     [$.multi_line_string_expression],
     [$.do_while_expression],
     [$._expression],
+    [$._expression, $.left_value_expression_without_wildcard],
     [$.user_type, $.identifier_or_keyword],
     [$.user_type, $._expression],
     [$.user_type, $._expression, $.left_value_expression_without_wildcard],
@@ -977,7 +978,7 @@ module.exports = grammar({
       prec.left(
         PREC.COMMENT,
         choice(
-          $.identifier,
+          $.identifier_or_keyword,
           $.left_aux_expression,
           seq($.left_aux_expression, optional('?'), $._assignable_suffix),
         ),
@@ -1475,7 +1476,7 @@ module.exports = grammar({
     var_binding_pattern: ($) => $.identifier,
 
     tuple_pattern: ($) =>
-      seq('(', repeat(seq($._pattern, optional(seq(',', $._pattern)))), ')'),
+      seq('(', $._pattern, repeat(seq(',', $._pattern)), ')'),
 
     type_pattern: ($) =>
       seq(choice('_', $.identifier), optional(seq(':', $._type))),
