@@ -173,6 +173,10 @@ static inline bool scan_multi_line_raw_string_start(Scanner *scanner, TSLexer *l
         opening_quotation = lexer->lookahead;
         advance(lexer);
     }
+    else
+    {
+        return false;
+    }
     scanner->opening_hash_count = opening_hash_count;
     scanner->opening_quotation = opening_quotation;
 
@@ -188,16 +192,12 @@ static inline bool scan_multi_line_raw_string_content(Scanner *scanner, TSLexer 
         {
             return false;
         }
-        if ((lexer->lookahead == '"' || lexer->lookahead == '\'' || lexer->lookahead == '#') && lexer->lookahead == scanner->opening_quotation)
+        if ((lexer->lookahead == '"' || lexer->lookahead == '\'') && lexer->lookahead == scanner->opening_quotation)
         {
             if (lexer->lookahead == '"' || lexer->lookahead == '\'')
             {
                 lexer->mark_end(lexer);
                 advance(lexer);
-            }
-            else if (lexer->lookahead == '#')
-            {
-                lexer->mark_end(lexer);
             }
 
             unsigned hash_count = 0;
