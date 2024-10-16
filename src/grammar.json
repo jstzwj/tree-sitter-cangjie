@@ -461,36 +461,92 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "STRING",
-          "value": "public"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "public"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "protected"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "protected"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "internal"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "internal"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "private"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "private"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "abstract"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "abstract"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "open"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "open"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "sealed"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "sealed"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "override"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "override"
+            }
+          }
         }
       ]
     },
@@ -1584,24 +1640,59 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "STRING",
-          "value": "public"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "public"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "protected"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "protected"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "internal"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "internal"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "private"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "private"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "open"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "open"
+            }
+          }
         }
       ]
     },
@@ -1730,52 +1821,136 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "STRING",
-          "value": "public"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "public"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "private"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "private"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "protected"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "protected"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "internal"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "internal"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "static"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "static"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "open"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "open"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "override"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "override"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "operator"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "operator"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "redef"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "redef"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "mut"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "mut"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "unsafe"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "unsafe"
+            }
+          }
         },
         {
-          "type": "STRING",
-          "value": "const"
+          "type": "TOKEN",
+          "content": {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "STRING",
+              "value": "const"
+            }
+          }
         }
       ]
     },
@@ -4043,45 +4218,52 @@
       ]
     },
     "property_modifier": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "public"
-        },
-        {
-          "type": "STRING",
-          "value": "private"
-        },
-        {
-          "type": "STRING",
-          "value": "protected"
-        },
-        {
-          "type": "STRING",
-          "value": "internal"
-        },
-        {
-          "type": "STRING",
-          "value": "static"
-        },
-        {
-          "type": "STRING",
-          "value": "open"
-        },
-        {
-          "type": "STRING",
-          "value": "override"
-        },
-        {
-          "type": "STRING",
-          "value": "redef"
-        },
-        {
-          "type": "STRING",
-          "value": "mut"
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": -1,
+        "content": {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "public"
+            },
+            {
+              "type": "STRING",
+              "value": "private"
+            },
+            {
+              "type": "STRING",
+              "value": "protected"
+            },
+            {
+              "type": "STRING",
+              "value": "internal"
+            },
+            {
+              "type": "STRING",
+              "value": "static"
+            },
+            {
+              "type": "STRING",
+              "value": "open"
+            },
+            {
+              "type": "STRING",
+              "value": "override"
+            },
+            {
+              "type": "STRING",
+              "value": "redef"
+            },
+            {
+              "type": "STRING",
+              "value": "mut"
+            }
+          ]
         }
-      ]
+      }
     },
     "main_definition": {
       "type": "SEQ",

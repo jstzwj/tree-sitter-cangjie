@@ -110,7 +110,11 @@ module.exports = grammar({
     [$._atomic_expression, $._literal_constant],
     [$.match_case, $._expression_or_declaration],
     [$._end, $.line_string_expression],
-    [$.user_type, $.left_value_expression_without_wildcard, $._atomic_expression],
+    [
+      $.user_type,
+      $.left_value_expression_without_wildcard,
+      $._atomic_expression,
+    ],
     [$.multi_line_string_expression, $._expression_or_declaration],
     [$.unit_literal, $.quote_token],
     [$.quote_token, $.macro_input_expr_with_parens],
@@ -288,14 +292,14 @@ module.exports = grammar({
     class_modifier_list: ($) => repeat1($.class_modifier),
     class_modifier: ($) =>
       choice(
-        'public',
-        'protected',
-        'internal',
-        'private',
-        'abstract',
-        'open',
-        'sealed',
-        'override',
+        token(prec(-1, 'public')),
+        token(prec(-1, 'protected')),
+        token(prec(-1, 'internal')),
+        token(prec(-1, 'private')),
+        token(prec(-1, 'abstract')),
+        token(prec(-1, 'open')),
+        token(prec(-1, 'sealed')),
+        token(prec(-1, 'override')),
       ),
     type_parameters: ($) =>
       prec.left(1, seq('<', sepBy1(',', $.identifier), '>')),
@@ -448,7 +452,13 @@ module.exports = grammar({
       ),
     interface_modifier_list: ($) => repeat1($.interface_modifier),
     interface_modifier: ($) =>
-      choice('public', 'protected', 'internal', 'private', 'open'),
+      choice(
+        token(prec(-1, 'public')),
+        token(prec(-1, 'protected')),
+        token(prec(-1, 'internal')),
+        token(prec(-1, 'private')),
+        token(prec(-1, 'open')),
+      ),
 
     // Function definition
     function_definition: ($) =>
@@ -465,18 +475,18 @@ module.exports = grammar({
     function_modifier_list: ($) => repeat1($.function_modifier),
     function_modifier: ($) =>
       choice(
-        'public',
-        'private',
-        'protected',
-        'internal',
-        'static',
-        'open',
-        'override',
-        'operator',
-        'redef',
-        'mut',
-        'unsafe',
-        'const',
+        token(prec(-1, 'public')),
+        token(prec(-1, 'private')),
+        token(prec(-1, 'protected')),
+        token(prec(-1, 'internal')),
+        token(prec(-1, 'static')),
+        token(prec(-1, 'open')),
+        token(prec(-1, 'override')),
+        token(prec(-1, 'operator')),
+        token(prec(-1, 'redef')),
+        token(prec(-1, 'mut')),
+        token(prec(-1, 'unsafe')),
+        token(prec(-1, 'const')),
       ),
 
     operator_function_definition: ($) =>
@@ -818,16 +828,21 @@ module.exports = grammar({
       ),
 
     property_modifier: ($) =>
-      choice(
-        'public',
-        'private',
-        'protected',
-        'internal',
-        'static',
-        'open',
-        'override',
-        'redef',
-        'mut',
+      token(
+        prec(
+          -1,
+          choice(
+            'public',
+            'private',
+            'protected',
+            'internal',
+            'static',
+            'open',
+            'override',
+            'redef',
+            'mut',
+          ),
+        ),
       ),
     // Main Definition
     main_definition: ($) =>

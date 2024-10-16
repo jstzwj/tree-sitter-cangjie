@@ -11981,11 +11981,6 @@
     }
   },
   {
-    "type": "property_modifier",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "quest_seperated_item",
     "named": true,
     "fields": {},
@@ -17290,6 +17285,10 @@
   {
     "type": "prop",
     "named": false
+  },
+  {
+    "type": "property_modifier",
+    "named": true
   },
   {
     "type": "protected",
