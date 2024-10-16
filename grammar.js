@@ -498,9 +498,9 @@ module.exports = grammar({
         field('operator', $.overloaded_operators),
         field('type_parameters', optional($.type_parameters)),
         field('parameters', $.function_parameters),
-        optional($._type),
+        optional(seq(':', field('return_type', $._type))),
         field('constraints', optional($.generic_constraints)),
-        field('body', optional($.block)),
+        field('body', optional(choice($.block, seq('=', $._expression)))),
       ),
 
     function_parameters: ($) =>
