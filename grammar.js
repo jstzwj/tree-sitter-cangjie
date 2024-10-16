@@ -103,8 +103,14 @@ module.exports = grammar({
     [$.line_string_expression],
     [$.multi_line_string_expression],
     [$.do_while_expression],
+    [$.user_type, $._expression],
+    [$.user_type, $._expression, $.left_value_expression_without_wildcard],
+    [$.left_aux_expression, $._atomic_expression],
+    [$.user_type, $._atomic_expression],
+    [$._atomic_expression, $._literal_constant],
     [$.match_case, $._expression_or_declaration],
     [$._end, $.line_string_expression],
+    [$.user_type, $.left_value_expression_without_wildcard, $._atomic_expression],
     [$.multi_line_string_expression, $._expression_or_declaration],
     [$.unit_literal, $.quote_token],
     [$.quote_token, $.macro_input_expr_with_parens],
@@ -291,7 +297,8 @@ module.exports = grammar({
         'sealed',
         'override',
       ),
-    type_parameters: ($) => prec.left(1, seq('<', sepBy1(',', $.identifier), '>')),
+    type_parameters: ($) =>
+      prec.left(1, seq('<', sepBy1(',', $.identifier), '>')),
     class_type: ($) =>
       seq(sepBy1('.', $.identifier), optional($.type_parameters)),
     super_interfaces: ($) => sepBy1(',', $.class_type),
@@ -889,7 +896,7 @@ module.exports = grammar({
     parenthesized_type: ($) => seq('(', $._type, ')'),
 
     type_arguments: ($) =>
-      prec.left(1, seq(token(prec(1, '<')), $._type, repeat(seq(',', $._type)), '>')),
+      prec.left(1, seq('<', $._type, repeat(seq(',', $._type)), '>')),
 
     // Expression
     _expression: ($) =>
@@ -914,6 +921,7 @@ module.exports = grammar({
         $.prefix_unary_expression,
         $.inc_and_dec_expression,
         $.postfix_expression,
+        seq($.identifier, optional($.type_arguments)),
       ),
 
     assignment_expression: ($) =>
@@ -1162,7 +1170,7 @@ module.exports = grammar({
           seq($._expression, $.call_suffix),
           seq($._expression, $.index_access),
           seq($._expression, $.trailing_lambda_expression),
-          // FIXME: 
+          // FIXME:
           // seq(
           //   $._expression,
           //   '.',
@@ -1193,11 +1201,13 @@ module.exports = grammar({
         ),
       ),
     item_after_quest: ($) =>
-      choice(
-        seq('.', $.identifier, optional($.type_arguments)),
-        $.call_suffix,
-        $.index_access,
-        $.trailing_lambda_expression,
+      prec.left(
+        choice(
+          seq('.', $.identifier, optional($.type_arguments)),
+          $.call_suffix,
+          $.index_access,
+          $.trailing_lambda_expression,
+        ),
       ),
 
     call_suffix: ($) =>
@@ -1243,7 +1253,6 @@ module.exports = grammar({
           $._literal_constant,
           $.collection_literal,
           $.tuple_literal,
-          seq($.identifier, optional($.type_arguments)),
           $.unit_literal,
           $.if_expression,
           $.match_expression,

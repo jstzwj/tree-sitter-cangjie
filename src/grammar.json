@@ -4624,15 +4624,8 @@
         "type": "SEQ",
         "members": [
           {
-            "type": "TOKEN",
-            "content": {
-              "type": "PREC",
-              "value": 1,
-              "content": {
-                "type": "STRING",
-                "value": "<"
-              }
-            }
+            "type": "STRING",
+            "value": "<"
           },
           {
             "type": "SYMBOL",
@@ -4739,6 +4732,27 @@
         {
           "type": "SYMBOL",
           "name": "postfix_expression"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "type_arguments"
+                },
+                {
+                  "type": "BLANK"
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -5931,46 +5945,50 @@
       ]
     },
     "item_after_quest": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SEQ",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "."
-            },
-            {
-              "type": "SYMBOL",
-              "name": "identifier"
-            },
-            {
-              "type": "CHOICE",
-              "members": [
-                {
-                  "type": "SYMBOL",
-                  "name": "type_arguments"
-                },
-                {
-                  "type": "BLANK"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "SYMBOL",
-          "name": "call_suffix"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "index_access"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "trailing_lambda_expression"
-        }
-      ]
+      "type": "PREC_LEFT",
+      "value": 0,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "."
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "type_arguments"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "SYMBOL",
+            "name": "call_suffix"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "index_access"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "trailing_lambda_expression"
+          }
+        ]
+      }
     },
     "call_suffix": {
       "type": "PREC_LEFT",
@@ -6181,27 +6199,6 @@
           {
             "type": "SYMBOL",
             "name": "tuple_literal"
-          },
-          {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "identifier"
-              },
-              {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "type_arguments"
-                  },
-                  {
-                    "type": "BLANK"
-                  }
-                ]
-              }
-            ]
           },
           {
             "type": "SYMBOL",
@@ -10035,12 +10032,38 @@
       "do_while_expression"
     ],
     [
+      "user_type",
+      "_expression"
+    ],
+    [
+      "user_type",
+      "_expression",
+      "left_value_expression_without_wildcard"
+    ],
+    [
+      "left_aux_expression",
+      "_atomic_expression"
+    ],
+    [
+      "user_type",
+      "_atomic_expression"
+    ],
+    [
+      "_atomic_expression",
+      "_literal_constant"
+    ],
+    [
       "match_case",
       "_expression_or_declaration"
     ],
     [
       "_end",
       "line_string_expression"
+    ],
+    [
+      "user_type",
+      "left_value_expression_without_wildcard",
+      "_atomic_expression"
     ],
     [
       "multi_line_string_expression",
