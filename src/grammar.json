@@ -4769,7 +4769,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "identifier_or_keyword"
+              "name": "_identifier_or_keyword"
             },
             {
               "type": "CHOICE",
@@ -4967,7 +4967,7 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "identifier_or_keyword"
+            "name": "_identifier_or_keyword"
           },
           {
             "type": "SYMBOL",
@@ -9474,7 +9474,7 @@
         "flags": "u"
       }
     },
-    "identifier_or_keyword": {
+    "_identifier_or_keyword": {
       "type": "CHOICE",
       "members": [
         {
@@ -10111,7 +10111,7 @@
     ],
     [
       "user_type",
-      "identifier_or_keyword"
+      "_identifier_or_keyword"
     ],
     [
       "user_type",
@@ -10425,20 +10425,20 @@
     [
       "function_modifier",
       "variable_modifier",
-      "identifier_or_keyword"
+      "_identifier_or_keyword"
     ],
     [
       "function_modifier",
-      "identifier_or_keyword"
+      "_identifier_or_keyword"
     ],
     [
       "variable_modifier",
-      "identifier_or_keyword"
+      "_identifier_or_keyword"
     ],
     [
       "user_type",
       "left_value_expression_without_wildcard",
-      "identifier_or_keyword"
+      "_identifier_or_keyword"
     ]
   ],
   "precedences": [],

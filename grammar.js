@@ -105,7 +105,7 @@ module.exports = grammar({
     [$.do_while_expression],
     [$._expression],
     [$._expression, $.left_value_expression_without_wildcard],
-    [$.user_type, $.identifier_or_keyword],
+    [$.user_type, $._identifier_or_keyword],
     [$.user_type, $._expression],
     [$.user_type, $._expression, $.left_value_expression_without_wildcard],
     [$.left_aux_expression, $._atomic_expression],
@@ -225,10 +225,10 @@ module.exports = grammar({
     [$.function_modifier, $.variable_modifier, $.property_modifier],
     [$.class_modifier, $.function_modifier],
     [$.class_modifier, $.function_modifier, $.property_modifier],
-    [$.function_modifier, $.variable_modifier, $.identifier_or_keyword],
-    [$.function_modifier, $.identifier_or_keyword],
-    [$.variable_modifier, $.identifier_or_keyword],
-    [$.user_type, $.left_value_expression_without_wildcard, $.identifier_or_keyword],
+    [$.function_modifier, $.variable_modifier, $._identifier_or_keyword],
+    [$.function_modifier, $._identifier_or_keyword],
+    [$.variable_modifier, $._identifier_or_keyword],
+    [$.user_type, $.left_value_expression_without_wildcard, $._identifier_or_keyword],
   ],
   rules: {
     source_file: ($) =>
@@ -932,7 +932,7 @@ module.exports = grammar({
         $.prefix_unary_expression,
         $.inc_and_dec_expression,
         $.postfix_expression,
-        seq($.identifier_or_keyword, optional($.type_arguments)),
+        seq($._identifier_or_keyword, optional($.type_arguments)),
       ),
 
     assignment_expression: ($) =>
@@ -978,7 +978,7 @@ module.exports = grammar({
       prec.left(
         PREC.COMMENT,
         choice(
-          $.identifier_or_keyword,
+          $._identifier_or_keyword,
           $.left_aux_expression,
           seq($.left_aux_expression, optional('?'), $._assignable_suffix),
         ),
@@ -1893,7 +1893,7 @@ module.exports = grammar({
       token(
         /`[_\p{XID_Start}][_\p{XID_Continue}]*`|[_\p{XID_Start}][_\p{XID_Continue}]*/u,
       ),
-    identifier_or_keyword: ($) => choice($.identifier, 'abstract', 'public', 'private', 'protected', 'internal', 'open', 'redef', 'sealed', 'override', 'get', 'set'),
+    _identifier_or_keyword: ($) => choice($.identifier, 'abstract', 'public', 'private', 'protected', 'internal', 'open', 'redef', 'sealed', 'override', 'get', 'set'),
     dollar_identifier: ($) => seq('$', $.identifier),
 
     // Comments
