@@ -17,22 +17,23 @@ const PREC = {
   BIT_AND: 10, // &
   EQUALITY: 11, // ==  !=
   GENERIC: 12,
-  REL: 13, // <  <=  >  >=  instanceof
-  RANGE: 14, // .. ..=
-  SHIFT: 15, // <<  >>  >>>
-  ADD: 16, // +  -
-  MULT: 17, // *  /  %
-  CAST: 18, // (Type)
-  EXP: 19, // **
-  NEG: 20, // +  -
-  NOT: 21, // !
-  QUESTION: 22, // ?
-  INC: 23, // a++  a--
-  CALL: 24, // ()
-  ARRAY: 25, // [Index]
-  MEMBER: 26, // .
-  PARENS: 27, // (Expression)
-  CLASS_LITERAL: 28, // .
+  CAST: 13, // as
+  CHECK: 14, // is
+  REL: 15, // <  <=  >  >=  instanceof
+  RANGE: 16, // .. ..=
+  SHIFT: 17, // <<  >>  >>>
+  ADD: 18, // +  -
+  MULT: 19, // *  /  %
+  EXP: 20, // **
+  NEG: 21, // +  -
+  NOT: 22, // !
+  QUESTION: 23, // ?
+  INC: 24, // a++  a--
+  PARENS: 25, // (Expression)
+  CALL: 26, // ()
+  ARRAY: 27, // [Index]
+  MEMBER: 28, // .
+  CLASS_LITERAL: 29, // .
 };
 
 const INTEGER_SUFFIX = ['i8', 'i16', 'i32', 'i64', 'u8', 'u16', 'u32', 'u64'];
@@ -114,8 +115,19 @@ module.exports = grammar({
     [$.match_case, $._expression_or_declaration],
     [$.builtin_types, $.rune_type_conv_expr],
     [$.builtin_types, $.numeric_type_conv_expr],
-    [$.unnamed_arrow_parameters, $.unnamed_tuple_type, $._expression, $.left_aux_expression],
-    [$.unnamed_arrow_parameters, $.unnamed_tuple_type, $.parenthesized_type, $._expression, $.left_aux_expression],
+    [
+      $.unnamed_arrow_parameters,
+      $.unnamed_tuple_type,
+      $._expression,
+      $.left_aux_expression,
+    ],
+    [
+      $.unnamed_arrow_parameters,
+      $.unnamed_tuple_type,
+      $.parenthesized_type,
+      $._expression,
+      $.left_aux_expression,
+    ],
     [$._expression, $.left_aux_expression],
     [$._end, $.line_string_expression],
     [
@@ -233,12 +245,21 @@ module.exports = grammar({
     [$.function_modifier, $.variable_modifier, $._identifier_or_keyword],
     [$.function_modifier, $._identifier_or_keyword],
     [$.variable_modifier, $._identifier_or_keyword],
-    [$.user_type, $.left_value_expression_without_wildcard, $._identifier_or_keyword],
+    [
+      $.user_type,
+      $.left_value_expression_without_wildcard,
+      $._identifier_or_keyword,
+    ],
     [$.postfix_expression, $._expression_or_declaration],
     [$.left_aux_expression, $.postfix_expression, $._expression_or_declaration],
     [$.left_aux_expression, $.postfix_expression],
-    [$.operator_function_definition, $.left_aux_expression, $.postfix_expression],
+    [
+      $.operator_function_definition,
+      $.left_aux_expression,
+      $.postfix_expression,
+    ],
     [$.operator_function_definition, $.postfix_expression],
+    [$.left_aux_expression, $._identifier_or_keyword],
   ],
   rules: {
     source_file: ($) =>
@@ -903,7 +924,7 @@ module.exports = grammar({
       ),
 
     user_type: ($) =>
-      prec.left(
+      prec.right(
         seq(
           repeat(seq($.identifier, '.')),
           $.identifier,
@@ -984,7 +1005,6 @@ module.exports = grammar({
       prec.left(
         PREC.COMMENT,
         choice(
-          $._identifier_or_keyword,
           $.left_aux_expression,
           seq($.left_aux_expression, optional('?'), $._assignable_suffix),
         ),
@@ -994,7 +1014,7 @@ module.exports = grammar({
       prec.left(
         PREC.COMMENT,
         choice(
-          // seq($.identifier, optional($.type_arguments)),
+          seq($._identifier_or_keyword, optional($.type_arguments)),
           $._type,
           $.this_super_expression,
           seq(
@@ -1106,22 +1126,30 @@ module.exports = grammar({
 
     comparison_or_type_expression: ($) =>
       prec.left(
-        PREC.REL,
         choice(
-          seq(
-            field('left', $._expression),
-            field('operator', choice('<', '>', '<=', '>=')),
-            field('right', $._expression),
+          prec(
+            PREC.REL,
+            seq(
+              field('left', $._expression),
+              field('operator', choice('<', '>', '<=', '>=')),
+              field('right', $._expression),
+            ),
           ),
-          seq(
-            field('left', $._expression),
-            field('operator', 'is'),
-            field('right', $._type),
+          prec(
+            PREC.CHECK,
+            seq(
+              field('left', $._expression),
+              field('operator', 'is'),
+              field('right', $._type),
+            ),
           ),
-          seq(
-            field('left', $._expression),
-            field('operator', 'as'),
-            field('right', $._type),
+          prec(
+            PREC.CAST,
+            seq(
+              field('left', $._expression),
+              field('operator', 'as'),
+              field('right', $._type),
+            ),
           ),
         ),
       ),
@@ -1182,18 +1210,15 @@ module.exports = grammar({
       prec.left(
         PREC.CALL,
         seq(
+          choice($._type, $._expression),
           choice(
-            $._type,
-            $._expression,
-          ),
-          choice(
-            seq('.', $.identifier, optional($.type_arguments)),
+            seq('.', $._identifier_or_keyword, optional($.type_arguments)),
             $.call_suffix,
             $.index_access,
             $.trailing_lambda_expression,
             repeat1(seq('?', $.quest_seperated_items)),
           ),
-        )
+        ),
       ),
 
     quest_seperated_items: ($) => prec.left(repeat1($.quest_seperated_item)),
@@ -1241,8 +1266,11 @@ module.exports = grammar({
 
     index_access: ($) =>
       prec.left(
-        // PREC.ARRAY,
-        seq('[', choice($._expression, $.range_element), ']'),
+        seq(
+          token.immediate(prec(1, /[\u0020\u0009\u000C]*\[/)),
+          choice($._expression, $.range_element),
+          ']',
+        ),
       ),
 
     range_element: ($) =>
@@ -1257,7 +1285,6 @@ module.exports = grammar({
 
     _atomic_expression: ($) =>
       prec.left(
-        PREC.CLASS_LITERAL,
         choice(
           $._literal_constant,
           $.collection_literal,
@@ -1265,7 +1292,7 @@ module.exports = grammar({
           $.unit_literal,
           $.if_expression,
           $.match_expression,
-          $.loop_expression,
+          $._loop_expression,
           $.try_expression,
           $.jump_expression,
           $.numeric_type_conv_expr,
@@ -1381,7 +1408,7 @@ module.exports = grammar({
 
     collection_literal: ($) => $.array_literal,
 
-    array_literal: ($) => seq('[', optional(seq($.elements)), ']'),
+    array_literal: ($) => seq('[', optional($.elements), ']'),
 
     elements: ($) => sepBy1(',', $.element),
 
@@ -1504,7 +1531,7 @@ module.exports = grammar({
     enum_pattern_parameters: ($) =>
       seq('(', repeat(seq($._pattern, optional(seq(',', $._pattern)))), ')'),
 
-    loop_expression: ($) =>
+    _loop_expression: ($) =>
       choice($.for_in_expression, $.while_expression, $.do_while_expression),
 
     for_in_expression: ($) =>
@@ -1520,7 +1547,7 @@ module.exports = grammar({
             ')',
           ),
         ),
-        $.block,
+        field('body', $.block),
       ),
 
     _patterns_maybe_irrefutable: ($) =>
@@ -1538,11 +1565,16 @@ module.exports = grammar({
         optional(seq('let', $.deconstruct_pattern, '<-')),
         $._expression,
         ')',
-        $.block,
+        field('body', $.block),
       ),
 
     do_while_expression: ($) =>
-      seq('do', $.block, 'while', optional(seq('(', $._expression, ')'))),
+      seq(
+        'do',
+        field('body', $.block),
+        'while',
+        optional(seq('(', $._expression, ')')),
+      ),
 
     try_expression: ($) =>
       choice(
@@ -1599,8 +1631,7 @@ module.exports = grammar({
     numeric_type_conv_expr: ($) =>
       seq($.numeric_types, '(', $._expression, ')'),
 
-    rune_type_conv_expr: ($) =>
-      seq('Rune', '(', $._expression, ')'),
+    rune_type_conv_expr: ($) => seq('Rune', '(', $._expression, ')'),
 
     this_super_expression: ($) => token(choice('this', 'super')),
 
@@ -1895,7 +1926,21 @@ module.exports = grammar({
       token(
         /`[_\p{XID_Start}][_\p{XID_Continue}]*`|[_\p{XID_Start}][_\p{XID_Continue}]*/u,
       ),
-    _identifier_or_keyword: ($) => choice($.identifier, 'abstract', 'public', 'private', 'protected', 'internal', 'open', 'redef', 'sealed', 'override', 'get', 'set'),
+    _identifier_or_keyword: ($) =>
+      choice(
+        $.identifier,
+        'abstract',
+        'public',
+        'private',
+        'protected',
+        'internal',
+        'open',
+        'redef',
+        'sealed',
+        'override',
+        'get',
+        'set',
+      ),
     dollar_identifier: ($) => seq('$', $.identifier),
 
     // Comments
