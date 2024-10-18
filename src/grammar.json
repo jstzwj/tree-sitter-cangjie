@@ -6123,8 +6123,8 @@
           {
             "type": "IMMEDIATE_TOKEN",
             "content": {
-              "type": "PATTERN",
-              "value": "[\\u0020\\u0009\\u000C]*\\["
+              "type": "STRING",
+              "value": "["
             }
           },
           {

@@ -1264,10 +1264,12 @@ module.exports = grammar({
     ref_transfer_expression: ($) =>
       seq('inout', optional(seq($._expression, '.', $.identifier))),
 
+    // FIXME: if there are whitespaces between index_access '[' and the expression
+    // the index_access will be parsed as a collection_literal
     index_access: ($) =>
       prec.left(
         seq(
-          token.immediate(/[\u0020\u0009\u000C]*\[/),
+          token.immediate('['),
           choice($._expression, $.range_element),
           ']',
         ),
