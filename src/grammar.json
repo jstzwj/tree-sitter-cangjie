@@ -6123,12 +6123,8 @@
           {
             "type": "IMMEDIATE_TOKEN",
             "content": {
-              "type": "PREC",
-              "value": 1,
-              "content": {
-                "type": "PATTERN",
-                "value": "[\\u0020\\u0009\\u000C]*\\["
-              }
+              "type": "PATTERN",
+              "value": "[\\u0020\\u0009\\u000C]*\\["
             }
           },
           {

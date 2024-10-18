@@ -1267,7 +1267,7 @@ module.exports = grammar({
     index_access: ($) =>
       prec.left(
         seq(
-          token.immediate(prec(1, /[\u0020\u0009\u000C]*\[/)),
+          token.immediate(/[\u0020\u0009\u000C]*\[/),
           choice($._expression, $.range_element),
           ']',
         ),
