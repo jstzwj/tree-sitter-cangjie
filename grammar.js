@@ -129,7 +129,6 @@ module.exports = grammar({
       $.left_aux_expression,
     ],
     [$._expression, $.left_aux_expression],
-    [$._end, $.line_string_expression],
     [
       $.user_type,
       $.left_value_expression_without_wildcard,
@@ -260,6 +259,7 @@ module.exports = grammar({
     ],
     [$.operator_function_definition, $.postfix_expression],
     [$.left_aux_expression, $._identifier_or_keyword],
+    [$.line_string_expression, $._expression_or_declaration],
   ],
   rules: {
     source_file: ($) =>
@@ -270,8 +270,6 @@ module.exports = grammar({
         repeat($._top_level_object),
       ),
 
-    _end: ($) => token(';'),
-
     // Preamble, package, and import definitions
     preamble: ($) =>
       choice(
@@ -280,19 +278,23 @@ module.exports = grammar({
       ),
     package_modifier: ($) => 'macro',
     package_header: ($) =>
-      seq(
-        optional($.package_modifier),
-        'package',
-        $.package_name_identifier,
-        optional($._end),
+      prec.left(
+        seq(
+          optional($.package_modifier),
+          'package',
+          $.package_name_identifier,
+          optional(';'),
+        ),
       ),
     package_name_identifier: ($) => sepBy1('.', $.identifier),
     import_list: ($) =>
-      seq(
-        optional(seq('from', $.identifier)),
-        'import',
-        sepBy1(',', $.import_part),
-        optional($._end),
+      prec.left(
+        seq(
+          optional(seq('from', $.identifier)),
+          'import',
+          sepBy1(',', $.import_part),
+          optional(';'),
+        ),
       ),
     import_part: ($) => sepBy1('.', choice('*', $.identifier)),
     import_alias: ($) => seq('as', $.identifier),
@@ -311,6 +313,7 @@ module.exports = grammar({
         $.foreign_declaration,
         $.macro_definition,
         $.macro_expression,
+        ';',
       ),
     // Class definition
     class_definition: ($) =>
@@ -355,13 +358,13 @@ module.exports = grammar({
     class_body: ($) =>
       seq(
         '{',
-        repeat($._end),
-        sepBy(repeat($._end), $._class_member_declaration),
-        repeat($._end),
+        repeat(';'),
+        sepBy(repeat(';'), $._class_member_declaration),
+        repeat(';'),
         optional($.class_primary_init),
-        repeat($._end),
-        sepBy(repeat($._end), $._class_member_declaration),
-        repeat($._end),
+        repeat(';'),
+        sepBy(repeat(';'), $._class_member_declaration),
+        repeat(';'),
         '}',
       ),
 
@@ -382,7 +385,7 @@ module.exports = grammar({
         'init',
         $.function_parameters,
         $.block,
-        repeat($._end),
+        repeat(';'),
       ),
     static_init: ($) =>
       seq(
@@ -393,7 +396,7 @@ module.exports = grammar({
         '{',
         optional($._expression_or_declarations),
         '}',
-        repeat($._end),
+        repeat(';'),
       ),
     class_primary_init: ($) =>
       seq(
@@ -404,7 +407,7 @@ module.exports = grammar({
         ')',
         '{',
         optional(seq('super', $.call_suffix)),
-        repeat($._end),
+        repeat(';'),
         optional($._expression_or_declarations),
         '}',
       ),
@@ -475,9 +478,9 @@ module.exports = grammar({
     interface_body: ($) =>
       seq(
         '{',
-        repeat($._end),
+        repeat(';'),
         repeat($._interface_member_declaration),
-        repeat($._end),
+        repeat(';'),
         '}',
       ),
     _interface_member_declaration: ($) =>
@@ -634,7 +637,7 @@ module.exports = grammar({
       seq(
         '{',
         repeat(
-          choice($._struct_member_declaration, $.struct_primary_init, $._end),
+          choice($._struct_member_declaration, $.struct_primary_init, ';'),
         ),
         '}',
       ),
@@ -731,14 +734,16 @@ module.exports = grammar({
 
     // Type Alias
     type_alias: ($) =>
-      seq(
-        optional($.type_modifier),
-        'type',
-        $.identifier,
-        optional($.type_parameters),
-        '=',
-        $._type,
-        optional($._end),
+      prec.left(
+        seq(
+          optional($.type_modifier),
+          'type',
+          $.identifier,
+          optional($.type_parameters),
+          '=',
+          $._type,
+          optional(';'),
+        ),
       ),
     type_modifier: ($) => choice('public', 'protected', 'internal', 'private'),
 
@@ -788,9 +793,9 @@ module.exports = grammar({
     foreign_body: ($) =>
       seq(
         '{',
-        repeat($._end),
+        repeat(';'),
         repeat($._foreign_member_declaration),
-        repeat($._end),
+        repeat(';'),
         '}',
       ),
 
@@ -801,7 +806,7 @@ module.exports = grammar({
         $.function_definition,
         $.macro_expression,
         $.variable_declaration,
-        $._end, // Allowing end after each member declaration
+        ';', // Allowing end after each member declaration
       ),
 
     annotation_list: ($) => repeat1($.annotation),
@@ -850,7 +855,7 @@ module.exports = grammar({
       ),
 
     property_body: ($) =>
-      seq('{', repeat($._end), repeat1($.property_member_declaration), '}'),
+      seq('{', repeat(';'), repeat1($.property_member_declaration), '}'),
 
     property_member_declaration: ($) =>
       choice(
@@ -1268,11 +1273,7 @@ module.exports = grammar({
     // the index_access will be parsed as a collection_literal
     index_access: ($) =>
       prec.left(
-        seq(
-          token.immediate('['),
-          choice($._expression, $.range_element),
-          ']',
-        ),
+        seq(token.immediate('['), choice($._expression, $.range_element), ']'),
       ),
 
     range_element: ($) =>
@@ -1402,9 +1403,9 @@ module.exports = grammar({
     multi_line_string_expression: ($) =>
       seq(
         '${',
-        repeat($._end),
+        repeat(';'),
         repeat($._expression_or_declaration),
-        repeat($._end),
+        repeat(';'),
         '}',
       ),
 
@@ -1475,8 +1476,8 @@ module.exports = grammar({
         optional($.pattern_guard),
         '=>',
         $._expression_or_declaration,
-        repeat(seq(repeat($._end), $._expression_or_declaration)),
-        repeat($._end),
+        repeat(seq(repeat(';'), $._expression_or_declaration)),
+        repeat(';'),
       ),
 
     pattern_guard: ($) => seq('where', $._expression),
@@ -1678,14 +1679,14 @@ module.exports = grammar({
       prec.left(PREC.PARENS, seq('(', $._expression, ')')),
 
     block: ($) =>
-      seq('{', optional($._expression_or_declarations), repeat($._end), '}'),
+      seq('{', optional($._expression_or_declarations), repeat(';'), '}'),
 
     unsafe_expression: ($) => seq('unsafe', $.block),
 
     _expression_or_declarations: ($) => repeat1($._expression_or_declaration),
 
     _expression_or_declaration: ($) =>
-      choice($._expression, $._var_or_func_declaration, $._end),
+      choice($._expression, $._var_or_func_declaration, ';'),
 
     _var_or_func_declaration: ($) =>
       choice($.function_definition, $.variable_declaration),
