@@ -7650,6 +7650,59 @@
     }
   },
   {
+    "type": "import_alias",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "import_all",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "import_all_or_specified",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "import_alias",
+          "named": true
+        },
+        {
+          "type": "import_all",
+          "named": true
+        },
+        {
+          "type": "import_specified",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "import_list",
     "named": true,
     "fields": {},
@@ -7662,19 +7715,19 @@
           "named": true
         },
         {
-          "type": "import_part",
+          "type": "import_all_or_specified",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "import_part",
+    "type": "import_specified",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "identifier",
@@ -8208,6 +8261,21 @@
       "types": [
         {
           "type": "interface_modifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "interface_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "class_type",
           "named": true
         }
       ]
@@ -16117,7 +16185,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "class_definition",
@@ -17510,6 +17578,21 @@
     }
   },
   {
+    "type": "super_class",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "class_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "super_class_or_interfaces",
     "named": true,
     "fields": {},
@@ -17517,6 +17600,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "super_class",
+          "named": true
+        },
         {
           "type": "super_interfaces",
           "named": true
@@ -17533,7 +17620,7 @@
       "required": true,
       "types": [
         {
-          "type": "class_type",
+          "type": "interface_type",
           "named": true
         }
       ]

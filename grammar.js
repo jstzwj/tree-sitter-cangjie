@@ -67,12 +67,7 @@ const HEXADECIMAL_EXPONENT = /[pP][+-]?[0-9][0-9_]*/;
 
 module.exports = grammar({
   name: 'cangjie',
-  extras: ($) => [
-    /[\u0020\u0009\u000C]/,
-    /\n|\r\n/,
-    $.line_comment,
-    $.delimited_comment,
-  ],
+  extras: ($) => [/[\u0020\u0009\u000C]/, $.line_comment, $.delimited_comment],
 
   externals: ($) => [
     $._line_str_text_no_escape,
@@ -85,136 +80,13 @@ module.exports = grammar({
   word: ($) => $.identifier,
   conflicts: ($) => [
     [$.source_file],
-    [$.quest_seperated_item],
-    [$.foreign_body],
-    [$.class_body],
-    [$.interface_body],
-    [$.function_definition],
-    [$.class_unnamed_init_param_list],
-    [$.named_parameter_list],
-    [$.class_init],
-    [$.struct_unnamed_init_param_list],
-    [$.unnamed_parameter_list],
-    [$.operator_function_definition],
-    [$.property_definition],
-    [$.resource_specification],
-    [$.static_init],
-    [$.if_expression],
-    [$._expression_or_declaration],
-    [$.line_string_expression],
-    [$.multi_line_string_expression],
-    [$.do_while_expression],
-    [$._expression],
-    [$._expression, $.left_value_expression_without_wildcard],
-    [$.user_type, $._identifier_or_keyword],
-    [$.user_type, $._expression],
-    [$.user_type, $._expression, $.left_value_expression_without_wildcard],
-    [$.left_aux_expression, $._atomic_expression],
-    [$.user_type, $._atomic_expression],
-    [$._atomic_expression, $._literal_constant],
-    [$.match_case, $._expression_or_declaration],
-    [$.builtin_types, $.rune_type_conv_expr],
-    [$.builtin_types, $.numeric_type_conv_expr],
     [
-      $.unnamed_arrow_parameters,
-      $.unnamed_tuple_type,
-      $._expression,
-      $.left_aux_expression,
+      $.class_modifier,
+      $.interface_modifier,
+      $.function_modifier,
+      $.variable_modifier,
+      $.enum_modifier,
     ],
-    [
-      $.unnamed_arrow_parameters,
-      $.unnamed_tuple_type,
-      $.parenthesized_type,
-      $._expression,
-      $.left_aux_expression,
-    ],
-    [$._expression, $.left_aux_expression],
-    [
-      $.user_type,
-      $.left_value_expression_without_wildcard,
-      $._atomic_expression,
-    ],
-    [$.multi_line_string_expression, $._expression_or_declaration],
-    [$.unit_literal, $.quote_token],
-    [$.quote_token, $.macro_input_expr_with_parens],
-    [$.quote_token, $.macro_expression],
-    [$.quote_token, $.dollar_identifier],
-    [$.quote_token, $.macro_attr_expr],
-    [$.quote_expr, $.quote_token],
-    [$.quote_token, $.quote_interpolate],
-    [$.quote_parameters],
-    [$.try_expression],
-    [$.block, $._expression_or_declaration],
-    [$.unnamed_arrow_parameters, $.unnamed_tuple_type, $.parenthesized_type],
-    [$.unnamed_arrow_parameters, $.unit_literal],
-    [$.unnamed_arrow_parameters, $.unnamed_tuple_type],
-    [$.named_arrow_parameters, $.named_tuple_type],
-    [$.class_primary_init, $.enum_pattern_parameters],
-    [$.left_aux_expression, $.item_after_quest],
-    [$.assignment_expression, $.left_aux_expression, $.postfix_expression],
-    [$.unit_literal, $.tuple_pattern],
-    [$.unnamed_tuple_type, $.parenthesized_type],
-    [$.var_binding_pattern, $.enum_pattern],
-    [$.wildcard_pattern, $.type_pattern],
-    [$.user_type, $.left_value_expression_without_wildcard],
-    [$.var_binding_pattern, $.type_pattern, $.enum_pattern],
-    [$.function_modifier_list],
-    [$.foreign_body, $._foreign_member_declaration],
-    [$.class_non_static_member_modifier, $.struct_non_static_member_modifier],
-    [$.wildcard_pattern, $.exception_type_pattern],
-    [$.left_aux_expression, $.prefix_unary_expression, $.postfix_expression],
-    [$.struct_name, $.enum_pattern],
-    [$.class_init, $.struct_init],
-    [$.left_aux_expression, $.multiplicative_expression, $.postfix_expression],
-    [
-      $.left_aux_expression,
-      $.bitwise_conjunction_expression,
-      $.postfix_expression,
-    ],
-    [$.user_type, $.var_binding_pattern, $.enum_pattern],
-    [$.user_type, $.enum_pattern],
-    [$.upper_bounds],
-    [$.generic_constraints],
-    [
-      $.left_aux_expression,
-      $.comparison_or_type_expression,
-      $.postfix_expression,
-    ],
-    [
-      $.left_aux_expression,
-      $.bitwise_disjunction_expression,
-      $.postfix_expression,
-    ],
-    [$.left_aux_expression, $.coalescing_expression, $.postfix_expression],
-    [
-      $.left_aux_expression,
-      $.logic_disjunction_expression,
-      $.postfix_expression,
-    ],
-    [
-      $.left_aux_expression,
-      $.logic_conjunction_expression,
-      $.postfix_expression,
-    ],
-    [$.left_aux_expression, $.range_expression, $.postfix_expression],
-    [$.left_aux_expression, $.bitwise_xor_expression, $.postfix_expression],
-    [
-      $.left_aux_expression,
-      $.equality_comparison_expression,
-      $.postfix_expression,
-    ],
-    [$.class_primary_init, $.case_body, $.struct_name],
-    [
-      $.class_primary_init,
-      $.struct_name,
-      $.var_binding_pattern,
-      $.enum_pattern,
-    ],
-    [$.unnamed_parameter, $.type_pattern],
-    [$.left_aux_expression, $.shifting_expression, $.postfix_expression],
-    [$.left_aux_expression, $.additive_expression, $.postfix_expression],
-    [$.left_aux_expression, $.exponent_expression, $.postfix_expression],
-    [$.left_aux_expression, $.flow_expression, $.postfix_expression],
     [
       $.class_modifier,
       $.interface_modifier,
@@ -222,59 +94,41 @@ module.exports = grammar({
       $.variable_modifier,
     ],
     [$.class_modifier, $.interface_modifier, $.function_modifier],
-    [$.function_modifier, $.variable_modifier],
-    [$.function_modifier, $.property_modifier],
-    [$.function_modifier, $.operator_function_definition],
-    [
-      $.class_modifier,
-      $.interface_modifier,
-      $.function_modifier,
-      $.variable_modifier,
-      $.property_modifier,
-    ],
-    [
-      $.class_modifier,
-      $.interface_modifier,
-      $.function_modifier,
-      $.property_modifier,
-    ],
-    [$.function_modifier, $.variable_modifier, $.property_modifier],
     [$.class_modifier, $.function_modifier],
-    [$.class_modifier, $.function_modifier, $.property_modifier],
-    [$.function_modifier, $.variable_modifier, $._identifier_or_keyword],
-    [$.function_modifier, $._identifier_or_keyword],
-    [$.variable_modifier, $._identifier_or_keyword],
+    [$.function_modifier, $.variable_modifier],
+    [$.var_binding_pattern, $.enum_pattern],
     [
-      $.user_type,
-      $.left_value_expression_without_wildcard,
-      $._identifier_or_keyword,
+      $.source_file,
+      $.function_definition,
+      $.variable_declaration,
+      $.enum_definition,
     ],
-    [$.postfix_expression, $._expression_or_declaration],
-    [$.left_aux_expression, $.postfix_expression, $._expression_or_declaration],
-    [$.left_aux_expression, $.postfix_expression],
-    [
-      $.operator_function_definition,
-      $.left_aux_expression,
-      $.postfix_expression,
-    ],
-    [$.operator_function_definition, $.postfix_expression],
-    [$.left_aux_expression, $._identifier_or_keyword],
-    [$.line_string_expression, $._expression_or_declaration],
+    [$.function_definition, $.variable_declaration, $.enum_definition],
+    [$.wildcard_pattern, $.type_pattern],
+    [$.var_binding_pattern, $.type_pattern, $.enum_pattern],
+    [$.function_modifier, $.property_modifier],
   ],
   rules: {
     source_file: ($) =>
       seq(
-        optional($.preamble),
-        repeat($._top_level_object),
-        optional($.main_definition),
-        repeat($._top_level_object),
+        $.preamble,
+        repeat($._end),
+        repeat(prec.left($._top_level_object)),
+        optional(seq(repeat1(prec.left($._end)), $.main_definition)),
+        repeat(prec.left($._nl)),
+        optional(sepBy(repeat($._nl), $._top_level_object)),
       ),
+
+    _nl: ($) => token(/\n|\r\n/),
+    _end: ($) => prec.left(PREC.CLASS_LITERAL, choice($._nl, ';')),
 
     // Preamble, package, and import definitions
     preamble: ($) =>
-      choice(
-        $.package_header,
-        seq(optional($.package_header), repeat1($.import_list)),
+      prec.left(
+        choice(
+          $.package_header,
+          seq(optional($.package_header), repeat1($.import_list)),
+        ),
       ),
     package_modifier: ($) => 'macro',
     package_header: ($) =>
@@ -282,22 +136,44 @@ module.exports = grammar({
         seq(
           optional($.package_modifier),
           'package',
+          repeat($._nl),
           $.package_name_identifier,
-          optional(';'),
+          repeat1($._end),
         ),
       ),
-    package_name_identifier: ($) => sepBy1('.', $.identifier),
+    package_name_identifier: ($) =>
+      prec.left(sepBy1(seq(repeat($._nl), '.', repeat($._nl)), $.identifier)),
     import_list: ($) =>
       prec.left(
         seq(
-          optional(seq('from', $.identifier)),
+          optional(seq('from', repeat($._nl), $.identifier)),
+          repeat($._nl),
           'import',
-          sepBy1(',', $.import_part),
-          optional(';'),
+          repeat($._nl),
+          sepBy1(
+            seq(repeat($._nl), ',', repeat($._nl)),
+            $.import_all_or_specified,
+          ),
+          repeat1($._end),
         ),
       ),
-    import_part: ($) => sepBy1('.', choice('*', $.identifier)),
-    import_alias: ($) => seq('as', $.identifier),
+    import_all_or_specified: ($) =>
+      prec.left(
+        choice(
+          $.import_all,
+          seq($.import_specified, optional(seq(repeat($._nl), $.import_alias))),
+        ),
+      ),
+    import_all: ($) =>
+      seq(
+        repeat1(
+          prec.left(seq($.identifier, repeat($._nl), '.', repeat($._nl))),
+        ),
+        '*',
+      ),
+    import_specified: ($) =>
+      prec.left(sepBy1(seq(repeat($._nl), '.', repeat($._nl)), $.identifier)),
+    import_alias: ($) => seq('as', repeat($._nl), $.identifier),
 
     // Top-level object definitions
     _top_level_object: ($) =>
@@ -318,18 +194,36 @@ module.exports = grammar({
     // Class definition
     class_definition: ($) =>
       seq(
-        optional($.class_modifier_list),
+        optional(seq($.class_modifier_list, repeat($._nl))),
         'class',
+        repeat($._nl),
         field('name', $.identifier),
+        repeat($._nl),
         field('type_parameters', optional($.type_parameters)),
+        repeat($._nl),
         optional(
           seq('<:', field('super', optional($.super_class_or_interfaces))),
         ),
+        repeat($._nl),
         field('constraints', optional($.generic_constraints)),
+        repeat($._nl),
         field('body', $.class_body),
       ),
 
-    super_class_or_interfaces: ($) => sepBy1('&', $.super_interfaces),
+    super_class_or_interfaces: ($) =>
+      prec.left(
+        choice(
+          seq(
+            $.super_class,
+            optional(
+              seq(repeat($._nl), '&', repeat($._nl), $.super_interfaces),
+            ),
+          ),
+          $.super_interfaces,
+        ),
+      ),
+    super_class: ($) => $.class_type,
+    interface_type: ($) => $.class_type,
     class_modifier_list: ($) => repeat1($.class_modifier),
     class_modifier: ($) =>
       choice(
@@ -342,50 +236,91 @@ module.exports = grammar({
         'sealed',
         'override',
       ),
-    type_parameters: ($) => seq('<', sepBy1(',', $.identifier), '>'),
+    type_parameters: ($) =>
+      seq(
+        '<',
+        repeat($._nl),
+        sepBy1(seq(repeat($._nl), ',', repeat($._nl)), $.identifier),
+        repeat($._nl),
+        '>',
+      ),
     class_type: ($) =>
-      seq(sepBy1('.', $.identifier), optional($.type_parameters)),
-    super_interfaces: ($) => sepBy1(',', $.class_type),
+      prec.left(
+        seq(
+          sepBy1(seq(repeat($._nl), '.', repeat($._nl)), $.identifier),
+          optional(seq(repeat($._nl), $.type_parameters)),
+        ),
+      ),
+    super_interfaces: ($) =>
+      prec.left(
+        sepBy1(seq(repeat($._nl), ',', repeat($._nl)), $.interface_type),
+      ),
     generic_constraints: ($) =>
       seq(
         'where',
+        repeat($._nl),
         choice($.identifier, 'This'),
+        repeat($._nl),
         '<:',
+        repeat($._nl),
         $.upper_bounds,
-        repeat(seq(',', choice($.identifier, 'This'), '<:', $.upper_bounds)),
+        repeat(
+          seq(
+            repeat($._nl),
+            ',',
+            repeat($._nl),
+            choice($.identifier, 'This'),
+            repeat($._nl),
+            '<:',
+            repeat($._nl),
+            $.upper_bounds,
+          ),
+        ),
       ),
-    upper_bounds: ($) => sepBy1('&', $._type),
+    upper_bounds: ($) =>
+      sepBy1(seq(repeat($._nl), '&', repeat($._nl)), $._type),
     class_body: ($) =>
       seq(
         '{',
-        repeat(';'),
-        sepBy(repeat(';'), $._class_member_declaration),
-        repeat(';'),
+        repeat($._end),
+        repeat($._class_member_declaration),
+        repeat($._nl),
         optional($.class_primary_init),
-        repeat(';'),
-        sepBy(repeat(';'), $._class_member_declaration),
-        repeat(';'),
+        repeat($._nl),
+        repeat($._class_member_declaration),
+        repeat($._end),
         '}',
       ),
 
     _class_member_declaration: ($) =>
-      choice(
-        $.class_init,
-        $.static_init,
-        $.variable_declaration,
-        $.function_definition,
-        $.operator_function_definition,
-        $.macro_expression,
-        $.property_definition,
-        $.class_finalizer,
+      prec.left(
+        seq(
+          choice(
+            $.class_init,
+            $.static_init,
+            $.variable_declaration,
+            $.function_definition,
+            $.operator_function_definition,
+            $.macro_expression,
+            $.property_definition,
+            $.class_finalizer,
+          ),
+          repeat($._end),
+        ),
       ),
     class_init: ($) =>
       seq(
-        optional(choice($.class_non_static_member_modifier, 'const')),
+        optional(
+          choice(
+            $.class_non_static_member_modifier,
+            seq('const', repeat($._nl)),
+          ),
+        ),
         'init',
+        repeat($._nl),
         $.function_parameters,
+        repeat($._nl),
         $.block,
-        repeat(';'),
       ),
     static_init: ($) =>
       seq(
@@ -396,67 +331,131 @@ module.exports = grammar({
         '{',
         optional($._expression_or_declarations),
         '}',
-        repeat(';'),
       ),
     class_primary_init: ($) =>
       seq(
-        optional(choice($.class_non_static_member_modifier, 'const')),
+        optional(
+          choice(
+            $.class_non_static_member_modifier,
+            seq('const', repeat($._nl)),
+          ),
+        ),
         field('name', $.identifier),
+        repeat($._nl),
         '(',
+        repeat($._nl),
         optional($.class_primary_init_param_lists),
+        repeat($._nl),
         ')',
+        repeat($._nl),
         '{',
+        repeat($._nl),
         optional(seq('super', $.call_suffix)),
-        repeat(';'),
+        $._end,
         optional($._expression_or_declarations),
+        repeat($._nl),
         '}',
       ),
 
     class_primary_init_param_lists: ($) =>
-      choice(
-        seq(
-          $.unnamed_parameter_list,
-          optional(seq(',', $.named_parameter_list)),
-          optional(seq(',', $.class_named_init_param_list)),
+      prec.left(
+        choice(
+          seq(
+            $.unnamed_parameter_list,
+            optional(
+              seq(repeat($._nl), ',', repeat($._nl), $.named_parameter_list),
+            ),
+            optional(
+              seq(
+                repeat($._nl),
+                ',',
+                repeat($._nl),
+                $.class_named_init_param_list,
+              ),
+            ),
+          ),
+          seq(
+            $.unnamed_parameter_list,
+            optional(
+              seq(
+                repeat($._nl),
+                ',',
+                repeat($._nl),
+                $.class_unnamed_init_param_list,
+              ),
+            ),
+            optional(
+              seq(
+                repeat($._nl),
+                ',',
+                repeat($._nl),
+                $.class_named_init_param_list,
+              ),
+            ),
+          ),
+          seq(
+            $.class_unnamed_init_param_list,
+            optional(
+              seq(
+                repeat($._nl),
+                ',',
+                repeat($._nl),
+                $.class_named_init_param_list,
+              ),
+            ),
+          ),
+          seq(
+            $.named_parameter_list,
+            optional(
+              seq(
+                repeat($._nl),
+                ',',
+                repeat($._nl),
+                $.class_named_init_param_list,
+              ),
+            ),
+          ),
+          $.class_named_init_param_list,
         ),
-        seq(
-          $.unnamed_parameter_list,
-          optional(seq(',', $.class_unnamed_init_param_list)),
-          optional(seq(',', $.class_named_init_param_list)),
-        ),
-        seq(
-          $.class_unnamed_init_param_list,
-          optional(seq(',', $.class_named_init_param_list)),
-        ),
-        seq(
-          $.named_parameter_list,
-          optional(seq(',', $.class_named_init_param_list)),
-        ),
-        $.class_named_init_param_list,
       ),
     class_unnamed_init_param_list: ($) =>
-      seq(
+      sepBy1(
+        seq(repeat($._nl), ',', repeat($._nl)),
         $.class_unnamed_init_param,
-        repeat(seq(',', $.class_unnamed_init_param)),
       ),
-    class_named_init_param_list: ($) => sepBy1(',', $.class_named_init_param),
+    class_named_init_param_list: ($) =>
+      prec.left(
+        sepBy1(
+          seq(repeat($._nl), ',', repeat($._nl)),
+          $.class_named_init_param,
+        ),
+      ),
     class_unnamed_init_param: ($) =>
       seq(
-        optional($.class_non_static_member_modifier),
+        optional(seq($.class_non_static_member_modifier, repeat($._nl))),
         choice('let', 'var'),
+        repeat($._nl),
         $.identifier,
+        repeat($._nl),
         ':',
+        repeat($._nl),
         $._type,
       ),
     class_named_init_param: ($) =>
-      seq(
-        optional($.class_non_static_member_modifier),
-        choice('let', 'var'),
-        $.identifier,
-        '!',
-        ':',
-        $._type,
-        optional(seq('=', $._expression)),
+      prec.left(
+        seq(
+          optional(seq($.class_non_static_member_modifier, repeat($._nl))),
+          choice('let', 'var'),
+          repeat($._nl),
+          $.identifier,
+          repeat($._nl),
+          '!',
+          repeat($._nl),
+          ':',
+          repeat($._nl),
+          $._type,
+          optional(seq(repeat($._nl), '=', repeat($._nl), $._expression)),
+        ),
       ),
 
     class_non_static_member_modifier: ($) =>
@@ -467,72 +466,101 @@ module.exports = grammar({
     // Interface definition
     interface_definition: ($) =>
       seq(
-        optional($.interface_modifier_list),
+        optional(seq($.interface_modifier_list, repeat($._nl))),
         'interface',
+        repeat($._nl),
         field('name', $.identifier),
+        repeat($._nl),
         field('type_parameters', optional($.type_parameters)),
+        repeat($._nl),
         optional(seq('<:', field('super', $.super_interfaces))),
+        repeat($._nl),
         field('constraints', optional($.generic_constraints)),
+        repeat($._nl),
         field('body', $.interface_body),
       ),
     interface_body: ($) =>
       seq(
         '{',
-        repeat(';'),
+        repeat($._end),
         repeat($._interface_member_declaration),
-        repeat(';'),
+        repeat($._end),
         '}',
       ),
     _interface_member_declaration: ($) =>
-      choice(
-        $.function_definition,
-        $.operator_function_definition,
-        $.macro_expression,
-        $.property_definition,
+      prec.left(
+        seq(
+          choice(
+            $.function_definition,
+            $.operator_function_definition,
+            $.macro_expression,
+            $.property_definition,
+          ),
+          repeat($._end),
+        ),
       ),
-    interface_modifier_list: ($) => repeat1($.interface_modifier),
+    interface_modifier_list: ($) =>
+      repeat1(prec.left(seq($.interface_modifier, repeat($._nl)))),
     interface_modifier: ($) =>
       choice('public', 'protected', 'internal', 'private', 'open'),
 
     // Function definition
     function_definition: ($) =>
-      seq(
-        field('modifier', optional($.function_modifier_list)),
-        'func',
-        field('name', $.identifier),
-        field('type_parameters', optional($.type_parameters)),
-        field('parameters', $.function_parameters),
-        optional(seq(':', field('return_type', $._type))),
-        field('constraints', optional($.generic_constraints)),
-        field('body', optional($.block)),
+      prec.left(
+        seq(
+          field('modifier', optional($.function_modifier_list)),
+          repeat($._nl),
+          'func',
+          repeat($._nl),
+          field('name', $.identifier),
+          repeat($._nl),
+          field('type_parameters', optional($.type_parameters)),
+          repeat($._nl),
+          field('parameters', $.function_parameters),
+          optional(seq(':', field('return_type', $._type))),
+          repeat($._nl),
+          field('constraints', optional($.generic_constraints)),
+          repeat($._nl),
+          field('body', optional($.block)),
+        ),
       ),
-    function_modifier_list: ($) => repeat1($.function_modifier),
+    function_modifier_list: ($) =>
+      prec.left(repeat1(prec.left(seq($.function_modifier, repeat($._nl))))),
     function_modifier: ($) =>
-      choice(
-        'public',
-        'private',
-        'protected',
-        'internal',
-        'static',
-        'open',
-        'override',
-        'operator',
-        'redef',
-        'mut',
-        'unsafe',
-        'const',
+      prec.left(
+        choice(
+          'public',
+          'private',
+          'protected',
+          'internal',
+          'static',
+          'open',
+          'override',
+          'operator',
+          'redef',
+          'mut',
+          'unsafe',
+          'const',
+        ),
       ),
 
     operator_function_definition: ($) =>
       seq(
         field('modifier', optional($.function_modifier_list)),
+        repeat($._nl),
         'operator',
+        repeat($._nl),
         'func',
+        repeat($._nl),
         field('operator', $.overloaded_operators),
+        repeat($._nl),
         field('type_parameters', optional($.type_parameters)),
+        repeat($._nl),
         field('parameters', $.function_parameters),
         optional(seq(':', field('return_type', $._type))),
+        repeat($._nl),
         field('constraints', optional($.generic_constraints)),
+        repeat($._nl),
         field('body', optional(choice($.block, seq('=', $._expression)))),
       ),
 
@@ -540,8 +568,14 @@ module.exports = grammar({
       choice(
         seq(
           '(',
+          repeat($._nl),
           field('unnamed_parameters', optional($.unnamed_parameter_list)),
-          field('named_parameters', optional(seq(',', $.named_parameter_list))),
+          repeat($._nl),
+          field(
+            'named_parameters',
+            optional(seq($._nl, ',', $._nl, $.named_parameter_list)),
+          ),
+          repeat($._nl),
           ')',
         ),
         seq('(', optional($.named_parameter_list), ')'),
@@ -551,37 +585,76 @@ module.exports = grammar({
       choice(
         seq(
           $.unnamed_parameter,
-          optional(seq(',', $.unnamed_parameter)),
-          optional(seq(',', $.named_parameter)),
+          optional(seq(repeat($._nl), ',', repeat($._nl), $.unnamed_parameter)),
+          optional(seq(repeat($._nl), ',', repeat($._nl), $.named_parameter)),
         ),
-        seq($.named_parameter, optional(seq(',', $.named_parameter))),
+        seq(
+          $.named_parameter,
+          optional(seq(repeat($._nl), ',', repeat($._nl), $.named_parameter)),
+        ),
       ),
 
-    unnamed_parameter_list: ($) => sepBy1(',', $.unnamed_parameter),
+    unnamed_parameter_list: ($) =>
+      sepBy1(seq(repeat($._nl), ',', repeat($._nl)), $.unnamed_parameter),
 
-    unnamed_parameter: ($) => seq(choice($.identifier, '_'), ':', $._type),
+    unnamed_parameter: ($) =>
+      seq(
+        choice($.identifier, '_'),
+        repeat($._nl),
+        ':',
+        repeat($._nl),
+        $._type,
+      ),
 
     named_parameter_list: ($) =>
-      sepBy1(',', choice($.named_parameter, $.default_parameter)),
+      sepBy1(
+        seq(repeat($._nl), ',', repeat($._nl)),
+        choice($.named_parameter, $.default_parameter),
+      ),
 
-    named_parameter: ($) => seq($.identifier, '!', ':', $._type),
+    named_parameter: ($) =>
+      seq(
+        $.identifier,
+        repeat($._nl),
+        '!',
+        repeat($._nl),
+        ':',
+        repeat($._nl),
+        $._type,
+      ),
 
     default_parameter: ($) =>
-      seq($.identifier, '!', ':', $._type, '=', $._expression),
+      seq(
+        $.identifier,
+        repeat($._nl),
+        '!',
+        repeat($._nl),
+        ':',
+        repeat($._nl),
+        $._type,
+        repeat($._nl),
+        '=',
+        repeat($._nl),
+        $._expression,
+      ),
 
     // Variable Declaration
     variable_declaration: ($) =>
       prec.left(
         seq(
           field('modifier', repeat($.variable_modifier)),
+          repeat($._nl),
           field('specifier', choice('let', 'var', 'const')),
+          repeat($._nl),
           field('name', $._patterns_maybe_irrefutable),
+          repeat($._nl),
           choice(
             seq(
-              optional(seq(':', field('type', $._type))),
-              optional(seq('=', field('value', $._expression))),
+              optional(seq(':', repeat($._nl), field('type', $._type))),
+              repeat($._nl),
+              optional(seq('=', repeat($._nl), field('value', $._expression))),
             ),
-            seq(':', field('type', $._type)),
+            seq(':', repeat($._nl), field('type', $._type)),
           ),
         ),
       ),
@@ -592,27 +665,37 @@ module.exports = grammar({
     enum_definition: ($) =>
       seq(
         field('modifier', optional($.enum_modifier)),
+        repeat($._nl),
         'enum',
+        repeat($._nl),
         field('name', $.identifier),
+        repeat($._nl),
         field('type_parameters', optional(seq($.type_parameters))),
+        repeat($._nl),
         optional(seq('<:', field('super', $.super_interfaces))),
+        repeat($._nl),
         field('constraints', optional($.generic_constraints)),
+        repeat($._nl),
         '{',
+        repeat($._nl),
         field('body', optional($.enum_body)),
+        repeat($._nl),
         '}',
       ),
     enum_modifier: ($) => choice('public', 'protected', 'internal', 'private'),
     enum_body: ($) =>
-      seq(
-        optional('|'),
-        $.case_body,
-        repeat(seq('|', $.case_body)),
-        repeat(
-          choice(
-            $.function_definition,
-            $.operator_function_definition,
-            $.property_definition,
-            $.macro_expression,
+      prec.left(
+        seq(
+          optional('|'),
+          $.case_body,
+          repeat(seq('|', $.case_body)),
+          repeat(
+            choice(
+              $.function_definition,
+              $.operator_function_definition,
+              $.property_definition,
+              $.macro_expression,
+            ),
           ),
         ),
       ),
